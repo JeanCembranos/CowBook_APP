@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "147367094949",
+    "project_id": "myfarmespe",
+    "storage_bucket": "myfarmespe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:147367094949:android:b37329b0e832db069d3b4c",
+        "android_client_info": {
+          "package_name": "com.example.myfarm_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "147367094949-okeqjkf5lsltdt4psbnm7d3756ht5kp8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.myfarm_app",
+            "certificate_hash": "5b5f435d360f00f25305c944ab481e37e91dd0a9"
+          }
+        },
+        {
+          "client_id": "147367094949-f0hn9bodnofic7q0gb48rajuv0704u4q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYnwFuu0XNacXbpU7jlRzHBGrac06agfU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "147367094949-f0hn9bodnofic7q0gb48rajuv0704u4q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
