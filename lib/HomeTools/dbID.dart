@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+/*import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myfarm_app/HistMedicoTools/RegistroMedicoModel.dart';
 import 'package:myfarm_app/LoginTools/userModel.dart';
 import 'package:myfarm_app/ObsTools/ObsModel.dart';
@@ -43,5 +43,5 @@ class dbID {
     Firestore.instance.collection('records').document(docId).delete().catchError((e){
       print(e);
     });
-  }
-}
+  }*/
+//}

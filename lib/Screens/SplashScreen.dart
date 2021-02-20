@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:myfarm_app/LoginTools/ActiveRoot.dart';
 import 'package:myfarm_app/LoginTools/root.dart';
+import 'package:myfarm_app/LoginTools/utils.dart';
 import 'package:myfarm_app/Screens/Login.dart';
 
 
@@ -51,13 +52,13 @@ class _SplashScreenState extends State<SplashScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      CircleAvatar(
-                        backgroundColor: Colors.blue,
-                        radius: 50.0,
-                        child: Icon(
-                          Icons.house_outlined,
-                          color: Colors.white,
-                          size: 50.0,
+                      new Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                          child: Image.asset('assets/images/logoCowBookPNG.png',
+                              width: screenAwareSize(500, context),
+                              height: screenAwareSize(500, context)),
                         ),
                       ),
                       Padding(

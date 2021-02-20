@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:myfarm_app/Screens/SplashScreen.dart';
 Future<void> main() {
-
   runApp(MyApp());
 }
 

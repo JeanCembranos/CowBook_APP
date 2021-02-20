@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:myfarm_app/HomeTools/DBPublicity.dart';
 import 'package:myfarm_app/LoginTools/auth.dart';
@@ -12,6 +13,10 @@ import 'package:myfarm_app/Screens/Identification.dart';
 import 'package:myfarm_app/Screens/Login.dart';
 import 'package:myfarm_app/Screens/ObservacionesSeleccion.dart';
 import 'package:myfarm_app/Screens/Settings.dart';
+import 'package:myfarm_app/ScreensNew/IDConsulta.dart';
+import 'package:myfarm_app/ScreensNew/ReproState.dart';
+
+import '../AdMob.dart';
 
 class Home extends StatefulWidget{
   final String data;
@@ -25,27 +30,29 @@ class Home extends StatefulWidget{
   });
 }
 
-class _HomeState extends State<Home>{
+
+class _HomeState extends State<Home> {
+
+
   @override
   void initState() {
     print('Qr: ${widget.data}');
     print('Usuario: ${widget.currentUser}');
     super.initState();
-    // Test if cloud firebase works
-    //print(publicity.documents[0].data['name']);
   }
+
+
+
   Future getCarouselWidget() async {
     var firestore = Firestore.instance;
     QuerySnapshot qn = await firestore.collection("carousel").getDocuments();
     return qn.documents;
   }
+
   @override
-  Widget build(BuildContext context)
-
-
-  {
+  Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xffAEA48F),
       //backgroundColor: Colors.blue,
       /*appBar: AppBar(
         backgroundColor: Colors.orange,
@@ -67,7 +74,7 @@ class _HomeState extends State<Home>{
 
       ),*/
 
-      body:SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             /*SizedBox(
@@ -97,7 +104,7 @@ class _HomeState extends State<Home>{
                   ),
                 ],
               )),*/
-           /* FutureBuilder(
+            FutureBuilder(
         future: getCarouselWidget(),
           builder: (context, AsyncSnapshot snapshot) {
             List<NetworkImage> list = new List<NetworkImage>();
@@ -115,7 +122,7 @@ class _HomeState extends State<Home>{
                     child: new Carousel(
                       boxFit: BoxFit.cover,
                       images: list,
-                      autoplay: true,
+                      autoplay: false,
                       dotSize: 4.0,
                       indicatorBgPadding: 4.0,
                       animationCurve: Curves.fastOutSlowIn,
@@ -123,139 +130,179 @@ class _HomeState extends State<Home>{
                     ));
               }
             }
-          }),*/
-
-
-
-                GridView.count(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  primary: false,
-                  padding: const EdgeInsets.only(top:25.0),
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  crossAxisCount: 2,
-                  children: <Widget>[
-                    InkWell(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width/2,
-                        padding: const EdgeInsets.all(8),
-                        child:Center(
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top:30),
-                                child: new Image.asset(
-                                  'assets/images/histmedico.png',
-                                  height: 70.0,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 20.0),
-                                child: Text("HISTORIAL MÉDICO",style: new TextStyle(fontSize: 15),),
-                              ),
-                            ],
-                          ),
-                        ),
-                        color: Colors.orangeAccent[100],
-                      ),
-                      onTap: (){
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HealthHistSelection(data: widget.data,currentUser: widget.currentUser,),
-                          ),
-                              (route) => false,
-                        );
-                      },
+          }),
+            SizedBox(
+              height: 30.0,
+            ),
+            Padding(
+              padding: EdgeInsets.only(right:MediaQuery.of(context).size.width-100),
+              child: new Text("Recordatorios"),
+            ),
+            SizedBox(
+              height: 15.0,
+            ),
+            new Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                color: Color(0xffF1E2E2),
+              ),
+              width: MediaQuery.of(context).size.width-10,
+              height: 80.0,
+            ),
+            GridView.count(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              primary: false,
+              padding: const EdgeInsets.all(15.0),
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              crossAxisCount: 2,
+              children: <Widget>[
+                InkWell(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      color: Color(0xffC4C4C4),
                     ),
-                    InkWell(
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top:30),
-                                child: new Image.asset(
-                                  'assets/images/historial.png',
-                                  height: 70.0,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 20.0),
-                                child: Text("NOVEDADES/OBSERVACIONES",style: new TextStyle(fontSize: 15),),
-                              ),
-                            ],
+                    padding: const EdgeInsets.all(8),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 30),
+                            child: new Image.asset(
+                              'assets/images/Info.png',
+                              height: 70.0,
+                            ),
                           ),
-                        ),
-                        color: Colors.orangeAccent[100],
-                      ),
-                      onTap: (){
-                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                            ObsSelection(data: widget.data,currentUser: widget.currentUser,)), (Route<dynamic> route) => false);
-                      },
-                    ),
-                    InkWell(
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top:10),
-                                child: new Image.asset(
-                                  'assets/images/vaca.png',
-                                  height: 90.0,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 20.0),
-                                child: Text("DATOS DE IDENTIFICACIÓN",style: new TextStyle(fontSize: 15),textAlign: TextAlign.center,),
-                              ),
-                            ],
+                          Padding(
+                            padding: EdgeInsets.only(top: 20.0),
+                            child: Text("IDENTIFICACIÓN",
+                              style: new TextStyle(fontSize: 15),),
                           ),
-                        ),
-                        color: Colors.orangeAccent[100],
+                        ],
                       ),
-                      onTap: (){
-                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                            Identification(data: widget.data,currentUser: widget.currentUser,)), (Route<dynamic> route) => false);
-                      },
                     ),
-                    InkWell(
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top:10),
-                                child: new Image.asset(
-                                  'assets/images/ajustes.png',
-                                  height: 90.0,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 20.0),
-                                child: Text("AJUSTES",style: new TextStyle(fontSize: 15),textAlign: TextAlign.center,),
-                              ),
-                            ],
+                  ),
+                  onTap: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            IDSearch(data: widget.data,currentUser: widget.currentUser,),
+                      ),
+                          (route) => false,
+                    );
+                  },
+                ),
+                InkWell(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      color: Color(0xffC4C4C4),
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 30),
+                            child: new Image.asset(
+                              'assets/images/estadistica.png',
+                              height: 70.0,
+                            ),
                           ),
-                        ),
-                        color: Colors.orangeAccent[100],
+                          Padding(
+                            padding: EdgeInsets.only(top: 20.0),
+                            child: Text("Producción Leche",
+                              style: new TextStyle(fontSize: 15),),
+                          ),
+                        ],
                       ),
-                      onTap: (){
-                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                            SettingsOnePage(data: widget.data,currentUser: widget.currentUser,)), (Route<dynamic> route) => false);
-                      },
+                    )
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) =>
+                            ObsSelection(data: widget.data,
+                              currentUser: widget.currentUser,)), (
+                        Route<dynamic> route) => false);
+                  },
+                ),
+                InkWell(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      color: Color(0xffC4C4C4),
                     ),
-                  ],
-                )
-
+                    padding: const EdgeInsets.all(8),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 10),
+                            child: new Image.asset(
+                              'assets/images/vaca.png',
+                              height: 90.0,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 20.0),
+                            child: Text("ESTADO REPRODUCTIVO",
+                              style: new TextStyle(fontSize: 15),
+                              textAlign: TextAlign.center,),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) =>
+                            ReproScreen()), (
+                        Route<dynamic> route) => false);
+                  },
+                ),
+                InkWell(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20.0),
+                      color: Color(0xffC4C4C4),
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 10),
+                            child: new Image.asset(
+                              'assets/images/ajustes.png',
+                              height: 90.0,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 20.0),
+                            child: Text(
+                              "ESTADO MÉDICO", style: new TextStyle(fontSize: 15),
+                              textAlign: TextAlign.center,),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) =>
+                            SettingsOnePage(data: widget.data,
+                              currentUser: widget.currentUser,)), (
+                        Route<dynamic> route) => false);
+                  },
+                ),
+              ],
+            ),
           ],
-        ) ,
-      ) ,
+        ),
+      ),
 
       /*body: new Center(
         child: new Column(

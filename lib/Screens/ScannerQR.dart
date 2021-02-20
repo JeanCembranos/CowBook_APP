@@ -2,12 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:myfarm_app/HomeTools/dbQR.dart';
+import 'package:myfarm_app/IDTools/dbID.dart';
 import 'package:myfarm_app/LoginTools/DBRecords.dart';
 import 'package:myfarm_app/LoginTools/auth.dart';
 import 'package:myfarm_app/LoginTools/root.dart';
 import 'package:myfarm_app/Screens/CreateIdentification.dart';
 import 'package:myfarm_app/Screens/Home.dart';
+import 'package:myfarm_app/ScreensNew/IDCreate.dart';
 
 import 'Login.dart';
 
@@ -21,16 +22,16 @@ class Scanner extends StatefulWidget {
 }
 
 class _ScannerState extends State <Scanner> {
-  QuerySnapshot QR;
-  dbQR objQR = new dbQR();
+  QuerySnapshot id;
+  dbID idSearch = new dbID();
   String _scanBarcode = 'Unknown';
 
   @override
   void initState(){
     super.initState();
-    objQR.getData().then((results){
+    idSearch.getData().then((results){
       setState(() {
-        QR = results;
+        id = results;
       });
     });
   }
@@ -155,70 +156,29 @@ void didChangeDependencies() async {
 
 
   Future<void> _ScannerRedirection() {
-    for(var y = 0; y < QR.documents.length; y++){
-      if(QR.documents[y].data['codigo'] == _scanBarcode){
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Home(currentUser: widget.currentUser,data: _scanBarcode,)
-          ),
-        );
+    bool bandera=true;
+   for(var y = 0; y < id.documents.length; y++){
+      if(id.documents[y].data['code'] == _scanBarcode){
+        bandera=true;
         break;
       }else{
-        objQR.createGroupQR(_scanBarcode, widget.currentUser);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>CreateID(data: _scanBarcode,currentUser: widget.currentUser,))
-        );
+        bandera=false;
       }
     }
-
-
-    //bool newdata = false;
-    /*if (cars != null) {
-      for (var index = 0; index < cars.documents.length; index++) {
-        if (_scanBarcode == cars.documents[index].data['data'] &&
-            cars.documents[index].data['currentUser'] == widget.currentUser) {
-          newdata = true;
-          print(_scanBarcode);
-          print(newdata);
-        }
-      }*/
-      /*if(!newdata){
-
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Description(
-                data: _scanBarcode,
-                currentUser: widget.currentUser,
-              ),
-            ),
-                (route) => true
-        );
-      }*/
-      /*else{
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Money(
-                  scanBarcode: _scanBarcode,
-                )
-            ),
-                (route) => true
-        );
-      }
-    }*/
-      /* else{
+    if(bandera){
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => OurRoot()
+            builder: (context) => Home(currentUser: widget.currentUser,data: _scanBarcode,)
         ),
       );
-
-    }*/
+    }else{
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>IDCreate(currentUser: widget.currentUser,data: _scanBarcode,))
+      );
+    }
     }
   void _signOut(BuildContext context) async {
     String _returnString = await Auth().signOut();

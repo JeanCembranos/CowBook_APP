@@ -10,7 +10,7 @@ import 'package:myfarm_app/HomeTools/dbID.dart';
 import 'Home.dart';
 
 
-class Identification extends StatefulWidget{
+/*class Identification extends StatefulWidget{
   final String data;
   final String currentUser;
 
@@ -329,4 +329,6 @@ class _IdentificationState extends State<Identification>{
     });
     return completer.future;
   }
+
 }
+*/

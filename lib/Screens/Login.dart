@@ -17,21 +17,11 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
         return new Scaffold(
-            backgroundColor: Color(0xffbE29A2D),
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0.0,
-              title: Text("MY FARM",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: screenAwareSize(30.0, context),
-                      fontWeight: FontWeight.normal,
-                      fontFamily: "Montserrat-Bold")),
-              centerTitle: true,
-            ),
+            backgroundColor: Colors.white,
             body: SingleChildScrollView(
               child: Column(
-                children: <Widget>[TopPartHome(), BottomPartHome()],
+                children: <Widget>[
+                  TopPartHome(), BottomPartHome()],
               ),
             ));
   }
@@ -50,14 +40,14 @@ class _TopPartHomeState extends State<TopPartHome> {
           Stack(
             children: <Widget>[
               Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    SizedBox(height: 30.0,),
                     Center(
                       child: new Container(
                         width: MediaQuery.of(context).size.width,
                         child: ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                          child: Image.asset('assets/images/farmlogo.jpg',
+                          child: Image.asset('assets/images/logoCowBook.jpg',
                               width: screenAwareSize(145, context),
                               height: screenAwareSize(145, context)),
                         ),
@@ -220,31 +210,31 @@ class _BottomPartHomeState extends State<BottomPartHome> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(
-              height: screenAwareSize(10.0, context),
+              height: screenAwareSize(60.0, context),
             ),
 
             Padding(
               padding: EdgeInsets.only(left: 10),
-              child: Text("Correo Electrónico",style: new TextStyle(color: Colors.white),),
+              child: Text("Correo Electrónico",style: new TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 15),),
             ),
             SizedBox(
               height: 10,
 
             ),
             Padding(
-              padding: EdgeInsets.only(left: 10,right: 10),
+              padding: EdgeInsets.only(left: 20,right: 20),
               child: new Container(
-                height: 30,
+                height: 40,
                 child: new TextField(
                   controller: _emailController,
                   decoration: new InputDecoration(
                       border: new OutlineInputBorder(
                         borderRadius: const BorderRadius.all(
-                          const Radius.circular(40.0),
+                          const Radius.circular(5.0),
                         ),
                       ),
                       filled: true,
-                      fillColor: Colors.white),
+                      fillColor: Colors.grey),
                 ),
               ),
             ),
@@ -253,26 +243,25 @@ class _BottomPartHomeState extends State<BottomPartHome> {
             ),
             Padding(
               padding: EdgeInsets.only(left: 10),
-              child: Text("Contraseña",style: new TextStyle(color: Colors.white),),
+              child: Text("Contraseña",style: new TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 15),),
             ),
             SizedBox(
               height: 10,
             ),
             Padding(
-              padding: EdgeInsets.only(left: 10),
+              padding: EdgeInsets.only(left: 20,right: 20),
               child: new Container(
-                width: 340,
-                height: 30,
+                height: 40,
                 child: new TextField(
                   controller: _passwordController,
                   decoration: new InputDecoration(
                       border: new OutlineInputBorder(
                         borderRadius: const BorderRadius.all(
-                          const Radius.circular(40.0),
+                          const Radius.circular(5.0),
                         ),
                       ),
                       filled: true,
-                      fillColor: Colors.white),
+                      fillColor: Colors.grey),
                   obscureText: true,
                 ),
               ),
@@ -303,7 +292,7 @@ class _BottomPartHomeState extends State<BottomPartHome> {
               height: screenAwareSize(15.0, context),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 150.0),
+              padding: EdgeInsets.only(left: 220.0),
               child: new Container(
                 child: InkWell(
                   onTap: () {
@@ -312,7 +301,7 @@ class _BottomPartHomeState extends State<BottomPartHome> {
                   child: Text(
                     "¿Olvidaste tu Contraseña?",
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.orange,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -322,7 +311,69 @@ class _BottomPartHomeState extends State<BottomPartHome> {
             SizedBox(
               height: screenAwareSize(5.0, context),
             ),
-            new Row(
+            Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: Container(
+                  height: 50,
+                  width: 160,
+                  color: Colors.green,
+                  child: new RaisedButton(
+                    onPressed: (){
+                      if (!EmailValidator.validate(_emailController.text, true) && !_emailController.text.contains(" ") || emailValidator(_emailController.text) != null && !_emailController.text.contains(" ") || _emailController.text == null && !_emailController.text.contains(" ") || _passwordController.text == null) {
+                        return showDialog<void>(
+                          context: context,
+                          barrierDismissible: false, // user must tap button!
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Warning'),
+                              content: SingleChildScrollView(
+                                child: ListBody(
+                                  children: <Widget>[
+                                    Text('Bad formatting in email or password')
+                                  ],
+                                ),
+                              ),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('OK'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+
+                      }else{
+                        for(int i=0;i<_emailController.text.length;i++){
+                          if(_emailController.text.characters.characterAt(i).contains(" ")){
+                            _emailController.text=_emailController.text.substring(0,i);
+                            _loginUser(
+                                type: LoginType.email,
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                                context: context);
+                            break;
+                          }else{
+                            _loginUser(
+                                type: LoginType.email,
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                                context: context);
+                            break;
+                          }
+                        }
+                      }
+                    },
+                    color: Colors.green[900],
+                    child: Text("Iniciar sesión",style: new TextStyle(color: Colors.white,fontSize: 20),),
+                  ),
+                ),
+              ),
+            ),
+            /*new Row(
               children: [
                 Padding(
                   padding: EdgeInsets.only(left: 50,top: 20),
@@ -384,7 +435,7 @@ class _BottomPartHomeState extends State<BottomPartHome> {
                     ),
                   ),
                 ),
-                Padding(
+                /*Padding(
                   padding: EdgeInsets.only(left: 20,top: 20),
                   child: Container(
                     height: 40,
@@ -401,179 +452,20 @@ class _BottomPartHomeState extends State<BottomPartHome> {
                       child: Text("SIGN UP",style: new TextStyle(color: Colors.black),),
                     ),
                   ),
-                ),
+                ),*/
 
               ],
-            ),
-            SizedBox(height: 30,),
-            new Center(
-              child: Text("--OR--"),
-            ),
+            ),*/
+            SizedBox(height: 10,),
             Padding(
-              padding: EdgeInsets.only(
-                  left: screenAwareSize(50.0, context),
-                  right: screenAwareSize(90.0, context)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  _googleButton(),
-                  _facebookButton()
+              padding: EdgeInsets.only(left: 40),
+              child: new  Row(
+                children: [
+                  Text("Aún no tienes una cuenta?",style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text("Créala Ahora",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),),
                 ],
               ),
-            )
-            /*Padding(
-              padding: const EdgeInsets.only(
-                  left: 20.0, right: 20.0, top: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  if (!EmailValidator.validate(_emailController.text, true) &&
-                      !_emailController.text.contains(" ") ||
-                      emailValidator(_emailController.text) != null &&
-                          !_emailController.text.contains(" ") ||
-                      _emailController.text == null &&
-                          !_emailController.text.contains(" ") ||
-                      _passwordController.text == null) {
-                    return showDialog<void>(
-                      context: context,
-                      barrierDismissible: false, // user must tap button!
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('Warning'),
-                          content: SingleChildScrollView(
-                            child: ListBody(
-                              children: <Widget>[
-                                Text('Bad formatting in email or password')
-                              ],
-                            ),
-                          ),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text('OK'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  } else {
-                    for (int i = 0; i < _emailController.text.length; i++) {
-                      if (_emailController.text.characters.characterAt(i)
-                          .contains(" ")) {
-                        _emailController.text =
-                            _emailController.text.substring(0, i);
-                        _loginUser(
-                            type: LoginType.email,
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                            context: context);
-                        break;
-                      } else {
-                        _loginUser(
-                            type: LoginType.email,
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                            context: context);
-                        break;
-                      }
-                    }
-                  }
-                },
-                child: Container(
-                  height: 50.0,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(0.0)),
-                    color: Colors.white70,
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Sign In",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25.0,
-                          letterSpacing: 1.0),
-                    ),
-                  ),
-                ),
-              ),
-            ),*/
-            /*Padding(
-              padding: const EdgeInsets.only(
-                  left: 20.0, right: 20.0, top: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  /*Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder:(context) =>Signup()),(route) => false);*/
-                },
-                child: Container(
-                  height: 50.0,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(0.0)),
-                    color: Colors.white70,
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Sign Up",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25.0,
-                          letterSpacing: 1.0),
-                    ),
-                  ),
-                ),
-              ),
-            ),*/
-
-
-            /* Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              FlatButton(
-                child: Text("                   Don't have an account? Sign up here",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                ),
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                onPressed: () {
-                         Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                                  builder:(context) =>Signup()),(route) => false);
-                },
-              ),
-              Text(
-                '                    - OR -',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              SizedBox(height: 20.0),
-              Text(
-                '                     Sign in with',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'OpenSans',
-                ),
-              ),
-            ],
-          ),*/
-            /* SizedBox(
-            height: screenAwareSize(15, context),
-          ),
-          */
+            ),
           ],
         ));
   }
