@@ -83,31 +83,7 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Card(
-                    elevation: 8.0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0)),
-                    color: Colors.orange,
-                    child: ListTile(
-                      onTap: () {
-                        //open edit profile
-                      },
-                      title: Text(
-                        "John Doe",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(avatars[0]),
-                      ),
-                      trailing: Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
+
                   const SizedBox(height: 10.0),
                   Card(
                     elevation: 4.0,
@@ -230,6 +206,20 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
             )
           ],
         ),
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: onTabTapped,
+          items: [
+            BottomNavigationBarItem(
+              icon: new Icon(Icons.home),
+              title: new Text('Home'),
+            ),
+
+            BottomNavigationBarItem(
+                icon: Icon(Icons.settings),
+                title: Text('Ajustes')
+            )
+          ],
+        ),
       ),
     );
   }
@@ -243,6 +233,30 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
         ),
             (route) => false,
       );
+    }
+  }
+  void onTabTapped(int index) {
+    switch(index){
+      case 0: {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Home(data: widget.data,currentUser: widget.currentUser,),
+          ),
+              (route) => false,
+        );
+      }
+      break;
+      case 1: {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SettingsOnePage(data: widget.data,currentUser: widget.currentUser,),
+          ),
+              (route) => false,
+        );
+      }
+      break;
     }
   }
   Container _buildDivider() {

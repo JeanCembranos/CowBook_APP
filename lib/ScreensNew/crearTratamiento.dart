@@ -4,6 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:myfarm_app/RegTools/DBReg.dart';
 import 'package:myfarm_app/RegTools/RegModel.dart';
 import 'package:myfarm_app/Screens/Home.dart';
+import 'package:myfarm_app/Screens/Settings.dart';
 import 'package:myfarm_app/ScreensNew/RegMedico.dart';
 
 class CreateReg extends StatefulWidget{
@@ -18,6 +19,7 @@ class CreateReg extends StatefulWidget{
 }
 
 class _CreateRegState extends State<CreateReg> {
+  int _currentIndex = 0;
   String obs;
   DateTime selectedIniDate = DateTime.now();
   DateTime selectedFinalDate = DateTime.now();
@@ -226,6 +228,21 @@ class _CreateRegState extends State<CreateReg> {
 
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: onTabTapped,
+        currentIndex: _currentIndex,
+        items: [
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.home),
+            title: new Text('Home'),
+          ),
+
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              title: Text('Ajustes')
+          )
+        ],
+      ),
     );
   }
 
@@ -250,6 +267,30 @@ class _CreateRegState extends State<CreateReg> {
       setState(() {
         selectedFinalDate = picked;
       });
+  }
+  void onTabTapped(int index) {
+    switch(index){
+      case 0: {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Home(data: widget.data,currentUser: widget.currentUser,),
+          ),
+              (route) => false,
+        );
+      }
+      break;
+      case 1: {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SettingsOnePage(data: widget.data,currentUser: widget.currentUser,),
+          ),
+              (route) => false,
+        );
+      }
+      break;
+    }
   }
   void _addID(BuildContext context, RegModel reg) async {
     String _returnString;

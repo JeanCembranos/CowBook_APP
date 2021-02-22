@@ -30,6 +30,8 @@ class Home extends StatefulWidget{
 
 
 class _HomeState extends State<Home> {
+  int _currentIndex = 0;
+  final List<Widget> _children = [];
 
 
   @override
@@ -424,6 +426,21 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: onTabTapped,
+        currentIndex: _currentIndex,
+        items: [
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.home),
+            title: new Text('Home'),
+          ),
+
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              title: Text('Ajustes')
+          )
+        ],
+      ),
 
       /*body: new Center(
         child: new Column(
@@ -491,5 +508,32 @@ class _HomeState extends State<Home> {
             (route) => false,
       );
     }
+  }
+  void onTabTapped(int index) {
+    switch(index){
+      case 0: {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Home(data: widget.data,currentUser: widget.currentUser,),
+          ),
+              (route) => false,
+        );
+      }
+      break;
+      case 1: {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SettingsOnePage(data: widget.data,currentUser: widget.currentUser,),
+          ),
+              (route) => false,
+        );
+      }
+      break;
+    }
+    setState(() {
+      _currentIndex = index;
+    });
   }
 }

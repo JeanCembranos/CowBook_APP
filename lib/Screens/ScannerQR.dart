@@ -8,6 +8,7 @@ import 'package:myfarm_app/LoginTools/auth.dart';
 import 'package:myfarm_app/LoginTools/authModel.dart';
 import 'package:myfarm_app/LoginTools/root.dart';
 import 'package:myfarm_app/Screens/Home.dart';
+import 'package:myfarm_app/ScreensNew/ChooseID.dart';
 import 'package:myfarm_app/ScreensNew/IDCreate.dart';
 import 'package:provider/provider.dart';
 
@@ -109,8 +110,8 @@ class _ScannerState extends State <Scanner> {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
-            appBar: AppBar( backgroundColor: Colors.orange,
-              title:Text('BARCODE SCANNER',
+            appBar: AppBar( backgroundColor: Colors.white,
+              title:Text('',
                 style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -122,7 +123,7 @@ class _ScannerState extends State <Scanner> {
                   _signOut(context);
                 },
                 child: Icon(
-                  Icons.power_settings_new,  // add custom icons also
+                  Icons.power_settings_new,color: Colors.red,  // add custom icons also
                 ),
               ),
               centerTitle: true,
@@ -144,26 +145,53 @@ class _ScannerState extends State <Scanner> {
                             splashColor:  Colors.blue[400],
                             onPressed: () => scanQR(),
                             child: Text("Start QR scan",style: TextStyle(color: Colors.white, fontSize: 20.0))),*/
-                          RawMaterialButton(
-                            onPressed: () => scanQR() ,
-                            elevation: 2.0,
-                            fillColor: Colors.orangeAccent,
-                            child: Column(
-                              children: [
-                                Icon(
-                                  Icons.qr_code,
-                                  size: 130.0,
-                                ),
-                                Text("INICIAR ESCANEO",textAlign: TextAlign.center,style: new TextStyle(color: Colors.white,fontSize: 20.0,fontWeight: FontWeight.bold),),
-                              ],
+                            RawMaterialButton(
+                              onPressed: () => scanQR() ,
+                              elevation: 2.0,
+                              fillColor: Colors.orangeAccent,
+                              child: Column(
+                                children: [
+                                  Icon(
+                                    Icons.qr_code,
+                                    size: 60.0,
+                                  ),
+                                  Text("INICIAR ESCANEO",textAlign: TextAlign.center,style: new TextStyle(color: Colors.white,fontSize: 20.0,fontWeight: FontWeight.bold),),
+                                ],
+                              ),
+                              padding: EdgeInsets.all(90.0),
+                              shape: CircleBorder(),
                             ),
-                            padding: EdgeInsets.all(90.0),
-                            shape: CircleBorder(),
-                          ),
                           SizedBox(
                             height: 20.0,
                           ),
-
+                            Padding(
+                              child: RawMaterialButton(
+                                onPressed: () {
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          IDChooser(currentUser: currentUid,),
+                                    ),
+                                        (route) => false,
+                                  );
+                                },
+                                elevation: 2.0,
+                                fillColor: Colors.orangeAccent,
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.edit_off,
+                                      size: 60.0,
+                                    ),
+                                    Text("Registro Sin Código QR",textAlign: TextAlign.center,style: new TextStyle(color: Colors.white,fontSize: 20.0,fontWeight: FontWeight.bold),),
+                                  ],
+                                ),
+                                padding: EdgeInsets.all(90.0),
+                                shape: CircleBorder(),
+                              ),
+                              padding: EdgeInsets.only(top: 20.0),
+                            ),
                         ])),
               );
             })));

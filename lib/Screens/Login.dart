@@ -47,9 +47,9 @@ class _TopPartHomeState extends State<TopPartHome> {
                         width: MediaQuery.of(context).size.width,
                         child: ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                          child: Image.asset('assets/images/logoCowBook.jpg',
-                              width: screenAwareSize(145, context),
-                              height: screenAwareSize(145, context)),
+                          child: Image.asset('assets/images/CowBook.png',
+                              width: screenAwareSize(250, context),
+                              height: screenAwareSize(250, context)),
                         ),
                       ),
                     ),
@@ -210,7 +210,7 @@ class _BottomPartHomeState extends State<BottomPartHome> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(
-              height: screenAwareSize(60.0, context),
+              height: screenAwareSize(0, context),
             ),
 
             Padding(
