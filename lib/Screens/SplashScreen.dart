@@ -37,67 +37,60 @@ class _SplashScreenState extends State<SplashScreen> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
-                  "assets/images/splashscreen.jpg",
+                  "assets/images/wallpaperSplash.jpg",
                 ),
                 fit: BoxFit.cover,
               )
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                flex: 2,
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      new Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                          child: Image.asset('assets/images/logoCowBookPNG.png',
-                              width: screenAwareSize(500, context),
-                              height: screenAwareSize(500, context)),
-                        ),
+              Column(
+                children: <Widget>[
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      child:Padding(
+                          child: Column(
+                            children: <Widget>[
+                              new Container(
+                                width: MediaQuery.of(context).size.width,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                                  child: Image.asset('assets/images/CowBook.png',
+                                      width: screenAwareSize(400, context),
+                                      height: screenAwareSize(400, context)),
+                                ),
+                              ),
+
+                            ],
+                          ),
+                        padding: EdgeInsets.only(left: 30.0),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10.0),
-                      ),
-                      Text(
-                        "MY FARM APP",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24.0),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CircularProgressIndicator(),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
                     ),
-                    Text(
-                      "THE BEST OPTION",
-                      softWrap: true,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0,
-                          color: Colors.white),
-                    )
-                  ],
-                ),
-              )
-            ],
-          )
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+
+                      children: <Widget>[
+                        CircularProgressIndicator(backgroundColor: Colors.lightGreen,),
+                        Padding(
+                          padding: EdgeInsets.only(top: 0.0),
+                        ),
+                        SizedBox(height: 10.0,),
+                        Text(
+                          "TU MEJOR OPCIÓN",
+                          softWrap: true,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0,
+                              color: Colors.black),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
         ],
       ),
     );

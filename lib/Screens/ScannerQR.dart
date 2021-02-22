@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:myfarm_app/IDTools/dbID.dart';
-import 'package:myfarm_app/LoginTools/DBRecords.dart';
+import 'file:///C:/Users/JEAN/Desktop/ControlGanaderoAPP/myfarm_app/lib/RegTools/DBReg.dart';
 import 'package:myfarm_app/LoginTools/auth.dart';
+import 'package:myfarm_app/LoginTools/authModel.dart';
 import 'package:myfarm_app/LoginTools/root.dart';
-import 'package:myfarm_app/Screens/CreateIdentification.dart';
 import 'package:myfarm_app/Screens/Home.dart';
 import 'package:myfarm_app/ScreensNew/IDCreate.dart';
+import 'package:provider/provider.dart';
 
 import 'Login.dart';
 
@@ -22,6 +23,8 @@ class Scanner extends StatefulWidget {
 }
 
 class _ScannerState extends State <Scanner> {
+  AuthStatus _authStatus = AuthStatus.unknown;
+  String currentUid;
   QuerySnapshot id;
   dbID idSearch = new dbID();
   String _scanBarcode = 'Unknown';
@@ -37,9 +40,21 @@ class _ScannerState extends State <Scanner> {
   }
 
   @override
-void didChangeDependencies() async {
-  super.didChangeDependencies();
-}
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    //get the state, check current User, set AuthStatus based on state
+    AuthModel _authStream = Provider.of<AuthModel>(context);
+    if (_authStream != null) {
+      setState(() {
+        _authStatus = AuthStatus.loggedIn;
+        currentUid = _authStream.uid;
+      });
+    } else {
+      setState(() {
+        _authStatus = AuthStatus.notLoggedIn;
+      });
+    }
+  }
 
   startBarcodeScanStream() async {
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
@@ -169,14 +184,14 @@ void didChangeDependencies() async {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => Home(currentUser: widget.currentUser,data: _scanBarcode,)
+            builder: (context) => Home(currentUser: currentUid,data: _scanBarcode,)
         ),
       );
     }else{
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>IDCreate(currentUser: widget.currentUser,data: _scanBarcode,))
+              builder: (context) =>IDCreate(currentUser: currentUid,data: _scanBarcode,))
       );
     }
     }

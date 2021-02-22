@@ -1,26 +1,22 @@
-/*import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:myfarm_app/HistMedicoTools/RegistroMedicoModel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:myfarm_app/LoginTools/userModel.dart';
-import 'package:myfarm_app/ObsTools/ObsModel.dart';
 
-import 'CowModel.dart';
-
-class dbID {
+import 'RegModel.dart';
+class DBReg {
   Firestore _firestore = Firestore.instance;
 
-  /*Create User database*/
 
   /*Create Car database*/
-  Future<String> createGroup(CowModel cow, String data, String currentUser) async {
+  Future<String> createGroup(RegModel registro, String data, String currentUser) async {
     String retVal = "error";
     try {
-      await _firestore.collection("dbID").add({
-        'nombre': cow.nombre,
-        'raza': cow.raza,
-        'peso': cow.peso,
-        'fechaNac': cow.fechaNac,
-        'currentUser': currentUser,
+      await _firestore.collection("DBReg").add({
+        'medicamento': registro.medicamento,
+        'fechaIni': registro.InitialDate,
+        'fechaFin': registro.FinalDate,
+        'observaciones': registro.observaciones,
         'codigo': data,
+        'currentUser': currentUser,
       });
       retVal = "success";
     } catch (e) {
@@ -28,9 +24,10 @@ class dbID {
     }
     return retVal;
   }
+
   /*Create Car documents*/
   getData() async{
-    return await Firestore.instance.collection('dbID').getDocuments();
+    return await Firestore.instance.collection('DBReg').getDocuments();
   }
   /*Update Car element*/
   updateCars(selectedDoc, newValues){
@@ -43,5 +40,5 @@ class dbID {
     Firestore.instance.collection('records').document(docId).delete().catchError((e){
       print(e);
     });
-  }*/
-//}
+  }
+}

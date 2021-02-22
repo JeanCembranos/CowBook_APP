@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myfarm_app/LoginTools/ActiveRoot.dart';
 import 'package:myfarm_app/LoginTools/authModel.dart';
 import 'package:myfarm_app/LoginTools/userModel.dart';
-import 'package:myfarm_app/LoginTools/DBRecords.dart';
+import 'file:///C:/Users/JEAN/Desktop/ControlGanaderoAPP/myfarm_app/lib/RegTools/DBReg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
@@ -35,7 +35,7 @@ class Auth {
   Future<String> signUpUser(
       String email, String password, String worker) async {
     String retVal = "error";
-    try {
+    /*try {
       AuthResult _authResult = await _auth.createUserWithEmailAndPassword(
           email: email.trim(), password: password);
       UserModel _user = UserModel(
@@ -45,17 +45,17 @@ class Auth {
         accountCreated: DateTime.now(),
         notifToken: await _fcm.getToken(),
       );
-      String _returnString = await DBRecords().createUser(_user);
-      if (_returnString == "success") {
+      //String _returnString = await DBRecords().createUser(_user);
+      /*if (_returnString == "success") {
         retVal = "success";
       }
     } on PlatformException catch (e) {
       retVal = e.message;
     } catch (e) {
       print(e);
-    }
+    }*/
 
-    return retVal;
+    return retVal;*/
   }
 
   Future<String> loginUserWithEmail(String email, String password) async {
@@ -82,7 +82,7 @@ class Auth {
       ],
     );
 
-    try  {
+    /*try  {
       GoogleSignInAccount _googleUser = await _googleSignIn.signIn();
       GoogleSignInAuthentication _googleAuth = await _googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.getCredential(
@@ -106,7 +106,7 @@ class Auth {
       retVal = e.message;
     } catch (e) {
       print(e);
-    }
+    }*/
 
   }
   Future deleteCurrentUser(String userUid,String userEmail, String password) async {

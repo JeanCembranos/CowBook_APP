@@ -1,138 +1,208 @@
+
+
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:myfarm_app/IDTools/dbID.dart';
+import 'package:myfarm_app/Screens/Home.dart';
 
 class ReproScreen extends StatefulWidget{
+  final String data;
+  final String currentUser;
   @override
   _ReproScreenState createState() => _ReproScreenState();
+  ReproScreen({
+    this.data,
+    this.currentUser
+  });
 }
 
 class _ReproScreenState extends State<ReproScreen>{
-  int num=0;
-  int _currentIndex=0;
+  DateTime InitialDate;
+  DateTime FinalDate;
+  File _image;
+  final picker = ImagePicker();
+  QuerySnapshot id;
+  dbID idSearch = new dbID();
+
+  void initState(){
+    super.initState();
+    idSearch.getData().then((results){
+      setState(() {
+        id = results;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: new Column(
-        children: [
-      CarouselSlider(
-      options: CarouselOptions(
-      height: MediaQuery.of(context).size.height,
-        autoPlay: false,
-        autoPlayInterval: Duration(seconds: 3),
-        autoPlayAnimationDuration: Duration(milliseconds: 800),
-        autoPlayCurve: Curves.fastOutSlowIn,
-        pauseAutoPlayOnTouch: true,
-        aspectRatio: 2.0,
-        onPageChanged: (index, reason) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-      ),
-      items: cardList.map((card){
-        return Builder(
-            builder:(BuildContext context){
-              return Container(
-                height: MediaQuery.of(context).size.height*0.30,
+      /*appBar: new AppBar(leading:
+      IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    Home(currentUser: widget.currentUser,data: widget.data,),
+              ),
+                  (route) => false,
+            );
+          }),
+        backgroundColor: Colors.transparent,
+        ),*/
+      body: _idList()
+    );
+  }
+  Widget _idList() {
+    if (id != null) {
+      bool carflag = false;
+      List<int> location = [];
+      for (var y = 0; y < id.documents.length; y++) {
+        if (id.documents[y].data['code'] == widget.data) {
+          carflag = true;
+          location.add(y);
+        }
+      }
+
+      if (carflag == true) {
+        return new Column(
+          children: [
+            Container(
                 width: MediaQuery.of(context).size.width,
-                child: Card(
-                  color: Colors.blueAccent,
-                  child: card,
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30.0),
+                    color: Colors.cyan[100],
+                    border: Border.all(color: Colors.cyan,width: 10)
                 ),
-              );
-            }
+                child: new Column(
+                  children: [
+                    Align(
+                      child: IconButton(
+                          icon: Icon(Icons.arrow_back),
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Home(currentUser: widget.currentUser,data: widget.data,),
+                              ),
+                                  (route) => false,
+                            );
+                          }),
+                      alignment: Alignment.topLeft,
+                    ),
+                    SizedBox(height: 25.0,),
+                    Text("ESTADO REPRODUCTIVO",style: TextStyle(fontSize: 30.0,fontWeight: FontWeight.bold),),
+                    SizedBox(height: 30.0,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.center,
+                          child: CircleAvatar(
+                            radius: 100,
+                            backgroundColor: Colors.cyan,
+                            child: ClipOval(
+                              child: new SizedBox(
+                                width: 180.0,
+                                height: 180.0,
+                                child: (_image!=null)?Image.file(
+                                  _image,
+                                  fit: BoxFit.fill,
+                                ):Image.network(
+                                  id.documents[location[0]].data['imageUrl'],
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 30.0,),
+                    Text(id.documents[location[0]].data['name'],style: TextStyle(fontSize: 30.0),),
+                    SizedBox(height: 30.0,),
+                    Container(
+                      width: MediaQuery.of(context).size.width-40,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30.0),
+                          color: Colors.lightGreen[200],
+                          border: Border.all(color: Colors.lightGreen,width: 10),
+                      ),
+                      child: new Column(
+                        children: [
+                          DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<120
+                          ? Text("TERNERA",style: TextStyle(fontSize: 30.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=120&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<180
+                          ? Text("DESTETADA",style: TextStyle(fontSize: 30.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=180&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<360
+                          ? Text("NOVILLA",style: TextStyle(fontSize: 30.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=360?Text("ADULTA VACÍA",style: TextStyle(fontSize: 30.0),):Text("INDEFINIDO",style: TextStyle(fontSize: 30.0),),
+
+                          SizedBox(height: 20.0,),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(left: 10.0),
+                                child: Text("Fecha Inicio",style: TextStyle(fontSize: 20.0),),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left:95.0),
+                                child:  DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<120
+                                    ?Text(id.documents[location[0]].data['birthDate'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 20.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=120&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<180
+                                    ?Text(id.documents[location[0]].data['fechaIniDeste'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 20.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=180&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<360
+                                    ?Text(id.documents[location[0]].data['fechaIniNovi'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 20.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=360
+                                    ?Text(id.documents[location[0]].data['fechaIniAdulta'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 20.0),):Text("NN-NN-NN")
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 20.0,),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(left: 10.0),
+                                child: Text("Fecha Finalización",style: TextStyle(fontSize: 20.0),),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.only(left:40.0),
+                                  child:  DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<120
+                                      ?Text(id.documents[location[0]].data['fechaIniDeste'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 20.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=120&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<180
+                                      ?Text(id.documents[location[0]].data['fechaIniNovi'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 20.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=180&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<360
+                                      ?Text(id.documents[location[0]].data['fechaIniAdulta'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 20.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=360
+                                      ?Text('',style: TextStyle(fontSize: 20.0),):Text("NN-NN-NN")
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 20.0,),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(left: 10.0),
+                                child: Text("Tiempo Restante",style: TextStyle(fontSize: 20.0),),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.only(left:50.0),
+                                  child:  DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<120
+                                      ?Text('${id.documents[location[0]].data['fechaIniDeste'].toDate().difference(DateTime.now()).inDays.toString()} días',style: TextStyle(fontSize: 20.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=120&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<180
+                                      ?Text('${id.documents[location[0]].data['fechaIniNovi'].toDate().difference(DateTime.now()).inDays.toString()} días',style: TextStyle(fontSize: 20.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=180&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<360
+                                      ?Text('${id.documents[location[0]].data['fechaIniAdulta'].toDate().difference(DateTime.now()).inDays.toString()} días',style: TextStyle(fontSize: 20.0),):Text(""),
+                              )
+                            ],
+                          ),
+                         // Text(id.documents[location[0]].data['birthDate'].toDate()+new DateTime(id.documents[location[0]].data['birthDate'].toDate().year, id.documents[location[0]].data['birthDate'].toDate().year, date.day);)
+
+                        ],
+                      ),
+                    )
+                  ],
+                )
+            ),
+          ],
         );
-      }).toList(),
-    ),
-        ],
-      )
-    );
-  }
-  List cardList=[
-    Item1(),
-    Item2(),
-
-  ];
-  List<T> map<T>(List list, Function handler) {
-    List<T> result = [];
-    for (var i = 0; i < list.length; i++) {
-      result.add(handler(i, list[i]));
+      }
     }
-    return result;
-  }
-
-}
-class Item1 extends StatelessWidget {
-  const Item1({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            stops: [0.3, 1],
-            colors: [Color(0xffff4000),Color(0xffffcc66),]
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-              "Data",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold
-              )
-          ),
-          Text(
-              "Data",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w600
-              )
-          ),
-        ],
-      ),
-    );
-  }
-}
-class Item2 extends StatelessWidget {
-  const Item2({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            stops: [0.3, 1],
-            colors: [Color(0xffff4000),Color(0xffffcc66),]
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-              "Holi",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold
-              )
-          ),
-          Text(
-              "Holi",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w600
-              )
-          ),
-        ],
-      ),
-    );
   }
 }

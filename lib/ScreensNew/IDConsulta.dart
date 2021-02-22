@@ -20,10 +20,11 @@ class IDSearch extends StatefulWidget{
 }
 
 class _IDSearchState extends State<IDSearch>{
+  DateTime fechaFinTer,fechainiDeste,fechaFinDeste,fechaIniNovi,fechaFinNovi,fechaIniAdulta;
   bool flag=true;
   DateTime selectedDate = DateTime.now();
-  bool _nameHasError = true;
-  bool _razaHasError = true;
+  bool _nameHasError = false;
+  bool _razaHasError = false;
   bool _birthDateHasError = false;
   final _formKey = GlobalKey<FormBuilderState>();
 
@@ -258,9 +259,10 @@ class _IDSearchState extends State<IDSearch>{
                           RaisedButton(
                             color: Colors.white,
                             onPressed: () {
+                              calcFechas(selectedDate);
                               var SelectedDoc=id.documents[location[0]].documentID.toString();
                               print(id.documents[location[0]].documentID.toString());
-                              idSearch.updateID(SelectedDoc, {'name':_formKey.currentState.fields['Nombre'].value,'raza':_formKey.currentState.fields['Raza'].value,'birthDate':selectedDate});
+                              idSearch.updateID(SelectedDoc, {'name':_formKey.currentState.fields['Nombre'].value,'raza':_formKey.currentState.fields['Raza'].value,'birthDate':selectedDate,'fechaIniDeste':fechainiDeste,'fechaIniNovi':fechaIniNovi,'fechaIniAdulta':fechaIniAdulta});
                               flag=true;
                               setState(() {
 
@@ -422,6 +424,15 @@ class _IDSearchState extends State<IDSearch>{
       setState(() {
         selectedDate = picked;
       });
+  }
+  calcFechas(DateTime inicio){
+    fechaFinTer=new DateTime(inicio.year,inicio.month+4,inicio.day);
+    fechainiDeste=new DateTime(inicio.year,inicio.month+4,inicio.day);
+    fechaFinDeste=new DateTime(inicio.year,inicio.month+6,inicio.day);
+    fechaIniNovi=new DateTime(inicio.year,inicio.month+6,inicio.day);
+    fechaFinNovi=new DateTime(inicio.year,inicio.month+12,inicio.day);
+    fechaIniAdulta=new DateTime(inicio.year,inicio.month+12,inicio.day);
+
   }
 
 }

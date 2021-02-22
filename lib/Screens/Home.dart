@@ -8,12 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:myfarm_app/HomeTools/DBPublicity.dart';
 import 'package:myfarm_app/LoginTools/auth.dart';
 import 'package:myfarm_app/LoginTools/utils.dart';
-import 'package:myfarm_app/Screens/HistorialMedicoSeleccion.dart';
-import 'package:myfarm_app/Screens/Identification.dart';
 import 'package:myfarm_app/Screens/Login.dart';
-import 'package:myfarm_app/Screens/ObservacionesSeleccion.dart';
 import 'package:myfarm_app/Screens/Settings.dart';
 import 'package:myfarm_app/ScreensNew/IDConsulta.dart';
+import 'package:myfarm_app/ScreensNew/RegMedico.dart';
 import 'package:myfarm_app/ScreensNew/ReproState.dart';
 
 import '../AdMob.dart';
@@ -52,7 +50,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffAEA48F),
+      backgroundColor: Colors.white,
       //backgroundColor: Colors.blue,
       /*appBar: AppBar(
         backgroundColor: Colors.orange,
@@ -134,6 +132,12 @@ class _HomeState extends State<Home> {
             SizedBox(
               height: 30.0,
             ),
+            RaisedButton(
+              child: Text("Salir"),
+              onPressed: (){
+                _signOut(context);
+              },
+            ),
             Padding(
               padding: EdgeInsets.only(right:MediaQuery.of(context).size.width-100),
               child: new Text("Recordatorios"),
@@ -144,7 +148,8 @@ class _HomeState extends State<Home> {
             new Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
-                color: Color(0xffF1E2E2),
+                color: Colors.orange.withOpacity(0.37),
+                border: Border.all(color: Colors.orange,width: 5)
               ),
               width: MediaQuery.of(context).size.width-10,
               height: 80.0,
@@ -162,14 +167,15 @@ class _HomeState extends State<Home> {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.0),
-                      color: Color(0xffC4C4C4),
+                      color: Color(0xff84DCEF).withOpacity(0.34),
+                      border: Border.all(color: Color(0xff84DCEF),width: 10.0)
                     ),
                     padding: const EdgeInsets.all(8),
                     child: Center(
                       child: Column(
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(top: 30),
+                            padding: EdgeInsets.only(top: 15),
                             child: new Image.asset(
                               'assets/images/Info.png',
                               height: 70.0,
@@ -177,9 +183,16 @@ class _HomeState extends State<Home> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 20.0),
-                            child: Text("IDENTIFICACIÓN",
-                              style: new TextStyle(fontSize: 15),),
-                          ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  color: Colors.white,
+
+                              ),
+                              child:  Text("IDENTIFICACIÓN",
+                                style: new TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                            ),
+                           ),
                         ],
                       ),
                     ),
@@ -197,6 +210,41 @@ class _HomeState extends State<Home> {
                 ),
                 InkWell(
                   child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: Color(0xff84DCEF).withOpacity(0.34),
+                        border: Border.all(color: Color(0xff84DCEF),width: 10.0)
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 15),
+                            child: new Image.asset(
+                              'assets/images/estadistica.png',
+                              height: 90.0,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 20.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5.0),
+                                color: Colors.white,
+
+                              ),
+                              child:  Text("PRODUCCIÓN LECHE",
+                                style: new TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+
+                  /*Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.0),
                       color: Color(0xffC4C4C4),
@@ -220,17 +268,52 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                     )
-                  ),
+                  ),*/
                   onTap: () {
-                    Navigator.of(context).pushAndRemoveUntil(
+                    /*Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(builder: (context) =>
                             ObsSelection(data: widget.data,
                               currentUser: widget.currentUser,)), (
-                        Route<dynamic> route) => false);
+                        Route<dynamic> route) => false);*/
                   },
                 ),
                 InkWell(
                   child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: Color(0xff84DCEF).withOpacity(0.34),
+                        border: Border.all(color: Color(0xff84DCEF),width: 10.0)
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 15),
+                            child: new Image.asset(
+                              'assets/images/vaca.png',
+                              height: 70.0,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 20.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5.0),
+                                color: Colors.white,
+
+                              ),
+                              child:  Text("ESTADO REPRODUCTIVO",
+                                style: new TextStyle(fontSize: 15,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+
+                  /*Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.0),
                       color: Color(0xffC4C4C4),
@@ -255,16 +338,54 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                     ),
-                  ),
+                  ),*/
                   onTap: () {
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(builder: (context) =>
-                            ReproScreen()), (
+                            ReproScreen(data: widget.data,currentUser:widget.currentUser)), (
                         Route<dynamic> route) => false);
                   },
                 ),
                 InkWell(
                   child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: Color(0xff84DCEF).withOpacity(0.34),
+                        border: Border.all(color: Color(0xff84DCEF),width: 10.0)
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 15),
+                            child: new Image.asset(
+                              'assets/images/medicina.png',
+                              height: 85.0,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 20.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5.0),
+                                color: Colors.white,
+
+                              ),
+                              child:  Text("ESTADO MÉDICO",
+                                style: new TextStyle(fontSize: 15,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+
+
+
+
+                  /*Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.0),
                       color: Color(0xffC4C4C4),
@@ -289,11 +410,11 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                     ),
-                  ),
+                  ),*/
                   onTap: () {
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(builder: (context) =>
-                            SettingsOnePage(data: widget.data,
+                            RegMedico(data: widget.data,
                               currentUser: widget.currentUser,)), (
                         Route<dynamic> route) => false);
                   },
@@ -358,5 +479,17 @@ class _HomeState extends State<Home> {
       ),*/
 
     );
+  }
+  void _signOut(BuildContext context) async {
+    String _returnString = await Auth().signOut();
+    if (_returnString == "success") {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Login(),
+        ),
+            (route) => false,
+      );
+    }
   }
 }
