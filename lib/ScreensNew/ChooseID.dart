@@ -4,6 +4,9 @@ import 'package:myfarm_app/IDTools/dbID.dart';
 import 'package:myfarm_app/Screens/Home.dart';
 import 'package:myfarm_app/Screens/ScannerQR.dart';
 import 'package:myfarm_app/ScreensNew/IDCreate.dart';
+import 'package:myfarm_app/SearchIDTools/SearchCard.dart';
+import 'package:myfarm_app/SearchIDTools/Trip.dart';
+import 'package:provider/provider.dart';
 
 class IDChooser extends StatefulWidget{
   final String currentUser;
@@ -15,17 +18,58 @@ class IDChooser extends StatefulWidget{
 }
 
 class _IDChooserState extends State<IDChooser>{
+  Future resultsLoaded;
+  List _allResults = [];
+  List _resultsList = [];
+  TextEditingController _searchController = TextEditingController();
   QuerySnapshot id;
   dbID idSearch = new dbID();
   @override
   void initState() {
     super.initState();
-    idSearch.getData().then((results){
+    _searchController.addListener(_onSearchChanged);
+    /*idSearch.getData().then((results){
       setState(() {
         id = results;
       });
+    });*/
+  }
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    resultsLoaded = getUsersPastTripsStreamSnapshots();
+  }
+  _onSearchChanged() {
+    searchResultsList();
+  }
+  searchResultsList() {
+    var showResults = [];
+
+    if(_searchController.text != "") {
+      for(var tripSnapshot in _allResults){
+        var title = Trip.fromSnapshot(tripSnapshot).title.toLowerCase();
+        var code = Trip.fromSnapshot(tripSnapshot).code.toLowerCase();
+
+        if(title.contains(_searchController.text.toLowerCase())) {
+          showResults.add(tripSnapshot);
+        }else if(code.contains(_searchController.text.toLowerCase())){
+          showResults.add(tripSnapshot);
+        }
+      }
+
+    } else {
+      showResults = List.from(_allResults);
+    }
+    setState(() {
+      _resultsList = showResults;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -72,184 +116,47 @@ class _IDChooserState extends State<IDChooser>{
           ],
           backgroundColor: Colors.white,
         ),
-        body: _IDList(),
+      body: new Column(
+        children: [
+          TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search)
+            ),
+          ),
+          Expanded(
+                child: ListView.builder(
+                  itemCount: _resultsList.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                    buildTripCard(context, _resultsList[index]),
+                  ),
+                ),
+        ],
+
+      ),
+
 
     );
   }
-  Widget _IDList(){
-    if (id != null) {
-      bool carflag = false;
-      List<int> location = [];
-      for(var y = 0; y < id.documents.length; y++){
-        if(id.documents[y].data['currentUser'] == widget.currentUser){
-          carflag = true;
-          location.add(y);
-        }
-      }
 
-      if(carflag == true){
-        return SingleChildScrollView(
-          child: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              itemCount: location.length,
-              padding: EdgeInsets.all(5.0),
-              itemBuilder: (context, i){
-
-                    return new InkWell(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                          color: Colors.yellow,
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        height: 90,
-                        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Center(
-                              child: Container(
-                                  width: 70,
-                                  height: 70,
-                                  margin: EdgeInsets.only(right: 15),
-                                  child: Image(image: AssetImage('assets/images/cowSearch.png'),height: 50,)),
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-
-                                  Text(
-                                    id.documents[location[i]].data['name'],style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
-                                  ),
-
-
-                                  Row(
-                                    children: <Widget>[
-                                      Container(
-                                        child: Icon(
-                                          Icons.featured_video_sharp,
-                                          color: Colors.orangeAccent,
-                                          size: 20,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Flexible(
-                                        child: Container(
-                                          width: MediaQuery.of(context).size.width,
-                                          child: Text("Raza: ${id.documents[location[i]].data['raza']}",
-                                            /* style: TextStyle(
-                                                color: primary, fontSize: 18, letterSpacing: .3)*/),
-                                        ),
-                                      ),
-
-                                    ],
-                                  ),
-                                  Row(
-                                    children: <Widget>[
-                                      Container(
-                                        child: Icon(
-                                          Icons.calendar_today,
-                                          color: Colors.blue,
-                                          size: 20,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Flexible(
-                                        child: Container(
-                                          width: MediaQuery.of(context).size.width,
-                                          child: Text("Fecha Nacimiento: ${id.documents[location[i]].data['birthDate'].toDate().toString().substring(0,10)}",
-                                            /* style: TextStyle(
-                                                color: primary, fontSize: 18, letterSpacing: .3)*/),
-                                        ),
-                                      ),
-
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-
-                      ),
-                      onTap: (){
-                        _nextpage(context,location[i]);
-                      },
-                    );
-              }
-          ),
-        );
-
-      }////////
-      else{
-        return new Scaffold(
-          body: new Container(
-            width: MediaQuery.of(context).size.width,
-            child: new Center(
-              child: ListView(
-                children: [
-                  new Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(top: 80.0),
-                        child: new Text("NO HAY REGISTROS EXISTENTES",style: new TextStyle(fontSize: 30,color: Colors.pinkAccent),textAlign: TextAlign.center,),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 60.0),
-                        child: new Text("* Para ingresar un nuevo vehículo, pulse aquí:",style: new TextStyle(fontSize: 24,color: Colors.black),textAlign: TextAlign.center,),
-                      ),
-                      Center(
-                          child: Container(
-                            width: 150.0,
-                            height: 80.0,
-                            margin: const EdgeInsets.only(top: 75.0),
-                            /*child: new IconButton(
-                      icon: Icon(Icons.camera_alt,size: 70,),
-
-                      //child: new Text("SCANNER",style: TextStyle(fontSize: 25),),*/
-                            child: FlatButton(
-                              onPressed: () {
-
-                              },
-                              color: Colors.orange,
-                              padding: EdgeInsets.all(10.0),
-                              child: Column( // Replace with a Row for horizontal icon + text
-                                children: <Widget>[
-                                  Icon(Icons.add,size: 60,),
-                                ],
-                              ),
-                            ),
-
-                          )
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-
-            ),
-          ),
-
-
-
-        );
-      }
-    }
+  getUsersPastTripsStreamSnapshots() async {
+    //final uid = await Provider.of(context).auth.getCurrentUID();
+    var data = await Firestore.instance
+        .collection('CowIDs')
+        .where('currentUser',isEqualTo: widget.currentUser)
+        .getDocuments();
+    setState(() {
+      _allResults = data.documents;
+    });
+    searchResultsList();
+    return "complete";
   }
+
   _nextpage(BuildContext context, i) {
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => Home(currentUser: widget.currentUser,data: id.documents[i].data['code'],),
+          builder: (context) => Home(currentUser: widget.currentUser,),
         ),
             (route) => false);
   }

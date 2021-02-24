@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:myfarm_app/IDTools/dbID.dart';
 import 'package:myfarm_app/LoginTools/ActiveRoot.dart';
 import 'package:myfarm_app/LoginTools/authModel.dart';
 import 'package:myfarm_app/LoginTools/userModel.dart';
@@ -35,7 +36,7 @@ class Auth {
   Future<String> signUpUser(
       String email, String password, String worker) async {
     String retVal = "error";
-    /*try {
+    try {
       AuthResult _authResult = await _auth.createUserWithEmailAndPassword(
           email: email.trim(), password: password);
       UserModel _user = UserModel(
@@ -45,17 +46,17 @@ class Auth {
         accountCreated: DateTime.now(),
         notifToken: await _fcm.getToken(),
       );
-      //String _returnString = await DBRecords().createUser(_user);
-      /*if (_returnString == "success") {
+      String _returnString = await dbID().createUser(_user);
+      if (_returnString == "success") {
         retVal = "success";
       }
     } on PlatformException catch (e) {
       retVal = e.message;
     } catch (e) {
       print(e);
-    }*/
+    }
 
-    return retVal;*/
+    return retVal;
   }
 
   Future<String> loginUserWithEmail(String email, String password) async {

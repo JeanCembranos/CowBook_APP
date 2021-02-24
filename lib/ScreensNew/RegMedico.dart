@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:myfarm_app/RegTools/DBReg.dart';
 import 'package:myfarm_app/Screens/Home.dart';
+import 'package:myfarm_app/ScreensNew/ConsTratamiento.dart';
 import 'package:myfarm_app/ScreensNew/crearTratamiento.dart';
 
 class RegMedico extends StatefulWidget{
@@ -27,8 +28,6 @@ class _RegMedicoState extends State<RegMedico>{
 
   @override
   void initState() {
-    _dropdownMenuItems = buildDropdownMenuItems(_option);
-    _selectedOption = _dropdownMenuItems[0].value;
     super.initState();
     objReg.getData().then((results){
       setState(() {
@@ -192,11 +191,7 @@ class _RegMedicoState extends State<RegMedico>{
                                         registros.documents[location[i]].data['fechaFin'].toDate().difference(DateTime.now()).inDays<=0&&registros.documents[location[i]].data['fechaFin'].toDate().difference(DateTime.now()).inHours<=12
                                             ?"COMPLETADO":"EN CURSO",style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
                                       ),
-                                      DropdownButton(
-                                        value: _selectedOption,
-                                        items: _dropdownMenuItems,
-                                        onChanged: onChangeDropdownItem,
-                                      ),
+
                                     ],
                                   ),
 
@@ -253,7 +248,7 @@ class _RegMedicoState extends State<RegMedico>{
 
                       ),
                       onTap: (){
-                        // _nextpage(context,location[i]);
+                        _nextpage(context,location[i]);
                       },
                     )
                 );
@@ -325,32 +320,14 @@ class _RegMedicoState extends State<RegMedico>{
     }
   }
 
-  List<DropdownMenuItem<String>> buildDropdownMenuItems(List options) {
-    List<DropdownMenuItem<String>> items = List();
-    for (String option in options) {
-      items.add(
-        DropdownMenuItem(
-          value: option,
-          child: Text(option),
-        ),
-      );
-    }
-    return items;
-  }
-  onChangeDropdownItem(String selectedCompany) {
-    selectedCompany=="Detalles"
-        ?Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            CreateReg(currentUser: widget.currentUser,data: widget.data,),
-      ),
-          (route) => false,
-    ):Text("");
-    /*setState(() {
-      _selectedOption = selectedCompany;
-    });*/
 
+  _nextpage(BuildContext context, int i) {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TratDetails(currentUser: widget.currentUser,data: widget.data,indice: i),
+        ),
+            (route) => false);
   }
 
 }

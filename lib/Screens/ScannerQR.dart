@@ -146,7 +146,7 @@ class _ScannerState extends State <Scanner> {
                             onPressed: () => scanQR(),
                             child: Text("Start QR scan",style: TextStyle(color: Colors.white, fontSize: 20.0))),*/
                             RawMaterialButton(
-                              onPressed: () => scanQR() ,
+                              onPressed: () => scanQR(),
                               elevation: 2.0,
                               fillColor: Colors.orangeAccent,
                               child: Column(

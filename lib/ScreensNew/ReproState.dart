@@ -77,8 +77,8 @@ class _ReproScreenState extends State<ReproScreen>{
                 height: MediaQuery.of(context).size.height,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30.0),
-                    color: Colors.cyan[100],
-                    border: Border.all(color: Colors.cyan,width: 10)
+                    color: Colors.white,
+                    border: Border.all(color: Color(0xffF2B90F),width: 5)
                 ),
                 child: new Column(
                   children: [
@@ -97,8 +97,11 @@ class _ReproScreenState extends State<ReproScreen>{
                           }),
                       alignment: Alignment.topLeft,
                     ),
-                    SizedBox(height: 25.0,),
-                    Text("ESTADO REPRODUCTIVO",style: TextStyle(fontSize: 30.0,fontWeight: FontWeight.bold),),
+                    SizedBox(height: 15.0,),
+                    Align(
+                      child: Text("ESTADO REPRODUCTIVO",style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold,),),
+                      alignment: Alignment.topLeft,
+                    ),
                     SizedBox(height: 30.0,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -107,7 +110,7 @@ class _ReproScreenState extends State<ReproScreen>{
                           alignment: Alignment.center,
                           child: CircleAvatar(
                             radius: 100,
-                            backgroundColor: Colors.cyan,
+                            backgroundColor: Colors.white,
                             child: ClipOval(
                               child: new SizedBox(
                                 width: 180.0,
@@ -132,8 +135,8 @@ class _ReproScreenState extends State<ReproScreen>{
                       width: MediaQuery.of(context).size.width-40,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30.0),
-                          color: Colors.lightGreen[200],
-                          border: Border.all(color: Colors.lightGreen,width: 10),
+                          color: Color(0xffF2B90F).withOpacity(0.79),
+                          border: Border.all(color: Color(0xffF2B90F),width: 10),
                       ),
                       child: new Column(
                         children: [
@@ -143,38 +146,44 @@ class _ReproScreenState extends State<ReproScreen>{
                           ? Text("NOVILLA",style: TextStyle(fontSize: 30.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=360?Text("ADULTA VACÍA",style: TextStyle(fontSize: 30.0),):Text("INDEFINIDO",style: TextStyle(fontSize: 30.0),),
 
                           SizedBox(height: 20.0,),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(left: 10.0),
-                                child: Text("Fecha Inicio",style: TextStyle(fontSize: 20.0),),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left:95.0),
-                                child:  DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<120
-                                    ?Text(id.documents[location[0]].data['birthDate'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 20.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=120&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<180
-                                    ?Text(id.documents[location[0]].data['fechaIniDeste'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 20.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=180&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<360
-                                    ?Text(id.documents[location[0]].data['fechaIniNovi'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 20.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=360
-                                    ?Text(id.documents[location[0]].data['fechaIniAdulta'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 20.0),):Text("NN-NN-NN")
-                              )
-                            ],
+                          Container(
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(left: 10.0),
+                                  child: Text("Fecha Inicio",style: TextStyle(fontSize: 20.0),),
+                                ),
+                                Padding(
+                                    padding: EdgeInsets.only(left:85.0),
+                                        child:  DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<120
+                                            ?Text(id.documents[location[0]].data['birthDate'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 15.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=120&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<180
+                                            ?Text(id.documents[location[0]].data['fechaIniDeste'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 15.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=180&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<360
+                                            ?Text(id.documents[location[0]].data['fechaIniNovi'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 15.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=360
+                                            ?Text(id.documents[location[0]].data['fechaIniAdulta'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 15.0),):Text("NN-NN-NN")
+                                    )
+                              ],
+                            ),
+                            width: MediaQuery.of(context).size.width,
                           ),
                           SizedBox(height: 20.0,),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(left: 10.0),
-                                child: Text("Fecha Finalización",style: TextStyle(fontSize: 20.0),),
-                              ),
-                              Padding(
-                                  padding: EdgeInsets.only(left:40.0),
-                                  child:  DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<120
-                                      ?Text(id.documents[location[0]].data['fechaIniDeste'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 20.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=120&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<180
-                                      ?Text(id.documents[location[0]].data['fechaIniNovi'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 20.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=180&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<360
-                                      ?Text(id.documents[location[0]].data['fechaIniAdulta'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 20.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=360
-                                      ?Text('',style: TextStyle(fontSize: 20.0),):Text("NN-NN-NN")
-                              )
-                            ],
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(left: 10.0),
+                                  child: Text("Fecha Finalización",style: TextStyle(fontSize: 20.0),),
+                                ),
+                                Padding(
+                                    padding: EdgeInsets.only(left:25.0),
+                                    child: DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<120
+                                          ?Text(id.documents[location[0]].data['fechaIniDeste'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 15.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=120&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<180
+                                          ?Text(id.documents[location[0]].data['fechaIniNovi'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 15.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=180&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<360
+                                          ?Text(id.documents[location[0]].data['fechaIniAdulta'].toDate().toString().substring(0,10),style: TextStyle(fontSize: 15.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=360
+                                          ?Text('',style: TextStyle(fontSize: 20.0),):Text("NN-NN-NN")
+                                    ),
+                              ],
+                            ),
                           ),
                           SizedBox(height: 20.0,),
                           Row(
@@ -184,7 +193,7 @@ class _ReproScreenState extends State<ReproScreen>{
                                 child: Text("Tiempo Restante",style: TextStyle(fontSize: 20.0),),
                               ),
                               Padding(
-                                  padding: EdgeInsets.only(left:50.0),
+                                  padding: EdgeInsets.only(left:40.0),
                                   child:  DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<120
                                       ?Text('${id.documents[location[0]].data['fechaIniDeste'].toDate().difference(DateTime.now()).inDays.toString()} días',style: TextStyle(fontSize: 20.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=120&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<180
                                       ?Text('${id.documents[location[0]].data['fechaIniNovi'].toDate().difference(DateTime.now()).inDays.toString()} días',style: TextStyle(fontSize: 20.0),):DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays>=180&&DateTime.now().difference(id.documents[location[0]].data['birthDate'].toDate()).inDays<360

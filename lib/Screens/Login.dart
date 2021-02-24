@@ -473,7 +473,19 @@ class _BottomPartHomeState extends State<BottomPartHome> {
                     child: new  Row(
                       children: [
                         Text("Aún no tienes una cuenta?",style: TextStyle(fontWeight: FontWeight.bold),),
-                        Text("Créala Ahora",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),),
+                        InkWell(
+                          child: Text("Créala Ahora",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),),
+                          onTap: (){
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Signup()
+                              ),
+                                  (route) => false,
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ),

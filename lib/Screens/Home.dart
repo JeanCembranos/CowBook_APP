@@ -134,12 +134,6 @@ class _HomeState extends State<Home> {
             SizedBox(
               height: 30.0,
             ),
-            RaisedButton(
-              child: Text("Salir"),
-              onPressed: (){
-                _signOut(context);
-              },
-            ),
             Padding(
               padding: EdgeInsets.only(right:MediaQuery.of(context).size.width-100),
               child: new Text("Recordatorios"),
@@ -191,7 +185,7 @@ class _HomeState extends State<Home> {
                                   color: Colors.white,
 
                               ),
-                              child:  Text("IDENTIFICACIÓN",
+                              child:  Text("Identificación",
                                 style: new TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
                             ),
                            ),
@@ -222,21 +216,21 @@ class _HomeState extends State<Home> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(top: 15),
+                            padding: EdgeInsets.only(top: 5),
                             child: new Image.asset(
                               'assets/images/estadistica.png',
                               height: 90.0,
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 20.0),
+                            padding: EdgeInsets.only(top: 10.0),
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5.0),
                                 color: Colors.white,
 
                               ),
-                              child:  Text("PRODUCCIÓN LECHE",
+                              child:  Text("Producción Leche",
                                 style: new TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
                             ),
                           ),
@@ -291,21 +285,21 @@ class _HomeState extends State<Home> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(top: 15),
+                            padding: EdgeInsets.only(top: 5),
                             child: new Image.asset(
                               'assets/images/vaca.png',
                               height: 70.0,
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 20.0),
+                            padding: EdgeInsets.only(top: 10.0),
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5.0),
                                 color: Colors.white,
 
                               ),
-                              child:  Text("ESTADO REPRODUCTIVO",
+                              child:  Text("Estado Reproductivo",
                                 style: new TextStyle(fontSize: 15,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                             ),
                           ),
@@ -360,21 +354,21 @@ class _HomeState extends State<Home> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(top: 15),
+                            padding: EdgeInsets.only(top: 5),
                             child: new Image.asset(
                               'assets/images/medicina.png',
                               height: 85.0,
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top: 20.0),
+                            padding: EdgeInsets.only(top: 10.0),
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5.0),
                                 color: Colors.white,
 
                               ),
-                              child:  Text("ESTADO MÉDICO",
+                              child:  Text("Estado Médico",
                                 style: new TextStyle(fontSize: 15,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                             ),
                           ),

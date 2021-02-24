@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:myfarm_app/LoginTools/utils.dart';
 import 'package:myfarm_app/Screens/Login.dart';
 
@@ -13,7 +14,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffbE29A2D),
+      backgroundColor: Colors.white,
           body: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -50,6 +51,8 @@ class Signupform extends StatefulWidget {
 }
 
 class _SignupformState extends State<Signupform> {
+  bool _correoHasError = false;
+  final _formKeyCorreo = GlobalKey<FormBuilderState>();
   TextEditingController _emailController = TextEditingController();
   var _formKey=GlobalKey<FormState>();
   String email="";
@@ -60,57 +63,50 @@ class _SignupformState extends State<Signupform> {
         key: _formKey,
         child: Column(
             children: <Widget>[
-              Text("RECUPERACIÓN",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: screenAwareSize(30.0, context),
-                      fontWeight: FontWeight.normal,
-                      fontFamily: "Montserrat-Bold")),
-              SizedBox(
-                height: screenAwareSize(5.0, context),
-              ),
-              Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                        child: Image.asset('assets/images/llave.png',
-                            width: screenAwareSize(180, context),
-                            height: screenAwareSize(180, context)),
-                      ),
-                    ),
-                  ]),
-              SizedBox(
-                height: screenAwareSize(30.0, context),
-              ),
-              Padding(
-                padding: EdgeInsets.only(right: 175),
-                child: Text("Correo Electrónico",style: new TextStyle(color: Colors.white),),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: new Container(
-                  width: 340,
-                  height: 30,
-                  child: new TextField(
-                    controller: _emailController,
-                    decoration: new InputDecoration(
-                        border: new OutlineInputBorder(
-                          borderRadius: const BorderRadius.all(
-                            const Radius.circular(40.0),
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white),
-                  ),
+              new Container(
+                width: MediaQuery.of(context).size.width,
+                child: ClipRRect(
+                  child: Image.asset('assets/images/recovery.png',
+                      width: screenAwareSize(250, context),
+                      height: screenAwareSize(250, context),fit: BoxFit.cover,),
                 ),
               ),
               SizedBox(
-                height: screenAwareSize(80.0, context),
+                height: screenAwareSize(30.0, context),
+              ),
+              FormBuilder(
+                key: _formKeyCorreo,
+                autovalidateMode: AutovalidateMode.disabled,
+                skipDisabled: true,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FormBuilderTextField(
+                        autovalidateMode: AutovalidateMode.always,
+                        name: "correo",
+                        decoration: InputDecoration(
+                          labelText: 'Correo Electrónico',
+                          suffixIcon: _correoHasError
+                              ? const Icon(Icons.error, color: Colors.red)
+                              : const Icon(Icons.check, color: Colors.green),
+                        ),
+                        onChanged: (val) {
+                          setState(() {
+                            _correoHasError =
+                            !_formKeyCorreo.currentState.fields['correo'].validate();
+                          });
+                        },
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context),
+                        ]),
+                        textInputAction: TextInputAction.next,
+                      ),
+                      ]
+                ),
+              ),
+
+              SizedBox(
+                height: 10,
               ),
 
               Padding(
@@ -118,8 +114,8 @@ class _SignupformState extends State<Signupform> {
                     left: 20.0, right: 20.0, top: 20.0),
                 child: GestureDetector(
                   onTap: () {
-                    if(_formKey.currentState.validate()&&!_emailController.text.contains(" ")){
-                      FirebaseAuth.instance.sendPasswordResetEmail(email: _emailController.text).then((value) => showSnackBar(context));
+                    if(_formKey.currentState.validate()&&! _formKeyCorreo.currentState.fields['correo'].value.contains(" ")){
+                      FirebaseAuth.instance.sendPasswordResetEmail(email: _formKeyCorreo.currentState.fields['correo'].value).then((value) => showSnackBar(context));
                     }else{
                       Flushbar(
                         borderRadius: 8,
