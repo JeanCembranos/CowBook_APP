@@ -6,6 +6,8 @@ import 'package:myfarm_app/RegTools/DBReg.dart';
 import 'package:myfarm_app/Screens/Home.dart';
 import 'package:myfarm_app/ScreensNew/ConsTratamiento.dart';
 import 'package:myfarm_app/ScreensNew/crearTratamiento.dart';
+import 'package:myfarm_app/SearchIDTools/HealthTrip.dart';
+import 'package:myfarm_app/SearchIDTools/SearchCardTrat.dart';
 
 class RegMedico extends StatefulWidget{
   final String data;
@@ -19,7 +21,10 @@ class RegMedico extends StatefulWidget{
 }
 
 class _RegMedicoState extends State<RegMedico>{
-  List<String> _option = ["","Detalles"];
+  Future resultsLoaded;
+  List _allResults = [];
+  List _resultsList = [];
+  TextEditingController _searchController = TextEditingController();
   List<DropdownMenuItem<String>> _dropdownMenuItems;
   String _selectedOption;
   QuerySnapshot registros;
@@ -29,10 +34,52 @@ class _RegMedicoState extends State<RegMedico>{
   @override
   void initState() {
     super.initState();
-    objReg.getData().then((results){
-      setState(() {
-        registros = results;
-      });
+    _searchController.addListener(_onSearchChanged);
+
+  }
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    resultsLoaded = getUsersPastTripsStreamSnapshots();
+  }
+  _onSearchChanged() {
+    searchResultsList();
+  }
+  getUsersPastTripsStreamSnapshots() async {
+    //final uid = await Provider.of(context).auth.getCurrentUID();
+    var data = await Firestore.instance
+        .collection('DBReg')
+        .where('currentUser',isEqualTo: widget.currentUser,)
+        .where('codigo',isEqualTo: widget.data,)
+        .getDocuments();
+    setState(() {
+      _allResults = data.documents;
+    });
+    searchResultsList();
+    return "complete";
+  }
+  searchResultsList() {
+    var showResults = [];
+
+    if(_searchController.text != "") {
+      for(var tripSnapshot in _allResults){
+        var medicamento = HealthTrip.fromSnapshot(tripSnapshot).medicamento.toLowerCase();
+
+        if(medicamento.contains(_searchController.text.toLowerCase())) {
+          showResults.add(tripSnapshot);
+        }
+      }
+
+    } else {
+      showResults = List.from(_allResults);
+    }
+    setState(() {
+      _resultsList = showResults;
     });
   }
 
@@ -78,56 +125,30 @@ class _RegMedicoState extends State<RegMedico>{
       ],
       backgroundColor: Colors.white,
     ),
-      body: _RegList()/*new Column(
+      body:  new Column(
         children: [
-          Align(
-            child: Container(
-              width: MediaQuery.of(context).size.width-10,
-              height: 200,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/TratLogo.png"),
-                      fit: BoxFit.cover
-                  )
-              ),
-            ),
-            alignment: Alignment.center,
-          ),
-          Divider(height: 20.0,color: Colors.black,),
-          RaisedButton(
-            color: Colors.white,
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      CreateReg(currentUser: widget.currentUser,data: widget.data,),
-                ),
-                    (route) => false,
-              );
-            },
-            elevation: 4.0,
-            splashColor:  Colors.blue[400],
-            child: Text(
-              'NUEVO REGISTRO',
-              style: TextStyle(color: Colors.red, fontSize: 25.0),
-            ),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
-                side: BorderSide(color: Colors.red)
+          TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+                prefixIcon: Icon(Icons.search)
             ),
           ),
-          Divider(height: 20.0,color: Colors.black,),
-         _RegList()
+          Expanded(
+            child: ListView.builder(
+              itemCount: _resultsList.length,
+              itemBuilder: (BuildContext context, int index) =>
+                  buildTripCardTrat(context, _resultsList[index]),
+            ),
+          ),
         ],
-      ),*/
+
+      ),
       );
   }
 
 
 
-  Widget _RegList(){
+  /*Widget _RegList(){
     if (registros != null) {
       bool carflag = false;
       List<int> location = [];
@@ -318,7 +339,7 @@ class _RegMedicoState extends State<RegMedico>{
         );
       }
     }
-  }
+  }*/
 
 
   _nextpage(BuildContext context, int i) {
