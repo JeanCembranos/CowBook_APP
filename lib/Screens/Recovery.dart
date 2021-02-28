@@ -51,11 +51,9 @@ class Signupform extends StatefulWidget {
 }
 
 class _SignupformState extends State<Signupform> {
-  bool _correoHasError = false;
+  bool _correoHasError = true;
   final _formKeyCorreo = GlobalKey<FormBuilderState>();
-  TextEditingController _emailController = TextEditingController();
   var _formKey=GlobalKey<FormState>();
-  String email="";
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -97,7 +95,9 @@ class _SignupformState extends State<Signupform> {
                           });
                         },
                         validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(context),
+                          FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                          FormBuilderValidators.email(context,errorText: "Ingrese un Correo Electrónico Válido"),
+                          FormBuilderValidators.maxLength(context,100,errorText: "Correo debe contener máximo 100 caracteres")
                         ]),
                         textInputAction: TextInputAction.next,
                       ),
@@ -112,9 +112,56 @@ class _SignupformState extends State<Signupform> {
               Padding(
                 padding: const EdgeInsets.only(
                     left: 20.0, right: 20.0, top: 20.0),
-                child: GestureDetector(
+                child: Align(
+                  child:  RaisedButton(
+                    color: Colors.white,
+                    onPressed: () {
+                      if(_formKey.currentState.validate()&&_formKeyCorreo.currentState.fields['correo'].validate()){
+                        //FirebaseAuth.instance.sendPasswordResetEmail(email: _formKeyCorreo.currentState.fields['correo'].value).then((value) => showSnackBar(context));
+                        final FirebaseAuth _auth = FirebaseAuth.instance;
+                        _auth.sendPasswordResetEmail(email: _formKeyCorreo.currentState.fields['correo'].value ).then((doc) {
+                          showSnackBar(context);
+                        }).catchError((err) {
+                          Flushbar(
+                            borderRadius: 8,
+                            backgroundGradient: LinearGradient(
+                              colors: [Colors.red.shade800,Colors.redAccent.shade700],
+                              stops: [0.6,1],
+                            ),
+                            boxShadows: [
+                              BoxShadow(
+                                color: Colors.black45,
+                                offset: Offset(3, 3),
+                                blurRadius: 3,
+                              )
+                            ],
+                            duration: Duration(seconds: 2),
+                            dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+                            forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+                            title: 'ERROR',
+                            message: 'Correo electrónico inválido',
+                          )..show(context);
+                        });
+                      }
+                    },
+                    elevation: 4.0,
+                    splashColor:  Colors.blue[400],
+                    child: Text(
+                      'GUARDAR',
+                      style: TextStyle(color: Colors.green, fontSize: 25.0),
+                    ),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: BorderSide(color: Colors.green)
+                    ),
+                  ),
+                  alignment: Alignment.center,
+                ),
+
+
+                /*GestureDetector(
                   onTap: () {
-                    if(_formKey.currentState.validate()&&! _formKeyCorreo.currentState.fields['correo'].value.contains(" ")){
+                    if(_formKey.currentState.validate()&&_formKeyCorreo.currentState.fields['correo'].validate()){
                       FirebaseAuth.instance.sendPasswordResetEmail(email: _formKeyCorreo.currentState.fields['correo'].value).then((value) => showSnackBar(context));
                     }else{
                       Flushbar(
@@ -146,7 +193,7 @@ class _SignupformState extends State<Signupform> {
                       child: Text("ENVIAR SOLICITUD",style: new TextStyle(color: Colors.black),),
                     ),
                   ),
-                ),
+                ),*/
               ),
             ]
         ),
@@ -167,6 +214,7 @@ class _SignupformState extends State<Signupform> {
           blurRadius: 3,
         )
       ],
+      duration: Duration(seconds: 2),
       dismissDirection: FlushbarDismissDirection.HORIZONTAL,
       forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
       title: 'SOLICITUD DE RECUPERACIÓN ENVIADA CORRECTAMENTE',

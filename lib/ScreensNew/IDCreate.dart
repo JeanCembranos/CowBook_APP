@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:myfarm_app/IDTools/IDModel.dart';
 import 'package:myfarm_app/IDTools/dbID.dart';
 import 'package:myfarm_app/Screens/Home.dart';
+import 'package:myfarm_app/Screens/ScannerQR.dart';
 import 'package:path/path.dart';
 
 class IDCreate extends StatefulWidget{
@@ -35,7 +37,7 @@ class _IDCreateState extends State<IDCreate>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xffC4C4C4),
+        backgroundColor: Colors.white,
         title: Text('REGISTRO INDIVIDUAL',
           style: TextStyle(
               fontSize: 22.0,
@@ -45,6 +47,19 @@ class _IDCreateState extends State<IDCreate>{
         ),
         centerTitle: true,
         elevation: 0,
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black,),
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      Scanner(
+                        currentUser: widget.currentUser,),
+                ),
+                    (route) => false,
+              );
+            }),
       ),
       body: new SingleChildScrollView(
         child: new Column(
@@ -69,7 +84,7 @@ class _IDCreateState extends State<IDCreate>{
                           _image,
                           fit: BoxFit.fill,
                         ):Image.network(
-                          "https://images.unsplash.com/photo-1542158921223-4939bbed53f1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80",
+                          "https://firebasestorage.googleapis.com/v0/b/myfarmespe.appspot.com/o/CowImages%2Fvaca-1200x800.jpg?alt=media&token=535bb730-a9fb-453f-8063-8b7699341ed7",
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -115,7 +130,8 @@ class _IDCreateState extends State<IDCreate>{
                       });
                     },
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context),
+                      FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                      FormBuilderValidators.maxLength(context, 50,errorText: "Este campo debe contener máximo 50 caracteres")
                     ]),
                     textInputAction: TextInputAction.next,
                   ),
@@ -135,7 +151,8 @@ class _IDCreateState extends State<IDCreate>{
                       });
                     },
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context),
+                      FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                      FormBuilderValidators.maxLength(context, 50,errorText: "Este campo debe contener máximo 50 caracteres")
                     ]),
                     textInputAction: TextInputAction.next,
                   ),
@@ -178,19 +195,20 @@ class _IDCreateState extends State<IDCreate>{
                    child: RaisedButton(
                      color: Colors.white,
                      onPressed: () {
-                       IDModel id=IDModel(_formKey.currentState.fields['Nombre'].value,_formKey.currentState.fields['Raza'].value,selectedDate);
-                       _addID(context, id);
-
+                       if(_formKey.currentState.fields['Raza'].validate()&&_formKey.currentState.fields['Nombre'].validate()){
+                         IDModel id=IDModel(_formKey.currentState.fields['Nombre'].value,_formKey.currentState.fields['Raza'].value,selectedDate);
+                         _addID(context, id);
+                       }
                      },
                      elevation: 4.0,
                      splashColor:  Colors.blue[400],
                      child: Text(
                        'GUARDAR',
-                       style: TextStyle(color: Colors.red, fontSize: 25.0),
+                       style: TextStyle(color: Colors.green, fontSize: 25.0),
                      ),
                      shape: RoundedRectangleBorder(
                          borderRadius: BorderRadius.circular(18.0),
-                         side: BorderSide(color: Colors.red)
+                         side: BorderSide(color: Colors.green)
                      ),
                    ),
                     alignment: Alignment.center,
@@ -293,13 +311,51 @@ class _IDCreateState extends State<IDCreate>{
 
     _returnString = await dbID().createID(widget.data, widget.currentUser, idCre,image_url);
     if (_returnString == "success") {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Home(currentUser: widget.currentUser,data: widget.data,),
+      Flushbar(
+        borderRadius: 8,
+        backgroundGradient: LinearGradient(
+          colors: [Colors.green.shade800,Colors.green.shade700],
+          stops: [0.6,1],
         ),
-            (route) => false,
-      );
+        boxShadows: [
+          BoxShadow(
+            color: Colors.black45,
+            offset: Offset(3, 3),
+            blurRadius: 3,
+          )
+        ],
+        duration: Duration(seconds: 2),
+        dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+        forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+        title: 'NOTIFICACIÓN',
+        message: 'Identificación Creada Correctamente',
+      )..show(context).then((value) => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) =>  Home(currentUser: widget.currentUser,data: widget.data,))
+      ));
+    }else{
+      Flushbar(
+        borderRadius: 8,
+        backgroundGradient: LinearGradient(
+          colors: [Colors.red.shade800,Colors.red.shade700],
+          stops: [0.6,1],
+        ),
+        boxShadows: [
+          BoxShadow(
+            color: Colors.black45,
+            offset: Offset(3, 3),
+            blurRadius: 3,
+          )
+        ],
+        duration: Duration(seconds: 2),
+        dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+        forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+        title: 'ERROR',
+        message: 'Identificación ya registrada anteriormente',
+      )..show(context).then((value) => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) =>  Home(currentUser: widget.currentUser,data: widget.data,))
+      ));
     }
 
   }

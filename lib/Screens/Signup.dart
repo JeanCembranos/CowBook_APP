@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:myfarm_app/LoginTools/auth.dart';
@@ -88,7 +89,8 @@ class _SignupformState extends State<Signupform> {
                     });
                   },
                   validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(context),
+                    FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                    FormBuilderValidators.maxLength(context,50,errorText: "Correo debe contener máximo 50 caracteres"),
                   ]),
                   textInputAction: TextInputAction.next,
                 ),
@@ -107,8 +109,11 @@ class _SignupformState extends State<Signupform> {
                       !_formKey.currentState.fields['correo'].validate();
                     });
                   },
+                  keyboardType: TextInputType.emailAddress,
                   validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(context),
+                    FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                    FormBuilderValidators.email(context,errorText: "Ingrese un Correo Electrónico Válido"),
+                    FormBuilderValidators.maxLength(context,100,errorText: "Correo debe contener máximo 100 caracteres")
                   ]),
                   textInputAction: TextInputAction.next,
                 ),
@@ -129,7 +134,9 @@ class _SignupformState extends State<Signupform> {
                     });
                   },
                   validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(context),
+                    FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                    FormBuilderValidators.minLength(context, 8,errorText: "Contraseña debe contener entre 8 y 16 caracteres"),
+                    FormBuilderValidators.maxLength(context, 16,errorText: "Contraseña debe contener entre 8 y 16 caracteres"),
                   ]),
                   textInputAction: TextInputAction.next,
                 ),
@@ -150,7 +157,9 @@ class _SignupformState extends State<Signupform> {
                     });
                   },
                   validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(context),
+                    FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                    FormBuilderValidators.minLength(context, 8,errorText: "Contraseña debe contener entre 8 y 16 caracteres"),
+                    FormBuilderValidators.maxLength(context, 16,errorText: "Contraseña debe contener entre 8 y 16 caracteres"),
                   ]),
                   textInputAction: TextInputAction.next,
                 ),
@@ -159,54 +168,43 @@ class _SignupformState extends State<Signupform> {
                   child:  RaisedButton(
                     color: Colors.white,
                     onPressed: () {
-                      /*if(_formKey.currentState.fields['contrasena'].value ==_formKey.currentState.fields['contrasenaConfirm'].value  && (_formKey.currentState.fields['contrasena'].value!="" && _formKey.currentState.fields['contrasenaConfirm'].value!="")){
-                        for(int i=0;i<_formKey.currentState.fields['correo'].value.length;i++) {
-                          if (!_formKey.currentState.fields['correo'].value.characterAt(i).contains(" ")) {
-                            _signUpUser(
-                                _formKey.currentState.fields['correo'].value, _formKey.currentState.fields['contrasena'].value,
-                                context, _formKey.currentState.fields['nombre'].value);
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Login()), (
-                                route) => false);
-                            break;
-                          }else{
-                            _formKey.currentState.fields['correo'].setValue( _formKey.currentState.fields['correo'].value.substring(0,i));
-                            _signUpUser(_formKey.currentState.fields['correo'].value, _formKey.currentState.fields['contrasena'].value, context, _formKey.currentState.fields['nombre'].value);
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder:(context) =>Login()),(route) => false);
-                            break;
-                          }
+                      if(_formKey.currentState.fields['contrasena'].value==_formKey.currentState.fields['contrasenaConfirm'].value){
+                        if(_formKey.currentState.fields['correo'].validate()&&_formKey.currentState.fields['nombre'].validate()&&_formKey.currentState.fields['contrasena'].validate()){
+                          _signUpUser(
+                              _formKey.currentState.fields['correo'].value, _formKey.currentState.fields['contrasena'].value,
+                              context, _formKey.currentState.fields['nombre'].value);
                         }
                       }else{
-                        Scaffold.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text("Password do not match"),
-                            duration: Duration(seconds:2),
+                        Flushbar(
+                          borderRadius: 8,
+                          backgroundGradient: LinearGradient(
+                            colors: [Colors.red.shade800,Colors.redAccent.shade700],
+                            stops: [0.6,1],
                           ),
-                        );
-                      }*/
-                      _signUpUser(
-                          _formKey.currentState.fields['correo'].value, _formKey.currentState.fields['contrasena'].value,
-                          context, _formKey.currentState.fields['nombre'].value);
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Login()), (
-                          route) => false);
+                          boxShadows: [
+                            BoxShadow(
+                              color: Colors.black45,
+                              offset: Offset(3, 3),
+                              blurRadius: 3,
+                            )
+                          ],
+                          duration: Duration(seconds: 2),
+                          dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+                          forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+                          title: 'ERROR',
+                          message: 'Contraseñas no Coinciden',
+                        )..show(context);
+                      }
                     },
                     elevation: 4.0,
                     splashColor:  Colors.blue[400],
                     child: Text(
                       'GUARDAR',
-                      style: TextStyle(color: Colors.red, fontSize: 25.0),
+                      style: TextStyle(color: Colors.green, fontSize: 25.0),
                     ),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0),
-                        side: BorderSide(color: Colors.red)
+                        side: BorderSide(color: Colors.green)
                     ),
                   ),
                   alignment: Alignment.center,
@@ -222,14 +220,48 @@ class _SignupformState extends State<Signupform> {
     try{
       String _returnString = await Auth().signUpUser(email,password,fullName);
       if (_returnString == "success"){
-        Navigator.pop(context);
-      } else{
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text(_returnString),
-            duration: Duration(seconds: 2),
+        Flushbar(
+          borderRadius: 8,
+          backgroundGradient: LinearGradient(
+            colors: [Colors.green.shade800,Colors.green.shade700],
+            stops: [0.6,1],
           ),
-        );
+          boxShadows: [
+            BoxShadow(
+              color: Colors.black45,
+              offset: Offset(3, 3),
+              blurRadius: 3,
+            )
+          ],
+          duration: Duration(seconds: 3),
+          dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+          forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+          title: 'NOTIFICACIÓN',
+          message: 'Usuario Creado Correctamente',
+        )..show(context).then((value) => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) =>  Login())
+        ));
+      } else{
+        Flushbar(
+          borderRadius: 8,
+          backgroundGradient: LinearGradient(
+            colors: [Colors.red.shade800,Colors.red.shade700],
+            stops: [0.6,1],
+          ),
+          boxShadows: [
+            BoxShadow(
+              color: Colors.black45,
+              offset: Offset(3, 3),
+              blurRadius: 3,
+            )
+          ],
+          duration: Duration(seconds: 2),
+          dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+          forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+          title: 'ERROR',
+          message: 'Usuario ya creado Anteriormente',
+        )..show(context);
       }
     } catch(e){
       print(e);

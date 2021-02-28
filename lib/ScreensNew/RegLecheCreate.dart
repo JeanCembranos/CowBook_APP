@@ -39,7 +39,7 @@ class _CreateRegLecheState extends State<CreateRegLeche> {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      RegMedico(
+                      RegLeche(
                         currentUser: widget.currentUser, data: widget.data,),
                 ),
                     (route) => false,

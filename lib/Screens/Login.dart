@@ -1,6 +1,8 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:myfarm_app/LoginTools/ActiveRoot.dart';
 import 'package:myfarm_app/LoginTools/auth.dart';
 import 'package:myfarm_app/LoginTools/utils.dart';
@@ -41,7 +43,6 @@ class _TopPartHomeState extends State<TopPartHome> {
             children: <Widget>[
               Column(
                   children: <Widget>[
-                    SizedBox(height: 30.0,),
                     Center(
                       child: new Container(
                         width: MediaQuery.of(context).size.width,
@@ -71,11 +72,14 @@ class BottomPartHome extends StatefulWidget {
 }
 
 class _BottomPartHomeState extends State<BottomPartHome> {
+  final _formKey = GlobalKey<FormBuilderState>();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  bool _correoHasError=true;
+  bool _contrasenaHasError=true;
 
   /* Email Validator */
-  String emailValidator(String value) {
+  /*String emailValidator(String value) {
     Pattern pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regex = new RegExp(pattern);
@@ -84,16 +88,16 @@ class _BottomPartHomeState extends State<BottomPartHome> {
     } else {
       return null;
     }
-  }
+  }*/
 
   /* Password Validator*/
-  String pwdValidator(String value) {
+ /*String pwdValidator(String value) {
     if (value.length < 8) {
       return 'Password must be longer than 8 characters';
     } else {
       return null;
     }
-  }
+  }*/
 
   /*  LoginUser  Method*/
   void _loginUser({
@@ -125,12 +129,25 @@ class _BottomPartHomeState extends State<BottomPartHome> {
               (route) => false,
         );
       } else {
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text(_returnString),
-            duration: Duration(seconds: 2),
-          ),
-        );
+       Flushbar(
+         borderRadius: 8,
+         backgroundGradient: LinearGradient(
+           colors: [Colors.red.shade800,Colors.redAccent.shade700],
+           stops: [0.6,1],
+         ),
+         boxShadows: [
+           BoxShadow(
+             color: Colors.black45,
+             offset: Offset(3, 3),
+             blurRadius: 3,
+           )
+         ],
+         duration: Duration(seconds: 3),
+         dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+         forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+         title: 'ERROR',
+         message: 'Correo y/o contraseña inválidos',
+       )..show(context);
       }
     } catch (e) {
       print(e);
@@ -209,11 +226,62 @@ class _BottomPartHomeState extends State<BottomPartHome> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(
-              height: screenAwareSize(0, context),
+            FormBuilder(
+              key: _formKey,
+              autovalidateMode: AutovalidateMode.disabled,
+              skipDisabled: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FormBuilderTextField(
+                    autovalidateMode: AutovalidateMode.always,
+                    name: "correo",
+                    decoration: InputDecoration(
+                      labelText: 'Correo Electrónico',
+                      suffixIcon: _correoHasError
+                          ? const Icon(Icons.error, color: Colors.red)
+                          : const Icon(Icons.check, color: Colors.green),
+                    ),
+                    onChanged: (val) {
+                      setState(() {
+                        _correoHasError =
+                        !_formKey.currentState.fields['correo'].validate();
+                      });
+                    },
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                      FormBuilderValidators.email(context,errorText: "Ingrese un Correo Electrónico Válido"),
+                      FormBuilderValidators.maxLength(context,100,errorText: "Correo debe contener máximo 100 caracteres")
+                    ]),
+                    textInputAction: TextInputAction.next,
+                  ),
+                  FormBuilderTextField(
+                    autovalidateMode: AutovalidateMode.always,
+                    name: "contrasena",
+                    decoration: InputDecoration(
+                      labelText: 'Contraseña',
+                      suffixIcon: _contrasenaHasError
+                          ? const Icon(Icons.error, color: Colors.red)
+                          : const Icon(Icons.check, color: Colors.green),
+                    ),
+                    onChanged: (val) {
+                      setState(() {
+                        _contrasenaHasError =
+                        !_formKey.currentState.fields['contrasena'].validate();
+                      });
+                    },
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                      FormBuilderValidators.minLength(context, 8,errorText: "Contraseña debe contener entre 8 y 16 caracteres"),
+                      FormBuilderValidators.maxLength(context, 16,errorText: "Contraseña debe contener entre 8 y 16 caracteres"),
+                    ]),
+                    textInputAction: TextInputAction.next,
+                    obscureText: true,
+                  ),
+                ],
+              ),
             ),
-
-            Padding(
+            /*Padding(
               padding: EdgeInsets.only(left: 10),
               child: Text("Correo Electrónico",style: new TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 15),),
             ),
@@ -237,8 +305,9 @@ class _BottomPartHomeState extends State<BottomPartHome> {
                       fillColor: Colors.grey),
                 ),
               ),
-            ),
-            SizedBox(
+            ),*/
+
+            /*SizedBox(
               height: 20,
             ),
             Padding(
@@ -265,7 +334,7 @@ class _BottomPartHomeState extends State<BottomPartHome> {
                   obscureText: true,
                 ),
               ),
-            ),
+            ),*/
             /*TextFormField(
               controller: _emailController,
               decoration: InputDecoration(
@@ -331,51 +400,12 @@ class _BottomPartHomeState extends State<BottomPartHome> {
                         color: Colors.green,
                         child: new RaisedButton(
                           onPressed: (){
-                            if (!EmailValidator.validate(_emailController.text, true) && !_emailController.text.contains(" ") || emailValidator(_emailController.text) != null && !_emailController.text.contains(" ") || _emailController.text == null && !_emailController.text.contains(" ") || _passwordController.text == null) {
-                              return showDialog<void>(
-                                context: context,
-                                barrierDismissible: false, // user must tap button!
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text('Warning'),
-                                    content: SingleChildScrollView(
-                                      child: ListBody(
-                                        children: <Widget>[
-                                          Text('Bad formatting in email or password')
-                                        ],
-                                      ),
-                                    ),
-                                    actions: <Widget>[
-                                      FlatButton(
-                                        child: Text('OK'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-
-                            }else{
-                              for(int i=0;i<_emailController.text.length;i++){
-                                if(_emailController.text.characters.characterAt(i).contains(" ")){
-                                  _emailController.text=_emailController.text.substring(0,i);
-                                  _loginUser(
-                                      type: LoginType.email,
-                                      email: _emailController.text,
-                                      password: _passwordController.text,
-                                      context: context);
-                                  break;
-                                }else{
-                                  _loginUser(
-                                      type: LoginType.email,
-                                      email: _emailController.text,
-                                      password: _passwordController.text,
-                                      context: context);
-                                  break;
-                                }
-                              }
+                            if(_formKey.currentState.fields['correo'].validate()&&_formKey.currentState.fields['contrasena'].validate()){
+                              _loginUser(
+                                  type: LoginType.email,
+                                  email: _formKey.currentState.fields['correo'].value,
+                                  password: _formKey.currentState.fields['contrasena'].value,
+                                  context: context);
                             }
                           },
                           color: Colors.green[900],

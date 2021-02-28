@@ -5,6 +5,8 @@ import 'package:myfarm_app/RegTools/DBReg.dart';
 import 'package:myfarm_app/Screens/Home.dart';
 import 'package:myfarm_app/ScreensNew/ConsTratamiento.dart';
 import 'package:myfarm_app/ScreensNew/RegLecheCreate.dart';
+import 'package:myfarm_app/ScreensNew/Tabs/TabCant.dart';
+import 'package:myfarm_app/ScreensNew/Tabs/TabModDel.dart';
 import 'package:myfarm_app/ScreensNew/crearTratamiento.dart';
 import 'package:myfarm_app/SearchIDTools/HealthTrip.dart';
 import 'package:myfarm_app/SearchIDTools/SearchCardTrat.dart';
@@ -130,20 +132,20 @@ class _RegLecheState extends State<RegLeche>{
           bottom: TabBar(
             tabs: [
               Tab(
-                icon: Icon(Icons.contact_mail,color: Colors.white,),
-                child: new Text("Consulta Cantidad",style: TextStyle(color: Colors.white),),
+                icon: Icon(Icons.edit_off,color: Colors.black,),
+                child: new Text("Modificar/Eliminar",style: TextStyle(color: Colors.black),),
               ),
               Tab(
-                icon: Icon(Icons.contact_mail,color: Colors.white,),
-                child: new Text("Modificar/Eliminar",style: TextStyle(color: Colors.white),),
+                icon: Icon(Icons.leaderboard,color: Colors.black,),
+                child: new Text("Consultar Cantidad",style: TextStyle(color: Colors.black),),
               ),
             ],
           ),
         ),
         body: new TabBarView(
           children: [
-            /*TabPago(card),
-            TabCompra(),*/
+           TabModDel(),
+            TabCant()
           ],
         ),
       ),
