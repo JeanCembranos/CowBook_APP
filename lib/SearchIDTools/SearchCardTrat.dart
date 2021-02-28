@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:myfarm_app/Screens/Home.dart';
+import 'package:myfarm_app/ScreensNew/ConsTratamiento.dart';
 import 'package:myfarm_app/SearchIDTools/HealthTrip.dart';
 
 
@@ -95,12 +96,12 @@ Widget buildTripCardTrat(BuildContext context, DocumentSnapshot document) {
 
     ),
     onTap: (){
-     /* Navigator.pushAndRemoveUntil(
+     Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => Home(currentUser: trip.currentUser,data: trip.codigo,),
+            builder: (context) => TratDetails(currentUser: trip.currentUser,data: trip.codigo,RegID: trip.RegID,),
           ),
-              (route) => false);*/
+              (route) => false);
     },
   );
 }

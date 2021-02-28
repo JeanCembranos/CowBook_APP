@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HealthTrip {
-  String medicamento,currentUser,codigo,observaciones;
+  String medicamento,currentUser,codigo,observaciones,RegID;
   DateTime fechaIni,fechaFin;
 
 
@@ -11,7 +11,8 @@ class HealthTrip {
       this.fechaFin,
       this.currentUser,
       this.observaciones,
-      this.codigo
+      this.codigo,
+      this.RegID
       );
 
   // formatting for upload to Firbase when creating the trip
@@ -19,6 +20,7 @@ class HealthTrip {
 
   // creating a Trip object from a firebase snapshot
   HealthTrip.fromSnapshot(DocumentSnapshot snapshot) :
+        RegID=snapshot['RegID'],
         medicamento = snapshot['medicamento'],
         fechaIni=snapshot['fechaIni'].toDate(),
         fechaFin=snapshot['fechaFin'].toDate(),

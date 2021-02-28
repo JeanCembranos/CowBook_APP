@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:myfarm_app/HomeTools/DBPublicity.dart';
 import 'package:myfarm_app/LoginTools/auth.dart';
@@ -11,10 +10,10 @@ import 'package:myfarm_app/LoginTools/utils.dart';
 import 'package:myfarm_app/Screens/Login.dart';
 import 'package:myfarm_app/Screens/Settings.dart';
 import 'package:myfarm_app/ScreensNew/IDConsulta.dart';
+import 'package:myfarm_app/ScreensNew/ProduccionLeche.dart';
 import 'package:myfarm_app/ScreensNew/RegMedico.dart';
 import 'package:myfarm_app/ScreensNew/ReproState.dart';
 
-import '../AdMob.dart';
 
 class Home extends StatefulWidget{
   final String data;
@@ -266,11 +265,10 @@ class _HomeState extends State<Home> {
                     )
                   ),*/
                   onTap: () {
-                    /*Navigator.of(context).pushAndRemoveUntil(
+                    Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(builder: (context) =>
-                            ObsSelection(data: widget.data,
-                              currentUser: widget.currentUser,)), (
-                        Route<dynamic> route) => false);*/
+                           RegLeche(data: widget.data,currentUser: widget.currentUser,)), (
+                        Route<dynamic> route) => false);
                   },
                 ),
                 InkWell(

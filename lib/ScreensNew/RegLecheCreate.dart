@@ -1,30 +1,30 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:myfarm_app/RegTools/DBProduLeche.dart';
 import 'package:myfarm_app/RegTools/DBReg.dart';
+import 'package:myfarm_app/RegTools/RegLecheModel.dart';
 import 'package:myfarm_app/RegTools/RegModel.dart';
 import 'package:myfarm_app/Screens/Home.dart';
 import 'package:myfarm_app/Screens/Settings.dart';
+import 'package:myfarm_app/ScreensNew/ProduccionLeche.dart';
 import 'package:myfarm_app/ScreensNew/RegMedico.dart';
 
-class CreateReg extends StatefulWidget{
+class CreateRegLeche extends StatefulWidget{
   final String data;
   final String currentUser;
   @override
-  _CreateRegState createState() => _CreateRegState();
-  CreateReg({
+  _CreateRegLecheState createState() => _CreateRegLecheState();
+  CreateRegLeche({
     this.data,
     this.currentUser
   });
 }
 
-class _CreateRegState extends State<CreateReg> {
+class _CreateRegLecheState extends State<CreateRegLeche> {
   int _currentIndex = 0;
   String obs;
-  DateTime selectedIniDate = DateTime.now();
-  DateTime selectedFinalDate = DateTime.now();
-  bool _medHasError = false;
-  bool _ObsHasError = false;
+  DateTime selectedDate = DateTime.now();
+  bool _medHasError = true;
   final _formKey = GlobalKey<FormBuilderState>();
 
   @override
@@ -74,68 +74,8 @@ class _CreateRegState extends State<CreateReg> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  FormBuilderTextField(
-                    autovalidateMode: AutovalidateMode.always,
-                    name: "medicamento",
-                    decoration: InputDecoration(
-                      labelText: 'Medicamento Prescrito',
-                      suffixIcon: _medHasError
-                          ? const Icon(Icons.error, color: Colors.red)
-                          : const Icon(Icons.check, color: Colors.green),
-                    ),
-                    onChanged: (val) {
-                      setState(() {
-                        _medHasError =
-                        !_formKey.currentState.fields['medicamento'].validate();
-                      });
-                    },
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context),
-                    ]),
-                    textInputAction: TextInputAction.next,
-                  ),
                   SizedBox(height: 10.0),
-                  Text("Fecha Inicio",style: TextStyle(fontSize: 15.0,fontWeight: FontWeight.w400),),
-                  Row(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width-70.0,
-                        height: 20.0,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border(
-                              bottom: BorderSide(
-                                color: Colors.black,
-                                width: 1.0,
-                              )
-                            )
-                        ),
-                        child: Text(selectedIniDate.toString().substring(0,10)),
-
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 10.0),
-                        child: ClipOval(
-                          child: Material(
-                            color: Colors.orange, // button color
-                            child: InkWell(
-                              splashColor: Colors.red, // inkwell color
-                              child: SizedBox(width: 56,
-                                  height: 56,
-                                  child: Icon(
-                                    Icons.calendar_today_outlined,)),
-                              onTap: () {
-                                _selectIniDate(context);
-                                // ignore: invalid_use_of_protected_member
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10.0),
-                  Text("Fecha Finalización",style: TextStyle(fontSize: 15.0,fontWeight: FontWeight.w400),),
+                  Text("Fecha de Registro",style: TextStyle(fontSize: 15.0,fontWeight: FontWeight.w400),),
                   Row(
                     children: [
                       Container(
@@ -150,7 +90,7 @@ class _CreateRegState extends State<CreateReg> {
                                 )
                             )
                         ),
-                        child: Text(selectedFinalDate.toString().substring(0,10)),
+                        child: Text(selectedDate.toString().substring(0,10)),
 
                       ),
                       Padding(
@@ -165,46 +105,43 @@ class _CreateRegState extends State<CreateReg> {
                                   child: Icon(
                                     Icons.calendar_today_outlined,)),
                               onTap: () {
-                                _selectFinalDate(context);
+                                _selectDate(context);
                                 // ignore: invalid_use_of_protected_member
                               },
                             ),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                   SizedBox(height: 10.0),
-                  Text("Observaciones",style: TextStyle(fontSize: 15.0,fontWeight: FontWeight.w400),),
-                  SizedBox(height: 10.0),
-                  Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0),
-                          color: Colors.white,
-                          border: Border.all(color: Colors.black,width: 2.0)
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(3.0),
-                        child: TextField(
-                          maxLines: 5,
-                         decoration: new InputDecoration(
-                           border: new OutlineInputBorder(
-                               borderSide: new BorderSide(color: Colors.black,width: 10)
-                           )
-                         ),
-                          onChanged: (texto) {
-                           obs = texto;
-                             },
-                        ),
-                      )
+                  FormBuilderTextField(
+                    autovalidateMode: AutovalidateMode.always,
+                    name: "cantidad",
+                    decoration: InputDecoration(
+                      labelText: 'Cantidad de Leche Producida (Litros)',
+                      suffixIcon: _medHasError
+                          ? const Icon(Icons.error, color: Colors.red)
+                          : const Icon(Icons.check, color: Colors.green),
+                    ),
+                    onChanged: (val) {
+                      setState(() {
+                        _medHasError =
+                        !_formKey.currentState.fields['cantidad'].validate();
+                      });
+                    },
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(context),
+                    ]),
+                    textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.number
                   ),
-                  SizedBox(height: 20.0,),
                   Align(
                     child: RaisedButton(
                       color: Colors.white,
                       onPressed: () {
-                        RegModel regM=RegModel(_formKey.currentState.fields['medicamento'].value, obs, selectedIniDate, selectedFinalDate);
-                        _addID(context, regM);
+                       RegLecheModel  reg = RegLecheModel(_formKey.currentState.fields['cantidad'].value, selectedDate);
+                        _addRegLeche(context, reg);
                       },
                       elevation: 4.0,
                       splashColor: Colors.blue[400],
@@ -246,28 +183,18 @@ class _CreateRegState extends State<CreateReg> {
     );
   }
 
-  Future<void> _selectIniDate(BuildContext context) async {
+  Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: selectedIniDate,
+        initialDate: selectedDate,
         firstDate: DateTime(1930, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedIniDate)
+    if (picked != null && picked != selectedDate)
       setState(() {
-        selectedIniDate = picked;
+        selectedDate = picked;
       });
   }
-  Future<void> _selectFinalDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedFinalDate,
-        firstDate: DateTime(1930, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedFinalDate)
-      setState(() {
-        selectedFinalDate = picked;
-      });
-  }
+
   void onTabTapped(int index) {
     switch(index){
       case 0: {
@@ -292,16 +219,16 @@ class _CreateRegState extends State<CreateReg> {
       break;
     }
   }
-  void _addID(BuildContext context, RegModel reg) async {
+  void _addRegLeche(BuildContext context, RegLecheModel regLeche) async {
     String _returnString;
     String key=UniqueKey().toString();
     String code=key.substring(2,key.length-1);
-    _returnString = await DBReg().createGroup(reg, widget.data, widget.currentUser,code);
+    _returnString = await DBProduLeche().createGroup(regLeche, widget.data, widget.currentUser,code);
     if (_returnString == "success") {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => RegMedico(currentUser: widget.currentUser,data: widget.data,),
+          builder: (context) => RegLeche(currentUser: widget.currentUser,data: widget.data,),
         ),
             (route) => false,
       );

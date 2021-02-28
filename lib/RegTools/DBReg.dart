@@ -7,7 +7,7 @@ class DBReg {
 
 
   /*Create Car database*/
-  Future<String> createGroup(RegModel registro, String data, String currentUser) async {
+  Future<String> createGroup(RegModel registro, String data, String currentUser,String code) async {
     String retVal = "error";
     try {
       await _firestore.collection("DBReg").add({
@@ -17,6 +17,7 @@ class DBReg {
         'observaciones': registro.observaciones,
         'codigo': data,
         'currentUser': currentUser,
+        'RegID': code,
       });
       retVal = "success";
     } catch (e) {
@@ -30,14 +31,14 @@ class DBReg {
     return await Firestore.instance.collection('DBReg').getDocuments();
   }
   /*Update Car element*/
-  updateCars(selectedDoc, newValues){
-    Firestore.instance.collection('records').document(selectedDoc).updateData(newValues).catchError((e){
+  updateReg(selectedDoc, newValues){
+    Firestore.instance.collection('DBReg').document(selectedDoc).updateData(newValues).catchError((e){
       print(e);
     });
   }
   /*Delete car element */
-  deleteCar(docId){
-    Firestore.instance.collection('records').document(docId).delete().catchError((e){
+  deleteReg(docId){
+    Firestore.instance.collection('DBReg').document(docId).delete().catchError((e){
       print(e);
     });
   }
