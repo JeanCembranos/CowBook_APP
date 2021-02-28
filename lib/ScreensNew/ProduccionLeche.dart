@@ -87,69 +87,73 @@ class _RegLecheState extends State<RegLeche>{
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Text("Producción de Leche",style: TextStyle(color: Colors.white),),
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
           backgroundColor: Colors.white,
-          leading:
-          IconButton(
-              icon: Icon(Icons.arrow_back,color: Colors.black,),
-              onPressed: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        Home(currentUser: widget.currentUser,data: widget.data,),
+          appBar: AppBar(
+            title: Text("Producción de Leche",style: TextStyle(color: Colors.white),),
+            backgroundColor: Colors.white,
+            leading:
+            IconButton(
+                icon: Icon(Icons.arrow_back,color: Colors.black,),
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          Home(currentUser: widget.currentUser,data: widget.data,),
+                    ),
+                        (route) => false,
+                  );
+                }),
+            actions: [
+              ClipOval(
+                child: Material(
+                  color: Colors.lightGreen, // button color
+                  child: InkWell(
+                    splashColor: Colors.red,
+                    // inkwell color
+                    child: SizedBox(width: 56, height: 56, child: Icon(Icons.add,)),
+                    onTap: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              CreateRegLeche(currentUser: widget.currentUser,data: widget.data,),
+                        ),
+                            (route) => false,
+                      );
+                    },
                   ),
-                      (route) => false,
-                );
-              }),
-          actions: [
-            ClipOval(
-              child: Material(
-                color: Colors.lightGreen, // button color
-                child: InkWell(
-                  splashColor: Colors.red,
-                  // inkwell color
-                  child: SizedBox(width: 56, height: 56, child: Icon(Icons.add,)),
-                  onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            CreateRegLeche(currentUser: widget.currentUser,data: widget.data,),
-                      ),
-                          (route) => false,
-                    );
-                  },
                 ),
               ),
+            ],
+            bottom: TabBar(
+              tabs: [
+                Tab(
+                  icon: Icon(Icons.edit_off,color: Colors.black,),
+                  child: new Text("Modificar/Eliminar",style: TextStyle(color: Colors.black),),
+                ),
+                Tab(
+                  icon: Icon(Icons.leaderboard,color: Colors.black,),
+                  child: new Text("Consultar Cantidad",style: TextStyle(color: Colors.black),),
+                ),
+              ],
             ),
-          ],
-          bottom: TabBar(
-            tabs: [
-              Tab(
-                icon: Icon(Icons.edit_off,color: Colors.black,),
-                child: new Text("Modificar/Eliminar",style: TextStyle(color: Colors.black),),
-              ),
-              Tab(
-                icon: Icon(Icons.leaderboard,color: Colors.black,),
-                child: new Text("Consultar Cantidad",style: TextStyle(color: Colors.black),),
-              ),
+          ),
+          body: new TabBarView(
+            children: [
+              TabModDel(),
+              TabCant()
             ],
           ),
         ),
-        body: new TabBarView(
-          children: [
-           TabModDel(),
-            TabCant()
-          ],
-        ),
       ),
     );
+
 
     /*return Scaffold(
       appBar: new AppBar(
@@ -210,5 +214,15 @@ class _RegLecheState extends State<RegLeche>{
 
       ),
     );*/
+  }
+  Future<bool> _onBackPressed() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            Home(currentUser: widget.currentUser,data: widget.data,),
+      ),
+          (route) => false,
+    );
   }
 }

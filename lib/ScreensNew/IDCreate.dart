@@ -61,163 +61,175 @@ class _IDCreateState extends State<IDCreate>{
               );
             }),
       ),
-      body: new SingleChildScrollView(
-        child: new Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 30.0,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                    CircleAvatar(
-                    radius: 100,
-                    backgroundColor: Colors.blue[900],
-                    child: ClipOval(
-                      child: new SizedBox(
-                        width: 180.0,
-                        height: 180.0,
-                        child: (_image!=null)?Image.file(
-                          _image,
-                          fit: BoxFit.fill,
-                        ):Image.network(
-                          "https://firebasestorage.googleapis.com/v0/b/myfarmespe.appspot.com/o/CowImages%2Fvaca-1200x800.jpg?alt=media&token=535bb730-a9fb-453f-8063-8b7699341ed7",
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                  ),
-                Padding(
-                  padding: EdgeInsets.only(top: 60.0),
-                  child: IconButton(
-                    icon: Icon(
-                      FontAwesomeIcons.camera,
-                      size: 30.0,
-                    ),
-                    onPressed: () {
-                      getImage();
-                    },
-                  ),
-                ),
-                    ],
-                  )
-                ),
-              ],
-            ),
-            FormBuilder(
-              key: _formKey,
-              autovalidateMode: AutovalidateMode.disabled,
-              skipDisabled: true,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  FormBuilderTextField(
-                  autovalidateMode: AutovalidateMode.always,
-                  name:"Nombre",
-                    decoration: InputDecoration(
-                      labelText: 'Nombre de la Vaca',
-                      suffixIcon: _nameHasError
-                          ? const Icon(Icons.error, color: Colors.red)
-                          : const Icon(Icons.check, color: Colors.green),
-                    ),
-                    onChanged: (val) {
-                      setState(() {
-                        _nameHasError =
-                        !_formKey.currentState.fields['Nombre'].validate();
-                      });
-                    },
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
-                      FormBuilderValidators.maxLength(context, 50,errorText: "Este campo debe contener máximo 50 caracteres")
-                    ]),
-                    textInputAction: TextInputAction.next,
-                  ),
-                  FormBuilderTextField(
-                    autovalidateMode: AutovalidateMode.always,
-                    name:"Raza",
-                    decoration: InputDecoration(
-                      labelText: 'Raza de la Vaca',
-                      suffixIcon: _razaHasError
-                          ? const Icon(Icons.error, color: Colors.red)
-                          : const Icon(Icons.check, color: Colors.green),
-                    ),
-                    onChanged: (val) {
-                      setState(() {
-                        _razaHasError =
-                        !_formKey.currentState.fields['Raza'].validate();
-                      });
-                    },
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
-                      FormBuilderValidators.maxLength(context, 50,errorText: "Este campo debe contener máximo 50 caracteres")
-                    ]),
-                    textInputAction: TextInputAction.next,
-                  ),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  Text("Fecha de Nacimiento",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 16.0),),
-                  Row(
-                    children: [
-                      SizedBox(height: 20.0,),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0),
-                          color: Colors.white,
-                          border: Border.all(color: Colors.black)
-                        ),
-                        width: MediaQuery.of(context).size.width-80,
-                        height: 20.0,
-                        child: new Text("${selectedDate.toLocal()}".split(' ')[0],textAlign: TextAlign.center,style: TextStyle(fontSize: 17.0),),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 10.0),
-                        child:  ClipOval(
-                          child: Material(
-                            color: Colors.orange, // button color
-                            child: InkWell(
-                              splashColor: Colors.red, // inkwell color
-                              child: SizedBox(width: 56, height: 56, child: Icon(Icons.calendar_today_outlined,)),
-                              onTap: () {
-                                _selectDate(context);
+      body: WillPopScope(
+
+        onWillPop: (){
+            return Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    Scanner(currentUser: widget.currentUser,),
+              ),
+                  (route) => false,
+            );
+        },
+        child: SingleChildScrollView(
+          child: new Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 30.0,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Align(
+                      alignment: Alignment.center,
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 100,
+                            backgroundColor: Colors.blue[900],
+                            child: ClipOval(
+                              child: new SizedBox(
+                                width: 180.0,
+                                height: 180.0,
+                                child: (_image!=null)?Image.file(
+                                  _image,
+                                  fit: BoxFit.fill,
+                                ):Image.network(
+                                  "https://firebasestorage.googleapis.com/v0/b/myfarmespe.appspot.com/o/CowImages%2Fvaca-1200x800.jpg?alt=media&token=535bb730-a9fb-453f-8063-8b7699341ed7",
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 60.0),
+                            child: IconButton(
+                              icon: Icon(
+                                FontAwesomeIcons.camera,
+                                size: 30.0,
+                              ),
+                              onPressed: () {
+                                getImage();
                               },
                             ),
                           ),
-                        ),
+                        ],
                       )
-                    ],
                   ),
-                  SizedBox(height: 20.0,),
-                  Align(
-                   child: RaisedButton(
-                     color: Colors.white,
-                     onPressed: () {
-                       if(_formKey.currentState.fields['Raza'].validate()&&_formKey.currentState.fields['Nombre'].validate()){
-                         IDModel id=IDModel(_formKey.currentState.fields['Nombre'].value,_formKey.currentState.fields['Raza'].value,selectedDate);
-                         _addID(context, id);
-                       }
-                     },
-                     elevation: 4.0,
-                     splashColor:  Colors.blue[400],
-                     child: Text(
-                       'GUARDAR',
-                       style: TextStyle(color: Colors.green, fontSize: 25.0),
-                     ),
-                     shape: RoundedRectangleBorder(
-                         borderRadius: BorderRadius.circular(18.0),
-                         side: BorderSide(color: Colors.green)
-                     ),
-                   ),
-                    alignment: Alignment.center,
-                    ),
                 ],
               ),
+              FormBuilder(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.disabled,
+                skipDisabled: true,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FormBuilderTextField(
+                      autovalidateMode: AutovalidateMode.always,
+                      name:"Nombre",
+                      decoration: InputDecoration(
+                        labelText: 'Nombre de la Vaca',
+                        suffixIcon: _nameHasError
+                            ? const Icon(Icons.error, color: Colors.red)
+                            : const Icon(Icons.check, color: Colors.green),
+                      ),
+                      onChanged: (val) {
+                        setState(() {
+                          _nameHasError =
+                          !_formKey.currentState.fields['Nombre'].validate();
+                        });
+                      },
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                        FormBuilderValidators.maxLength(context, 50,errorText: "Este campo debe contener máximo 50 caracteres")
+                      ]),
+                      textInputAction: TextInputAction.next,
+                    ),
+                    FormBuilderTextField(
+                      autovalidateMode: AutovalidateMode.always,
+                      name:"Raza",
+                      decoration: InputDecoration(
+                        labelText: 'Raza de la Vaca',
+                        suffixIcon: _razaHasError
+                            ? const Icon(Icons.error, color: Colors.red)
+                            : const Icon(Icons.check, color: Colors.green),
+                      ),
+                      onChanged: (val) {
+                        setState(() {
+                          _razaHasError =
+                          !_formKey.currentState.fields['Raza'].validate();
+                        });
+                      },
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                        FormBuilderValidators.maxLength(context, 50,errorText: "Este campo debe contener máximo 50 caracteres")
+                      ]),
+                      textInputAction: TextInputAction.next,
+                    ),
+                    SizedBox(
+                      height: 15.0,
+                    ),
+                    Text("Fecha de Nacimiento",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 16.0),),
+                    Row(
+                      children: [
+                        SizedBox(height: 20.0,),
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5.0),
+                              color: Colors.white,
+                              border: Border.all(color: Colors.black)
+                          ),
+                          width: MediaQuery.of(context).size.width-80,
+                          height: 20.0,
+                          child: new Text("${selectedDate.toLocal()}".split(' ')[0],textAlign: TextAlign.center,style: TextStyle(fontSize: 17.0),),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10.0),
+                          child:  ClipOval(
+                            child: Material(
+                              color: Colors.orange, // button color
+                              child: InkWell(
+                                splashColor: Colors.red, // inkwell color
+                                child: SizedBox(width: 56, height: 56, child: Icon(Icons.calendar_today_outlined,)),
+                                onTap: () {
+                                  _selectDate(context);
+                                },
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 20.0,),
+                    Align(
+                      child: RaisedButton(
+                        color: Colors.white,
+                        onPressed: () {
+                          if(_formKey.currentState.fields['Raza'].validate()&&_formKey.currentState.fields['Nombre'].validate()){
+                            IDModel id=IDModel(_formKey.currentState.fields['Nombre'].value,_formKey.currentState.fields['Raza'].value,selectedDate);
+                            _addID(context, id);
+                          }
+                        },
+                        elevation: 4.0,
+                        splashColor:  Colors.blue[400],
+                        child: Text(
+                          'GUARDAR',
+                          style: TextStyle(color: Colors.green, fontSize: 25.0),
+                        ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: Colors.green)
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                    ),
+                  ],
+                ),
 
-            )
-            /*Text("Nombre de la Vaca",style: TextStyle(fontWeight: FontWeight.bold),),
+              )
+              /*Text("Nombre de la Vaca",style: TextStyle(fontWeight: FontWeight.bold),),
             SizedBox(height: 20.0,),
             Container(
               decoration: BoxDecoration(
@@ -280,7 +292,8 @@ class _IDCreateState extends State<IDCreate>{
                   ],
                 )
             )*/
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -370,5 +383,4 @@ class _IDCreateState extends State<IDCreate>{
       }
     });
   }
-
 }

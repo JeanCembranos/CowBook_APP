@@ -16,6 +16,8 @@ class TabModDel extends StatefulWidget{
 }
 
 class _TabModDelState extends State<TabModDel> {
+  DateTime selectedIniDate = DateTime.now();
+  DateTime selectedFinDate = DateTime.now();
   Future resultsLoaded;
   List _allResults = [];
   List _resultsList = [];
@@ -50,8 +52,8 @@ class _TabModDelState extends State<TabModDel> {
     //final uid = await Provider.of(context).auth.getCurrentUID();
     var data = await Firestore.instance
         .collection('DBProduLeche')
-        .where('currentUser', isEqualTo: widget.currentUser,)
-        .where('codigo', isEqualTo: widget.data,)
+        .where('fechaReg',isGreaterThanOrEqualTo: selectedIniDate)
+        .where('fechaReg',isLessThanOrEqualTo: selectedFinDate)
         .getDocuments();
     setState(() {
       _allResults = data.documents;
@@ -62,21 +64,7 @@ class _TabModDelState extends State<TabModDel> {
 
   searchResultsList() {
     var showResults = [];
-
-    if (_searchController.text != "") {
-      for (var tripSnapshot in _allResults) {
-        var regID = SearchDelMod
-            .fromSnapshot(tripSnapshot)
-            .RegID
-            .toLowerCase();
-
-        if (regID.contains(_searchController.text.toLowerCase())) {
-          showResults.add(tripSnapshot);
-        }
-      }
-    } else {
       showResults = List.from(_allResults);
-    }
     setState(() {
       _resultsList = showResults;
     });
@@ -87,13 +75,94 @@ class _TabModDelState extends State<TabModDel> {
     return Scaffold(
       body:  new Column(
         children: [
-          TextField(
-            controller: _searchController,
-            decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search)
+          SizedBox(
+            height: 20.0,
+          ),
+          Container(
+              width:MediaQuery.of(context).size.width,
+              child: Row(
+                children: [
+                  Padding(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width/2-70,
+                      height: 30.0,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border(
+                              bottom: BorderSide(
+                                color: Colors.black,
+                                width: 1.0,
+                              )
+                          )
+                      ),
+                      child: Text(selectedIniDate.toString().substring(0,10)),
+                    ),
+                    padding: EdgeInsets.only(left: 20.0),
+                  ),
+                  ClipOval(
+                    child: Material(
+                      color: Colors.orange, // button color
+                      child: InkWell(
+                        splashColor: Colors.red, // inkwell color
+                        child: SizedBox(width: 46, height:46, child: Icon(Icons.calendar_today_outlined,)),
+                        onTap: () {
+                          _selectIniDate(context);
+                        },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 10.0),
+                    child: Container(
+                        width: MediaQuery.of(context).size.width/2-70,
+                        height: 30.0,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.black,
+                                  width: 1.0,
+                                )
+                            )
+                        ),
+                        child: Text(selectedFinDate.toString().substring(0,10))
+                    ),
+                  ),
+                  ClipOval(
+                    child: Material(
+                      color: Colors.orange, // button color
+                      child: InkWell(
+                        splashColor: Colors.red, // inkwell color
+                        child: SizedBox(width: 46, height: 46, child: Icon(Icons.calendar_today_outlined,)),
+                        onTap: () {
+                          _selectFinDate(context);
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              )
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width,
+            child: RaisedButton(
+              color: Colors.white,
+              onPressed: () {
+                getRegLecheSnapshots();
+              },
+              elevation: 4.0,
+              splashColor:  Colors.blue[400],
+              child: Text(
+                'BUSCAR',
+                style: TextStyle(color: Colors.red, fontSize: 25.0),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                  side: BorderSide(color: Colors.red)
+              ),
             ),
           ),
-          Expanded(
+      Expanded(
             child: ListView.builder(
               itemCount: _resultsList.length,
               itemBuilder: (BuildContext context, int index) =>
@@ -105,5 +174,26 @@ class _TabModDelState extends State<TabModDel> {
       ),
     );
   }
-
+  Future<void> _selectIniDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedIniDate,
+        firstDate: DateTime(1930, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedIniDate)
+      setState(() {
+        selectedIniDate = picked;
+      });
+  }
+  Future<void> _selectFinDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedFinDate,
+        firstDate: DateTime(1930, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedFinDate)
+      setState(() {
+        selectedFinDate = picked;
+      });
+  }
 }

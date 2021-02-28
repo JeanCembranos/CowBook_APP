@@ -125,24 +125,37 @@ class _RegMedicoState extends State<RegMedico>{
       ],
       backgroundColor: Colors.white,
     ),
-      body:  new Column(
-        children: [
-          TextField(
-            controller: _searchController,
-            decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search)
+      body:WillPopScope(
+        onWillPop: _onBackPressed,
+        child:  new Column(
+          children: [
+            TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search)
+              ),
             ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _resultsList.length,
-              itemBuilder: (BuildContext context, int index) =>
-                  buildTripCardTrat(context, _resultsList[index]),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _resultsList.length,
+                itemBuilder: (BuildContext context, int index) =>
+                    buildTripCardTrat(context, _resultsList[index]),
+              ),
             ),
-          ),
-        ],
+          ],
 
+        ),
       ),
       );
+  }
+  Future<bool> _onBackPressed() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            Home(data: widget.data,currentUser: widget.currentUser,),
+      ),
+          (route) => false,
+    );
   }
 }

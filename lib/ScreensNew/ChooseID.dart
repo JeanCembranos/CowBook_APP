@@ -116,26 +116,37 @@ class _IDChooserState extends State<IDChooser>{
           ],
           backgroundColor: Colors.white,
         ),
-      body: new Column(
-        children: [
-          TextField(
-            controller: _searchController,
-            decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search)
+      body:WillPopScope(
+        onWillPop: _onBackPressed,
+        child:  new Column(
+          children: [
+            TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search)
+              ),
             ),
-          ),
-          Expanded(
-                child: ListView.builder(
-                  itemCount: _resultsList.length,
-                  itemBuilder: (BuildContext context, int index) =>
+            Expanded(
+              child: ListView.builder(
+                itemCount: _resultsList.length,
+                itemBuilder: (BuildContext context, int index) =>
                     buildTripCard(context, _resultsList[index]),
-                  ),
-                ),
-        ],
+              ),
+            ),
+          ],
 
+        ),
+      )
+    );
+  }
+  Future<bool> _onBackPressed() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            Scanner(currentUser: widget.currentUser,),
       ),
-
-
+          (route) => false,
     );
   }
 

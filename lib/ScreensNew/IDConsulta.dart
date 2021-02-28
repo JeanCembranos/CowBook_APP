@@ -85,250 +85,252 @@ class _IDSearchState extends State<IDSearch>{
       }
 
       if (carflag == true) {
-        return new SingleChildScrollView(
-          child: new Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 30.0,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.center,
-                    child: CircleAvatar(
-                      radius: 100,
-                      backgroundColor: Colors.cyan,
-                      child: ClipOval(
-                        child: new SizedBox(
-                          width: 180.0,
-                          height: 180.0,
-                          child: (_image!=null)?Image.file(
-                                      _image,
-                                      fit: BoxFit.fill,
-                                    ):Image.network(
-                            id.documents[location[0]].data['imageUrl'],
-                            fit: BoxFit.fill,
+        return WillPopScope(
+          onWillPop: _onBackPressed,
+          child: SingleChildScrollView(
+            child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 30.0,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.center,
+                      child: CircleAvatar(
+                        radius: 100,
+                        backgroundColor: Colors.cyan,
+                        child: ClipOval(
+                          child: new SizedBox(
+                            width: 180.0,
+                            height: 180.0,
+                            child: (_image!=null)?Image.file(
+                              _image,
+                              fit: BoxFit.fill,
+                            ):Image.network(
+                              id.documents[location[0]].data['imageUrl'],
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              FormBuilder(
-                key: _formKey,
-                autovalidateMode: AutovalidateMode.disabled,
-                skipDisabled: true,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FormBuilderTextField(
-                      readOnly: flag
-                          ? true
-                          : false,
-                      initialValue: id.documents[location[0]].data['name'],
-                      autovalidateMode: AutovalidateMode.always,
-                      name:"Nombre",
-                      decoration: InputDecoration(
-                        labelText: 'Nombre de la Vaca',
-                        suffixIcon: _nameHasError
-                            ? const Icon(Icons.error, color: Colors.red)
-                            : const Icon(Icons.check, color: Colors.green),
-                      ),
-                      onChanged: (val) {
-                        setState(() {
-                          _nameHasError =
-                          !_formKey.currentState.fields['Nombre'].validate();
-                        });
-                      },
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
-                        FormBuilderValidators.maxLength(context, 50,errorText: "Este campo debe contener máximo 50 caracteres")
-                      ]),
-                      textInputAction: TextInputAction.next,
-                    ),
-                    FormBuilderTextField(
-                      readOnly: flag
-                          ? true
-                          : false,
-                      initialValue: id.documents[location[0]].data['raza'],
-                      autovalidateMode: AutovalidateMode.always,
-                      name:"Raza",
-                      decoration: InputDecoration(
-                        labelText: 'Raza de la Vaca',
-                        suffixIcon: _razaHasError
-                            ? const Icon(Icons.error, color: Colors.red)
-                            : const Icon(Icons.check, color: Colors.green),
-                      ),
-                      onChanged: (val) {
-                        setState(() {
-                          _razaHasError =
-                          !_formKey.currentState.fields['Raza'].validate();
-                        });
-                      },
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
-                        FormBuilderValidators.maxLength(context, 50,errorText: "Este campo debe contener máximo 50 caracteres")
-                      ]),
-                      textInputAction: TextInputAction.next,
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    Text("Fecha de Nacimiento",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 16.0),),
-                    Row(
-                      children: [
-                        SizedBox(height: 20.0,),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5.0),
-                              color: Colors.white,
-                              border: Border.all(color: Colors.black)
-                          ),
-                          width: MediaQuery.of(context).size.width-80,
-                          height: 20.0,
-                          child: flagA
-                          ? new Text(id.documents[location[0]].data['birthDate'].toDate().toString().substring(0,10)):new Text(selectedDate.toString().substring(0,10)),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 10.0),
-                          child: flag==false
-                          ? ClipOval(
-                            child: Material(
-                              color: Colors.orange, // button color
-                              child: InkWell(
-                                splashColor: Colors.red, // inkwell color
-                                child: SizedBox(width: 56, height: 56, child: Icon(Icons.calendar_today_outlined,)),
-                                onTap: () {
-                                  flagA=false;
-                                  _selectDate(context);
-                                },
-                              ),
-                            ),
-                          )
-                          : Padding(
-                            padding: EdgeInsets.only(left: 10.0),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 20.0,),
-                    Padding(
-                      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width/2-80),
-                      child: flag==true
-                          ?
-                      Row(
-                        children: [
-                          ClipOval(
-                            child: Material(
-                              color: Colors.orange, // button color
-                              child: InkWell(
-                                splashColor: Colors.red, // inkwell color
-                                child: SizedBox(width: 56, height: 56, child: Icon(Icons.edit,)),
-                                onTap: () {
-                                  flag=false;
-                                  selectedDate=id.documents[location[0]].data['birthDate'].toDate();
-                                  setState(() {
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left:35.0),
-                            child: ClipOval(
-                              child: Material(
-                                color: Colors.red, // button color
-                                child: InkWell(
-                                  splashColor: Colors.red, // inkwell color
-                                  child: SizedBox(width: 56, height: 56, child: Icon(Icons.delete,)),
-                                  onTap: () {
-                                    var SelectedDoc=id.documents[location[0]].documentID.toString();
-                                    idSearch.deleteID(SelectedDoc);
-                                    Flushbar(
-                                      borderRadius: 8,
-                                      backgroundGradient: LinearGradient(
-                                        colors: [Colors.green.shade800,Colors.green.shade700],
-                                        stops: [0.6,1],
-                                      ),
-                                      boxShadows: [
-                                        BoxShadow(
-                                          color: Colors.black45,
-                                          offset: Offset(3, 3),
-                                          blurRadius: 3,
-                                        )
-                                      ],
-                                      duration: Duration(seconds: 2),
-                                      dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-                                      forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
-                                      title: 'NOTIFICACIÓN',
-                                      message: 'Identificación Eliminada Correctamente',
-                                    )..show(context).then((value) => Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) =>   Scanner(currentUser: widget.currentUser))
-                                    ));
-                                  },
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ):Column(
-                        children: [
-                          RaisedButton(
-                            color: Colors.white,
-                            onPressed: () {
-                              if(_formKey.currentState.fields['Raza'].validate()&&_formKey.currentState.fields['Nombre'].validate()){
-                                calcFechas(selectedDate);
-                                var SelectedDoc=id.documents[location[0]].documentID.toString();
-                                idSearch.updateID(SelectedDoc, {'name':_formKey.currentState.fields['Nombre'].value,'raza':_formKey.currentState.fields['Raza'].value,'birthDate':selectedDate,'fechaIniDeste':fechainiDeste,'fechaIniNovi':fechaIniNovi,'fechaIniAdulta':fechaIniAdulta});
-                                flag=true;
-                                setState(() {
-
-                                });
-                                Flushbar(
-                                  borderRadius: 8,
-                                  backgroundGradient: LinearGradient(
-                                    colors: [Colors.green.shade800,Colors.green.shade700],
-                                    stops: [0.6,1],
-                                  ),
-                                  boxShadows: [
-                                    BoxShadow(
-                                      color: Colors.black45,
-                                      offset: Offset(3, 3),
-                                      blurRadius: 3,
-                                    )
-                                  ],
-                                  duration: Duration(seconds: 2),
-                                  dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-                                  forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
-                                  title: 'NOTIFICACIÓN',
-                                  message: 'Identificación Modificada Correctamente',
-                                )..show(context).then((value) => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) =>   IDSearch(data: widget.data,currentUser: widget.currentUser))
-                                ));
-                              }
-                            },
-                            elevation: 4.0,
-                            splashColor:  Colors.blue[400],
-                            child: Text(
-                              'GUARDAR',
-                              style: TextStyle(color: Colors.red, fontSize: 25.0),
-                            ),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                                side: BorderSide(color: Colors.red)
-                            ),
-                          ),
-                        ],
                       ),
                     ),
                   ],
                 ),
+                FormBuilder(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  skipDisabled: true,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FormBuilderTextField(
+                        readOnly: flag
+                            ? true
+                            : false,
+                        initialValue: id.documents[location[0]].data['name'],
+                        autovalidateMode: AutovalidateMode.always,
+                        name:"Nombre",
+                        decoration: InputDecoration(
+                          labelText: 'Nombre de la Vaca',
+                          suffixIcon: _nameHasError
+                              ? const Icon(Icons.error, color: Colors.red)
+                              : const Icon(Icons.check, color: Colors.green),
+                        ),
+                        onChanged: (val) {
+                          setState(() {
+                            _nameHasError =
+                            !_formKey.currentState.fields['Nombre'].validate();
+                          });
+                        },
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                          FormBuilderValidators.maxLength(context, 50,errorText: "Este campo debe contener máximo 50 caracteres")
+                        ]),
+                        textInputAction: TextInputAction.next,
+                      ),
+                      FormBuilderTextField(
+                        readOnly: flag
+                            ? true
+                            : false,
+                        initialValue: id.documents[location[0]].data['raza'],
+                        autovalidateMode: AutovalidateMode.always,
+                        name:"Raza",
+                        decoration: InputDecoration(
+                          labelText: 'Raza de la Vaca',
+                          suffixIcon: _razaHasError
+                              ? const Icon(Icons.error, color: Colors.red)
+                              : const Icon(Icons.check, color: Colors.green),
+                        ),
+                        onChanged: (val) {
+                          setState(() {
+                            _razaHasError =
+                            !_formKey.currentState.fields['Raza'].validate();
+                          });
+                        },
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                          FormBuilderValidators.maxLength(context, 50,errorText: "Este campo debe contener máximo 50 caracteres")
+                        ]),
+                        textInputAction: TextInputAction.next,
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      Text("Fecha de Nacimiento",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 16.0),),
+                      Row(
+                        children: [
+                          SizedBox(height: 20.0,),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5.0),
+                                color: Colors.white,
+                                border: Border.all(color: Colors.black)
+                            ),
+                            width: MediaQuery.of(context).size.width-80,
+                            height: 20.0,
+                            child: flagA
+                                ? new Text(id.documents[location[0]].data['birthDate'].toDate().toString().substring(0,10)):new Text(selectedDate.toString().substring(0,10)),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10.0),
+                            child: flag==false
+                                ? ClipOval(
+                              child: Material(
+                                color: Colors.orange, // button color
+                                child: InkWell(
+                                  splashColor: Colors.red, // inkwell color
+                                  child: SizedBox(width: 56, height: 56, child: Icon(Icons.calendar_today_outlined,)),
+                                  onTap: () {
+                                    flagA=false;
+                                    _selectDate(context);
+                                  },
+                                ),
+                              ),
+                            )
+                                : Padding(
+                              padding: EdgeInsets.only(left: 10.0),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 20.0,),
+                      Padding(
+                        padding: EdgeInsets.only(left: MediaQuery.of(context).size.width/2-80),
+                        child: flag==true
+                            ?
+                        Row(
+                          children: [
+                            ClipOval(
+                              child: Material(
+                                color: Colors.orange, // button color
+                                child: InkWell(
+                                  splashColor: Colors.red, // inkwell color
+                                  child: SizedBox(width: 56, height: 56, child: Icon(Icons.edit,)),
+                                  onTap: () {
+                                    flag=false;
+                                    selectedDate=id.documents[location[0]].data['birthDate'].toDate();
+                                    setState(() {
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left:35.0),
+                              child: ClipOval(
+                                child: Material(
+                                  color: Colors.red, // button color
+                                  child: InkWell(
+                                    splashColor: Colors.red, // inkwell color
+                                    child: SizedBox(width: 56, height: 56, child: Icon(Icons.delete,)),
+                                    onTap: () {
+                                      var SelectedDoc=id.documents[location[0]].documentID.toString();
+                                      idSearch.deleteID(SelectedDoc);
+                                      Flushbar(
+                                        borderRadius: 8,
+                                        backgroundGradient: LinearGradient(
+                                          colors: [Colors.green.shade800,Colors.green.shade700],
+                                          stops: [0.6,1],
+                                        ),
+                                        boxShadows: [
+                                          BoxShadow(
+                                            color: Colors.black45,
+                                            offset: Offset(3, 3),
+                                            blurRadius: 3,
+                                          )
+                                        ],
+                                        duration: Duration(seconds: 2),
+                                        dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+                                        forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+                                        title: 'NOTIFICACIÓN',
+                                        message: 'Identificación Eliminada Correctamente',
+                                      )..show(context).then((value) => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) =>   Scanner(currentUser: widget.currentUser))
+                                      ));
+                                    },
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ):Column(
+                          children: [
+                            RaisedButton(
+                              color: Colors.white,
+                              onPressed: () {
+                                if(_formKey.currentState.fields['Raza'].validate()&&_formKey.currentState.fields['Nombre'].validate()){
+                                  calcFechas(selectedDate);
+                                  var SelectedDoc=id.documents[location[0]].documentID.toString();
+                                  idSearch.updateID(SelectedDoc, {'name':_formKey.currentState.fields['Nombre'].value,'raza':_formKey.currentState.fields['Raza'].value,'birthDate':selectedDate,'fechaIniDeste':fechainiDeste,'fechaIniNovi':fechaIniNovi,'fechaIniAdulta':fechaIniAdulta});
+                                  flag=true;
+                                  setState(() {
 
-              )
-             /* SizedBox(height: 30.0,),
+                                  });
+                                  Flushbar(
+                                    borderRadius: 8,
+                                    backgroundGradient: LinearGradient(
+                                      colors: [Colors.green.shade800,Colors.green.shade700],
+                                      stops: [0.6,1],
+                                    ),
+                                    boxShadows: [
+                                      BoxShadow(
+                                        color: Colors.black45,
+                                        offset: Offset(3, 3),
+                                        blurRadius: 3,
+                                      )
+                                    ],
+                                    duration: Duration(seconds: 2),
+                                    dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+                                    forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+                                    title: 'NOTIFICACIÓN',
+                                    message: 'Identificación Modificada Correctamente',
+                                  )..show(context).then((value) => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) =>   IDSearch(data: widget.data,currentUser: widget.currentUser))
+                                  ));
+                                }
+                              },
+                              elevation: 4.0,
+                              splashColor:  Colors.blue[400],
+                              child: Text(
+                                'GUARDAR',
+                                style: TextStyle(color: Colors.red, fontSize: 25.0),
+                              ),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  side: BorderSide(color: Colors.red)
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                )
+                /* SizedBox(height: 30.0,),
               Text("Nombre de la Vaca",style: TextStyle(fontWeight: FontWeight.bold),),
               SizedBox(height: 20.0,),
               Container(
@@ -431,11 +433,22 @@ class _IDSearchState extends State<IDSearch>{
                     ],
                   )
               )*/
-            ],
+              ],
+            ),
           ),
         );
       }
     }
+  }
+  Future<bool> _onBackPressed() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            Home(currentUser: widget.currentUser,data: widget.data,),
+      ),
+          (route) => false,
+    );
   }
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(

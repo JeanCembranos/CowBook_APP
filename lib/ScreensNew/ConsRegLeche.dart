@@ -104,226 +104,229 @@ class _RegLecheDetailsState extends State<RegLecheDetails> {
       }
 
       if (carflag == true) {
-        return ListView.builder(
-            itemCount: location.length,
-            padding: EdgeInsets.all(5.0),
+        return WillPopScope(
+          onWillPop: _onBackPressed,
+          child: ListView.builder(
+              itemCount: location.length,
+              padding: EdgeInsets.all(5.0),
 
-            itemBuilder:(context,i){
-              return SingleChildScrollView(
-                child: new Column(
-                  children: [
-                    Align(
-                      child: Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width - 10,
-                        height: 250,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            image: DecorationImage(
-                                image: AssetImage("assets/images/CreTratLogo.png"),
-                                fit: BoxFit.cover
-                            )
+              itemBuilder:(context,i){
+                return SingleChildScrollView(
+                  child: new Column(
+                    children: [
+                      Align(
+                        child: Container(
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width - 10,
+                          height: 250,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              image: DecorationImage(
+                                  image: AssetImage("assets/images/CreTratLogo.png"),
+                                  fit: BoxFit.cover
+                              )
+                          ),
                         ),
+                        alignment: Alignment.center,
                       ),
-                      alignment: Alignment.center,
-                    ),
-                    FormBuilder(
-                      key: _formKey,
-                      autovalidateMode: AutovalidateMode.disabled,
-                      skipDisabled: true,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Fecha de Registro",style: TextStyle(fontSize: 15.0,fontWeight: FontWeight.w400),),
-                          Row(
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width-90.0,
-                                height: 20.0,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border(
-                                        bottom: BorderSide(
-                                          color: Colors.black,
-                                          width: 1.0,
-                                        )
-                                    )
-                                ),
-                                child:flagA
-                                    ? Text(RegLecheDB.documents[location[i]].data['fechaReg'].toDate().toString().substring(0,10))
-                                    :Text(selectedIniDate.toString().substring(0,10)),
-
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 5.0),
-                                child: flag==false
-                                    ? ClipOval(
-                                  child: Material(
-                                    color: Colors.orange, // button color
-                                    child: InkWell(
-                                      splashColor: Colors.red, // inkwell color
-                                      child: SizedBox(width: 56, height: 56, child: Icon(Icons.calendar_today_outlined,)),
-                                      onTap: () {
-                                        flagA=false;
-                                        _selectIniDate(context);
-                                      },
-                                    ),
-                                  ),
-                                )
-                                    : Padding(
-                                  padding: EdgeInsets.only(left: 10.0),
-                                ),
-                              ),
-                            ],
-                          ),
-                          FormBuilderTextField(
-                              readOnly: flag
-                                  ? true
-                                  : false,
-                              initialValue: RegLecheDB.documents[location[i]].data['cantProd'],
-                            autovalidateMode: AutovalidateMode.always,
-                            name: "cantidad",
-                            decoration: InputDecoration(
-                              labelText: 'Cantidad de Leche Producida (Litros)',
-                              suffixIcon: _medHasError
-                                  ? const Icon(Icons.error, color: Colors.red)
-                                  : const Icon(Icons.check, color: Colors.green),
-                            ),
-                            onChanged: (val) {
-                              setState(() {
-                                _medHasError =
-                                !_formKey.currentState.fields['cantidad'].validate();
-                              });
-                            },
-                            validator: FormBuilderValidators.compose([
-                              FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
-                              FormBuilderValidators.maxLength(context,30,errorText: "Este campo debe contener hasta un máximo de 50 caracteres"),
-                            ]),
-                            textInputAction: TextInputAction.next,
-                              keyboardType: TextInputType.number
-                          ),
-                          SizedBox(height: 20.0,),
-                          Padding(
-                            padding: EdgeInsets.only(left: MediaQuery.of(context).size.width/2-80),
-                            child: flag==true
-                                ?
+                      FormBuilder(
+                        key: _formKey,
+                        autovalidateMode: AutovalidateMode.disabled,
+                        skipDisabled: true,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Fecha de Registro",style: TextStyle(fontSize: 15.0,fontWeight: FontWeight.w400),),
                             Row(
                               children: [
-                                ClipOval(
-                                  child: Material(
-                                    color: Colors.orange, // button color
-                                    child: InkWell(
-                                      splashColor: Colors.red, // inkwell color
-                                      child: SizedBox(width: 56, height: 56, child: Icon(Icons.edit,)),
-                                      onTap: () {
-                                        flag=false;
-                                        selectedIniDate=RegLecheDB.documents[location[i]].data['fechaReg'].toDate();
-                                        setState(() {
-                                        });
-                                      },
-                                    ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width-90.0,
+                                  height: 20.0,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border(
+                                          bottom: BorderSide(
+                                            color: Colors.black,
+                                            width: 1.0,
+                                          )
+                                      )
                                   ),
+                                  child:flagA
+                                      ? Text(RegLecheDB.documents[location[i]].data['fechaReg'].toDate().toString().substring(0,10))
+                                      :Text(selectedIniDate.toString().substring(0,10)),
+
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(left:35.0),
-                                  child: ClipOval(
+                                  padding: EdgeInsets.only(left: 5.0),
+                                  child: flag==false
+                                      ? ClipOval(
                                     child: Material(
-                                      color: Colors.red, // button color
+                                      color: Colors.orange, // button color
                                       child: InkWell(
                                         splashColor: Colors.red, // inkwell color
-                                        child: SizedBox(width: 56, height: 56, child: Icon(Icons.delete,)),
+                                        child: SizedBox(width: 56, height: 56, child: Icon(Icons.calendar_today_outlined,)),
                                         onTap: () {
-                                          var SelectedDoc=RegLecheDB.documents[location[i]].documentID.toString();
-                                          objRegLeche.deleteReg(SelectedDoc);
-                                          Flushbar(
-                                            borderRadius: 8,
-                                            backgroundGradient: LinearGradient(
-                                              colors: [Colors.green.shade800,Colors.green.shade700],
-                                              stops: [0.6,1],
-                                            ),
-                                            boxShadows: [
-                                              BoxShadow(
-                                                color: Colors.black45,
-                                                offset: Offset(3, 3),
-                                                blurRadius: 3,
-                                              )
-                                            ],
-                                            duration: Duration(seconds: 2),
-                                            dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-                                            forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
-                                            title: 'NOTIFICACIÓN',
-                                            message: 'Reporte Inidividual Eliminado Correctamente',
-                                          )..show(context).then((value) => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(builder: (context) => RegLeche(currentUser: widget.currentUser,data: widget.data,))
-                                          ));
+                                          flagA=false;
+                                          _selectIniDate(context);
+                                        },
+                                      ),
+                                    ),
+                                  )
+                                      : Padding(
+                                    padding: EdgeInsets.only(left: 10.0),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            FormBuilderTextField(
+                                readOnly: flag
+                                    ? true
+                                    : false,
+                                initialValue: RegLecheDB.documents[location[i]].data['cantProd'],
+                                autovalidateMode: AutovalidateMode.always,
+                                name: "cantidad",
+                                decoration: InputDecoration(
+                                  labelText: 'Cantidad de Leche Producida (Litros)',
+                                  suffixIcon: _medHasError
+                                      ? const Icon(Icons.error, color: Colors.red)
+                                      : const Icon(Icons.check, color: Colors.green),
+                                ),
+                                onChanged: (val) {
+                                  setState(() {
+                                    _medHasError =
+                                    !_formKey.currentState.fields['cantidad'].validate();
+                                  });
+                                },
+                                validator: FormBuilderValidators.compose([
+                                  FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                                  FormBuilderValidators.maxLength(context,30,errorText: "Este campo debe contener hasta un máximo de 50 caracteres"),
+                                ]),
+                                textInputAction: TextInputAction.next,
+                                keyboardType: TextInputType.number
+                            ),
+                            SizedBox(height: 20.0,),
+                            Padding(
+                              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width/2-80),
+                              child: flag==true
+                                  ?
+                              Row(
+                                children: [
+                                  ClipOval(
+                                    child: Material(
+                                      color: Colors.orange, // button color
+                                      child: InkWell(
+                                        splashColor: Colors.red, // inkwell color
+                                        child: SizedBox(width: 56, height: 56, child: Icon(Icons.edit,)),
+                                        onTap: () {
+                                          flag=false;
+                                          selectedIniDate=RegLecheDB.documents[location[i]].data['fechaReg'].toDate();
+                                          setState(() {
+                                          });
                                         },
                                       ),
                                     ),
                                   ),
-                                )
-                              ],
-                            ):Column(
-                              children: [
-                                RaisedButton(
-                                  color: Colors.white,
-                                  onPressed: () {
-                                    if(_formKey.currentState.fields['cantidad'].validate()){
-                                      var SelectedDoc=RegLecheDB.documents[location[i]].documentID.toString();
-                                      print(RegLecheDB.documents[location[i]].documentID.toString());
-                                      objRegLeche.updateRegLeche(SelectedDoc, {'fechaReg':selectedIniDate,'cantProd':_formKey.currentState.fields['cantidad'].value});
-                                      flag=true;
-                                      Flushbar(
-                                        borderRadius: 8,
-                                        backgroundGradient: LinearGradient(
-                                          colors: [Colors.green.shade800,Colors.green.shade700],
-                                          stops: [0.6,1],
+                                  Padding(
+                                    padding: EdgeInsets.only(left:35.0),
+                                    child: ClipOval(
+                                      child: Material(
+                                        color: Colors.red, // button color
+                                        child: InkWell(
+                                          splashColor: Colors.red, // inkwell color
+                                          child: SizedBox(width: 56, height: 56, child: Icon(Icons.delete,)),
+                                          onTap: () {
+                                            var SelectedDoc=RegLecheDB.documents[location[i]].documentID.toString();
+                                            objRegLeche.deleteReg(SelectedDoc);
+                                            Flushbar(
+                                              borderRadius: 8,
+                                              backgroundGradient: LinearGradient(
+                                                colors: [Colors.green.shade800,Colors.green.shade700],
+                                                stops: [0.6,1],
+                                              ),
+                                              boxShadows: [
+                                                BoxShadow(
+                                                  color: Colors.black45,
+                                                  offset: Offset(3, 3),
+                                                  blurRadius: 3,
+                                                )
+                                              ],
+                                              duration: Duration(seconds: 2),
+                                              dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+                                              forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+                                              title: 'NOTIFICACIÓN',
+                                              message: 'Reporte Inidividual Eliminado Correctamente',
+                                            )..show(context).then((value) => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => RegLeche(currentUser: widget.currentUser,data: widget.data,))
+                                            ));
+                                          },
                                         ),
-                                        boxShadows: [
-                                          BoxShadow(
-                                            color: Colors.black45,
-                                            offset: Offset(3, 3),
-                                            blurRadius: 3,
-                                          )
-                                        ],
-                                        duration: Duration(seconds: 2),
-                                        dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-                                        forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
-                                        title: 'NOTIFICACIÓN',
-                                        message: 'Registro modificado Correctamente',
-                                      )..show(context).then((value) => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) =>  RegLecheDetails(currentUser: widget.currentUser,data: widget.data,RegID: widget.RegID,))
-                                      ));
-                                    }
-                                  },
-                                  elevation: 4.0,
-                                  splashColor:  Colors.blue[400],
-                                  child: Text(
-                                    'GUARDAR',
-                                    style: TextStyle(color: Colors.red, fontSize: 25.0),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ):Column(
+                                children: [
+                                  RaisedButton(
+                                    color: Colors.white,
+                                    onPressed: () {
+                                      if(_formKey.currentState.fields['cantidad'].validate()){
+                                        var SelectedDoc=RegLecheDB.documents[location[i]].documentID.toString();
+                                        print(RegLecheDB.documents[location[i]].documentID.toString());
+                                        objRegLeche.updateRegLeche(SelectedDoc, {'fechaReg':selectedIniDate,'cantProd':_formKey.currentState.fields['cantidad'].value});
+                                        flag=true;
+                                        Flushbar(
+                                          borderRadius: 8,
+                                          backgroundGradient: LinearGradient(
+                                            colors: [Colors.green.shade800,Colors.green.shade700],
+                                            stops: [0.6,1],
+                                          ),
+                                          boxShadows: [
+                                            BoxShadow(
+                                              color: Colors.black45,
+                                              offset: Offset(3, 3),
+                                              blurRadius: 3,
+                                            )
+                                          ],
+                                          duration: Duration(seconds: 2),
+                                          dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+                                          forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+                                          title: 'NOTIFICACIÓN',
+                                          message: 'Registro modificado Correctamente',
+                                        )..show(context).then((value) => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) =>  RegLecheDetails(currentUser: widget.currentUser,data: widget.data,RegID: widget.RegID,))
+                                        ));
+                                      }
+                                    },
+                                    elevation: 4.0,
+                                    splashColor:  Colors.blue[400],
+                                    child: Text(
+                                      'GUARDAR',
+                                      style: TextStyle(color: Colors.red, fontSize: 25.0),
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(18.0),
+                                        side: BorderSide(color: Colors.red)
+                                    ),
                                   ),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                      side: BorderSide(color: Colors.red)
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    )
+                          ],
+                        ),
+                      )
 
 
-                  ],
+                    ],
 
-                ),
-              );
-            }
+                  ),
+                );
+              }
 
+          ),
         );
       }
     }
@@ -378,5 +381,15 @@ class _RegLecheDetailsState extends State<RegLecheDetails> {
     setState(() {
       _currentIndex = index;
     });
+  }
+  Future<bool> _onBackPressed() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            RegLeche(currentUser: widget.currentUser,data: widget.data,),
+      ),
+          (route) => false,
+    );
   }
 }

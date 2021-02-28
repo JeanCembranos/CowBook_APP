@@ -48,125 +48,128 @@ class _CreateRegLecheState extends State<CreateRegLeche> {
             }),
         backgroundColor: Colors.white,
       ),
-      body: SingleChildScrollView(
-        child: new Column(
-          children: [
-            Align(
-              child: Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width - 10,
-                height: 250,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/CreTratLogo.png"),
-                        fit: BoxFit.cover
-                    )
+      body: WillPopScope(
+        onWillPop: _onBackPressed,
+        child: SingleChildScrollView(
+          child: new Column(
+            children: [
+              Align(
+                child: Container(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width - 10,
+                  height: 250,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/CreTratLogo.png"),
+                          fit: BoxFit.cover
+                      )
+                  ),
                 ),
+                alignment: Alignment.center,
               ),
-              alignment: Alignment.center,
-            ),
-            FormBuilder(
-              key: _formKey,
-              autovalidateMode: AutovalidateMode.disabled,
-              skipDisabled: true,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 10.0),
-                  Text("Fecha de Registro",style: TextStyle(fontSize: 15.0,fontWeight: FontWeight.w400),),
-                  Row(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width-70.0,
-                        height: 20.0,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.black,
-                                  width: 1.0,
-                                )
-                            )
-                        ),
-                        child: Text(selectedDate.toString().substring(0,10)),
+              FormBuilder(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.disabled,
+                skipDisabled: true,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 10.0),
+                    Text("Fecha de Registro",style: TextStyle(fontSize: 15.0,fontWeight: FontWeight.w400),),
+                    Row(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width-70.0,
+                          height: 20.0,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.black,
+                                    width: 1.0,
+                                  )
+                              )
+                          ),
+                          child: Text(selectedDate.toString().substring(0,10)),
 
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 10.0),
-                        child: ClipOval(
-                          child: Material(
-                            color: Colors.orange, // button color
-                            child: InkWell(
-                              splashColor: Colors.red, // inkwell color
-                              child: SizedBox(width: 56,
-                                  height: 56,
-                                  child: Icon(
-                                    Icons.calendar_today_outlined,)),
-                              onTap: () {
-                                _selectDate(context);
-                                // ignore: invalid_use_of_protected_member
-                              },
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10.0),
+                          child: ClipOval(
+                            child: Material(
+                              color: Colors.orange, // button color
+                              child: InkWell(
+                                splashColor: Colors.red, // inkwell color
+                                child: SizedBox(width: 56,
+                                    height: 56,
+                                    child: Icon(
+                                      Icons.calendar_today_outlined,)),
+                                onTap: () {
+                                  _selectDate(context);
+                                  // ignore: invalid_use_of_protected_member
+                                },
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10.0),
-                  FormBuilderTextField(
-                    autovalidateMode: AutovalidateMode.always,
-                    name: "cantidad",
-                    decoration: InputDecoration(
-                      labelText: 'Cantidad de Leche Producida (Litros)',
-                      suffixIcon: _medHasError
-                          ? const Icon(Icons.error, color: Colors.red)
-                          : const Icon(Icons.check, color: Colors.green),
+                      ],
                     ),
-                    onChanged: (val) {
-                      setState(() {
-                        _medHasError =
-                        !_formKey.currentState.fields['cantidad'].validate();
-                      });
-                    },
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
-                      FormBuilderValidators.maxLength(context,30,errorText: "Este campo debe contener hasta un máximo de 30 caracteres"),
-                    ]),
-                    textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.number
-                  ),
-                  Align(
-                    child: RaisedButton(
-                      color: Colors.white,
-                      onPressed: () {
-                        if(_formKey.currentState.fields['cantidad'].validate()){
-                          RegLecheModel  reg = RegLecheModel(_formKey.currentState.fields['cantidad'].value, selectedDate);
-                          _addRegLeche(context, reg);
-                        }
-                      },
-                      elevation: 4.0,
-                      splashColor: Colors.blue[400],
-                      child: Text(
-                        'GUARDAR',
-                        style: TextStyle(color: Colors.red, fontSize: 25.0),
-                      ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: Colors.red)
-                      ),
+                    SizedBox(height: 10.0),
+                    FormBuilderTextField(
+                        autovalidateMode: AutovalidateMode.always,
+                        name: "cantidad",
+                        decoration: InputDecoration(
+                          labelText: 'Cantidad de Leche Producida (Litros)',
+                          suffixIcon: _medHasError
+                              ? const Icon(Icons.error, color: Colors.red)
+                              : const Icon(Icons.check, color: Colors.green),
+                        ),
+                        onChanged: (val) {
+                          setState(() {
+                            _medHasError =
+                            !_formKey.currentState.fields['cantidad'].validate();
+                          });
+                        },
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                          FormBuilderValidators.maxLength(context,30,errorText: "Este campo debe contener hasta un máximo de 30 caracteres"),
+                        ]),
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.number
                     ),
-                    alignment: Alignment.center,
-                  ),
-                ],
-              ),
-            )
+                    Align(
+                      child: RaisedButton(
+                        color: Colors.white,
+                        onPressed: () {
+                          if(_formKey.currentState.fields['cantidad'].validate()){
+                            RegLecheModel  reg = RegLecheModel(_formKey.currentState.fields['cantidad'].value, selectedDate);
+                            _addRegLeche(context, reg);
+                          }
+                        },
+                        elevation: 4.0,
+                        splashColor: Colors.blue[400],
+                        child: Text(
+                          'GUARDAR',
+                          style: TextStyle(color: Colors.red, fontSize: 25.0),
+                        ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: Colors.red)
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                    ),
+                  ],
+                ),
+              )
 
 
-          ],
+            ],
 
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -184,6 +187,16 @@ class _CreateRegLecheState extends State<CreateRegLeche> {
           )
         ],
       ),
+    );
+  }
+  Future<bool> _onBackPressed() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            RegLeche(data: widget.data,currentUser: widget.currentUser,),
+      ),
+          (route) => false,
     );
   }
 

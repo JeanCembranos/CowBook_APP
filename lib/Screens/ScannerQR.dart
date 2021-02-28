@@ -130,16 +130,18 @@ class _ScannerState extends State <Scanner> {
               elevation: 0,
             ),
             body: Builder(builder: (BuildContext context) {
-              return SingleChildScrollView(
-                child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    alignment: Alignment.center,
-                    height: MediaQuery.of(context).size.height,
-                    child: Flex(
-                        direction: Axis.vertical,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          /*RaisedButton(
+              return WillPopScope(
+                onWillPop: _onBackPressed,
+                child: SingleChildScrollView(
+                  child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      alignment: Alignment.center,
+                      height: MediaQuery.of(context).size.height,
+                      child: Flex(
+                          direction: Axis.vertical,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            /*RaisedButton(
                             color: Colors.blue[900],
                             elevation: 4.0,
                             splashColor:  Colors.blue[400],
@@ -161,9 +163,9 @@ class _ScannerState extends State <Scanner> {
                               padding: EdgeInsets.all(90.0),
                               shape: CircleBorder(),
                             ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
+                            SizedBox(
+                              height: 20.0,
+                            ),
                             Padding(
                               child: RawMaterialButton(
                                 onPressed: () {
@@ -192,7 +194,8 @@ class _ScannerState extends State <Scanner> {
                               ),
                               padding: EdgeInsets.only(top: 20.0),
                             ),
-                        ])),
+                          ])),
+                ),
               );
             })));
   }
@@ -234,5 +237,15 @@ class _ScannerState extends State <Scanner> {
             (route) => false,
       );
     }
+  }
+  Future<bool> _onBackPressed() {
+    /*Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            Login(),
+      ),
+          (route) => false,
+    );*/
   }
   }
