@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:myfarm_app/RegTools/DBReg.dart';
@@ -153,7 +154,7 @@ class _TratDetailsState extends State<TratDetails> {
                                 });
                               },
                               validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(context),
+                                FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
                               ]),
                               textInputAction: TextInputAction.next,
                             ),
@@ -306,14 +307,28 @@ class _TratDetailsState extends State<TratDetails> {
                                           onTap: () {
                                             var SelectedDoc=registros.documents[location[i]].documentID.toString();
                                             objReg.deleteReg(SelectedDoc);
-                                            Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => RegMedico(currentUser: widget.currentUser,data: widget.data,),
+                                            Flushbar(
+                                              borderRadius: 8,
+                                              backgroundGradient: LinearGradient(
+                                                colors: [Colors.green.shade800,Colors.green.shade700],
+                                                stops: [0.6,1],
                                               ),
-                                                  (route) => false,
-                                            );
-
+                                              boxShadows: [
+                                                BoxShadow(
+                                                  color: Colors.black45,
+                                                  offset: Offset(3, 3),
+                                                  blurRadius: 3,
+                                                )
+                                              ],
+                                              duration: Duration(seconds: 2),
+                                              dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+                                              forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+                                              title: 'NOTIFICACIÓN',
+                                              message: 'Tratamiento Eliminado Correctamente',
+                                            )..show(context).then((value) => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) =>  RegMedico(currentUser: widget.currentUser,data: widget.data,))
+                                            ));
                                           },
                                         ),
                                       ),
@@ -325,17 +340,34 @@ class _TratDetailsState extends State<TratDetails> {
                                   RaisedButton(
                                     color: Colors.white,
                                     onPressed: () {
-                                      var SelectedDoc=registros.documents[location[i]].documentID.toString();
-                                      print(registros.documents[location[i]].documentID.toString());
-                                      objReg.updateReg(SelectedDoc, {'medicamento':_formKey.currentState.fields['medicamento'].value,'fechaIni':selectedIniDate,'fechaFin':selectedFinalDate,'observaciones':obs});
-                                      flag=true;
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => TratDetails(currentUser: widget.currentUser,data: widget.data,RegID: widget.RegID,),
-                                        ),
-                                            (route) => false,
-                                      );
+                                      if(_formKey.currentState.fields['medicamento'].validate()){
+                                        var SelectedDoc=registros.documents[location[i]].documentID.toString();
+                                        print(registros.documents[location[i]].documentID.toString());
+                                        objReg.updateReg(SelectedDoc, {'medicamento':_formKey.currentState.fields['medicamento'].value,'fechaIni':selectedIniDate,'fechaFin':selectedFinalDate,'observaciones':obs});
+                                        flag=true;
+                                        Flushbar(
+                                          borderRadius: 8,
+                                          backgroundGradient: LinearGradient(
+                                            colors: [Colors.green.shade800,Colors.green.shade700],
+                                            stops: [0.6,1],
+                                          ),
+                                          boxShadows: [
+                                            BoxShadow(
+                                              color: Colors.black45,
+                                              offset: Offset(3, 3),
+                                              blurRadius: 3,
+                                            )
+                                          ],
+                                          duration: Duration(seconds: 2),
+                                          dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+                                          forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+                                          title: 'NOTIFICACIÓN',
+                                          message: 'Tratamiento modificado correctamente',
+                                        )..show(context).then((value) => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) =>  TratDetails(currentUser: widget.currentUser,data: widget.data,RegID: widget.RegID,))
+                                        ));
+                                      }
                                     },
                                     elevation: 4.0,
                                     splashColor:  Colors.blue[400],

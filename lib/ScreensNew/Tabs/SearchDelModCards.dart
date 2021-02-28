@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:myfarm_app/Screens/Home.dart';
+import 'package:myfarm_app/ScreensNew/ConsRegLeche.dart';
 import 'package:myfarm_app/ScreensNew/Tabs/SearchDelMod.dart';
 
 
@@ -69,12 +70,12 @@ Widget buildSearchDelModCards(BuildContext context, DocumentSnapshot document) {
 
     ),
     onTap: (){
-      /*Navigator.pushAndRemoveUntil(
+      Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => TratDetails(currentUser: trip.currentUser,data: trip.codigo,RegID: trip.RegID,),
+            builder: (context) => RegLecheDetails(currentUser: trip.currentUser,data: trip.codigo,RegID: trip.RegID,),
           ),
-              (route) => false);*/
+              (route) => false);
     },
   );
 }

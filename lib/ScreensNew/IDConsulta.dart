@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,6 +23,7 @@ class IDSearch extends StatefulWidget{
 class _IDSearchState extends State<IDSearch>{
   DateTime fechaFinTer,fechainiDeste,fechaFinDeste,fechaIniNovi,fechaFinNovi,fechaIniAdulta;
   bool flag=true;
+  bool flagA=true;
   DateTime selectedDate = DateTime.now();
   bool _nameHasError = false;
   bool _razaHasError = false;
@@ -45,9 +47,9 @@ class _IDSearchState extends State<IDSearch>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xffC4C4C4),
+        backgroundColor: Colors.white,
         leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: Icon(Icons.arrow_back,color: Colors.black,),
             onPressed: () {
               Navigator.pushAndRemoveUntil(
                 context,
@@ -140,7 +142,8 @@ class _IDSearchState extends State<IDSearch>{
                         });
                       },
                       validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(context),
+                        FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                        FormBuilderValidators.maxLength(context, 50,errorText: "Este campo debe contener máximo 50 caracteres")
                       ]),
                       textInputAction: TextInputAction.next,
                     ),
@@ -164,7 +167,8 @@ class _IDSearchState extends State<IDSearch>{
                         });
                       },
                       validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(context),
+                        FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                        FormBuilderValidators.maxLength(context, 50,errorText: "Este campo debe contener máximo 50 caracteres")
                       ]),
                       textInputAction: TextInputAction.next,
                     ),
@@ -183,7 +187,7 @@ class _IDSearchState extends State<IDSearch>{
                           ),
                           width: MediaQuery.of(context).size.width-80,
                           height: 20.0,
-                          child: flag
+                          child: flagA
                           ? new Text(id.documents[location[0]].data['birthDate'].toDate().toString().substring(0,10)):new Text(selectedDate.toString().substring(0,10)),
                         ),
                         Padding(
@@ -196,6 +200,7 @@ class _IDSearchState extends State<IDSearch>{
                                 splashColor: Colors.red, // inkwell color
                                 child: SizedBox(width: 56, height: 56, child: Icon(Icons.calendar_today_outlined,)),
                                 onTap: () {
+                                  flagA=false;
                                   _selectDate(context);
                                 },
                               ),
@@ -240,14 +245,28 @@ class _IDSearchState extends State<IDSearch>{
                                   onTap: () {
                                     var SelectedDoc=id.documents[location[0]].documentID.toString();
                                     idSearch.deleteID(SelectedDoc);
-                                    Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => Scanner(currentUser: widget.currentUser),
+                                    Flushbar(
+                                      borderRadius: 8,
+                                      backgroundGradient: LinearGradient(
+                                        colors: [Colors.green.shade800,Colors.green.shade700],
+                                        stops: [0.6,1],
                                       ),
-                                          (route) => false,
-                                    );
-
+                                      boxShadows: [
+                                        BoxShadow(
+                                          color: Colors.black45,
+                                          offset: Offset(3, 3),
+                                          blurRadius: 3,
+                                        )
+                                      ],
+                                      duration: Duration(seconds: 2),
+                                      dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+                                      forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+                                      title: 'NOTIFICACIÓN',
+                                      message: 'Identificación Eliminada Correctamente',
+                                    )..show(context).then((value) => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) =>   Scanner(currentUser: widget.currentUser))
+                                    ));
                                   },
                                 ),
                               ),
@@ -259,38 +278,42 @@ class _IDSearchState extends State<IDSearch>{
                           RaisedButton(
                             color: Colors.white,
                             onPressed: () {
-                              calcFechas(selectedDate);
-                              var SelectedDoc=id.documents[location[0]].documentID.toString();
-                              print(id.documents[location[0]].documentID.toString());
-                              idSearch.updateID(SelectedDoc, {'name':_formKey.currentState.fields['Nombre'].value,'raza':_formKey.currentState.fields['Raza'].value,'birthDate':selectedDate,'fechaIniDeste':fechainiDeste,'fechaIniNovi':fechaIniNovi,'fechaIniAdulta':fechaIniAdulta});
-                              flag=true;
-                              setState(() {
+                              if(_formKey.currentState.fields['Raza'].validate()&&_formKey.currentState.fields['Nombre'].validate()){
+                                calcFechas(selectedDate);
+                                var SelectedDoc=id.documents[location[0]].documentID.toString();
+                                idSearch.updateID(SelectedDoc, {'name':_formKey.currentState.fields['Nombre'].value,'raza':_formKey.currentState.fields['Raza'].value,'birthDate':selectedDate,'fechaIniDeste':fechainiDeste,'fechaIniNovi':fechaIniNovi,'fechaIniAdulta':fechaIniAdulta});
+                                flag=true;
+                                setState(() {
 
-                              });
+                                });
+                                Flushbar(
+                                  borderRadius: 8,
+                                  backgroundGradient: LinearGradient(
+                                    colors: [Colors.green.shade800,Colors.green.shade700],
+                                    stops: [0.6,1],
+                                  ),
+                                  boxShadows: [
+                                    BoxShadow(
+                                      color: Colors.black45,
+                                      offset: Offset(3, 3),
+                                      blurRadius: 3,
+                                    )
+                                  ],
+                                  duration: Duration(seconds: 2),
+                                  dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+                                  forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+                                  title: 'NOTIFICACIÓN',
+                                  message: 'Identificación Modificada Correctamente',
+                                )..show(context).then((value) => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) =>   IDSearch(data: widget.data,currentUser: widget.currentUser))
+                                ));
+                              }
                             },
                             elevation: 4.0,
                             splashColor:  Colors.blue[400],
                             child: Text(
                               'GUARDAR',
-                              style: TextStyle(color: Colors.red, fontSize: 25.0),
-                            ),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                                side: BorderSide(color: Colors.red)
-                            ),
-                          ),
-                          RaisedButton(
-                            color: Colors.white,
-                            onPressed: () {
-                              flag=true;
-                              setState(() {
-
-                              });
-                            },
-                            elevation: 4.0,
-                            splashColor:  Colors.blue[400],
-                            child: Text(
-                              'CANCELAR',
                               style: TextStyle(color: Colors.red, fontSize: 25.0),
                             ),
                             shape: RoundedRectangleBorder(

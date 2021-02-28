@@ -1,4 +1,5 @@
 
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:myfarm_app/RegTools/DBReg.dart';
@@ -90,7 +91,8 @@ class _CreateRegState extends State<CreateReg> {
                       });
                     },
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context),
+                      FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                      FormBuilderValidators.maxLength(context,50,errorText: "Este campo debe contener hasta un máximo de 50 caracteres"),
                     ]),
                     textInputAction: TextInputAction.next,
                   ),
@@ -203,8 +205,10 @@ class _CreateRegState extends State<CreateReg> {
                     child: RaisedButton(
                       color: Colors.white,
                       onPressed: () {
-                        RegModel regM=RegModel(_formKey.currentState.fields['medicamento'].value, obs, selectedIniDate, selectedFinalDate);
-                        _addID(context, regM);
+                        if(_formKey.currentState.fields['medicamento'].validate()){
+                          RegModel regM=RegModel(_formKey.currentState.fields['medicamento'].value, obs, selectedIniDate, selectedFinalDate);
+                          _addID(context, regM);
+                        }
                       },
                       elevation: 4.0,
                       splashColor: Colors.blue[400],
@@ -298,13 +302,48 @@ class _CreateRegState extends State<CreateReg> {
     String code=key.substring(2,key.length-1);
     _returnString = await DBReg().createGroup(reg, widget.data, widget.currentUser,code);
     if (_returnString == "success") {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => RegMedico(currentUser: widget.currentUser,data: widget.data,),
+      Flushbar(
+        borderRadius: 8,
+        backgroundGradient: LinearGradient(
+          colors: [Colors.green.shade800,Colors.green.shade700],
+          stops: [0.6,1],
         ),
-            (route) => false,
-      );
+        boxShadows: [
+          BoxShadow(
+            color: Colors.black45,
+            offset: Offset(3, 3),
+            blurRadius: 3,
+          )
+        ],
+        duration: Duration(seconds: 2),
+        dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+        forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+        title: 'NOTIFICACIÓN',
+        message: 'Tratamiento Creado Correctamente',
+      )..show(context).then((value) => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) =>  RegMedico(currentUser: widget.currentUser,data: widget.data,))
+      ));
+    }else{
+      Flushbar(
+        borderRadius: 8,
+        backgroundGradient: LinearGradient(
+          colors: [Colors.green.shade800,Colors.green.shade700],
+          stops: [0.6,1],
+        ),
+        boxShadows: [
+          BoxShadow(
+            color: Colors.black45,
+            offset: Offset(3, 3),
+            blurRadius: 3,
+          )
+        ],
+        duration: Duration(seconds: 2),
+        dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+        forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+        title: 'ERROR',
+        message: 'Tratamiento no ha podido ser creado',
+      )..show(context);
     }
 
   }

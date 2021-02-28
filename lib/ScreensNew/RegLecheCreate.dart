@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:myfarm_app/RegTools/DBProduLeche.dart';
@@ -131,7 +132,8 @@ class _CreateRegLecheState extends State<CreateRegLeche> {
                       });
                     },
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context),
+                      FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                      FormBuilderValidators.maxLength(context,30,errorText: "Este campo debe contener hasta un máximo de 30 caracteres"),
                     ]),
                     textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.number
@@ -140,8 +142,10 @@ class _CreateRegLecheState extends State<CreateRegLeche> {
                     child: RaisedButton(
                       color: Colors.white,
                       onPressed: () {
-                       RegLecheModel  reg = RegLecheModel(_formKey.currentState.fields['cantidad'].value, selectedDate);
-                        _addRegLeche(context, reg);
+                        if(_formKey.currentState.fields['cantidad'].validate()){
+                          RegLecheModel  reg = RegLecheModel(_formKey.currentState.fields['cantidad'].value, selectedDate);
+                          _addRegLeche(context, reg);
+                        }
                       },
                       elevation: 4.0,
                       splashColor: Colors.blue[400],
@@ -225,13 +229,28 @@ class _CreateRegLecheState extends State<CreateRegLeche> {
     String code=key.substring(2,key.length-1);
     _returnString = await DBProduLeche().createGroup(regLeche, widget.data, widget.currentUser,code);
     if (_returnString == "success") {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => RegLeche(currentUser: widget.currentUser,data: widget.data,),
+      Flushbar(
+        borderRadius: 8,
+        backgroundGradient: LinearGradient(
+          colors: [Colors.green.shade800,Colors.green.shade700],
+          stops: [0.6,1],
         ),
-            (route) => false,
-      );
+        boxShadows: [
+          BoxShadow(
+            color: Colors.black45,
+            offset: Offset(3, 3),
+            blurRadius: 3,
+          )
+        ],
+        duration: Duration(seconds: 2),
+        dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+        forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+        title: 'NOTIFICACIÓN',
+        message: 'Registro Diario creado Correctamente',
+      )..show(context).then((value) => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) =>  RegLeche(currentUser: widget.currentUser,data: widget.data,),)
+      ));
     }
 
   }
