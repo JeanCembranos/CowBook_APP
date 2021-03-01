@@ -119,17 +119,20 @@ class _RegLecheDetailsState extends State<RegLecheDetails> {
                           width: MediaQuery
                               .of(context)
                               .size
-                              .width - 10,
-                          height: 250,
+                              .width - 50,
+                          height: 180,
                           decoration: BoxDecoration(
                               color: Colors.white,
                               image: DecorationImage(
-                                  image: AssetImage("assets/images/CreTratLogo.png"),
+                                  image: AssetImage("assets/images/ConsLecheIndi.JPG"),
                                   fit: BoxFit.cover
                               )
                           ),
                         ),
                         alignment: Alignment.center,
+                      ),
+                      SizedBox(
+                        height: 30.0,
                       ),
                       FormBuilder(
                         key: _formKey,
@@ -179,6 +182,9 @@ class _RegLecheDetailsState extends State<RegLecheDetails> {
                                   ),
                                 ),
                               ],
+                            ),
+                            SizedBox(
+                              height: 30.0,
                             ),
                             FormBuilderTextField(
                                 readOnly: flag

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:myfarm_app/LoginTools/auth.dart';
 import 'package:myfarm_app/Screens/ScannerQR.dart';
+import 'package:myfarm_app/SettingsTools/ChangePassScreen.dart';
 import 'package:myfarm_app/SettingsTools/assets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -102,7 +103,13 @@ class _SettingsOnePageState extends State<SettingsOnePage> {
                             title: Text("Cambiar Contraseña"),
                             trailing: Icon(Icons.keyboard_arrow_right),
                             onTap: () {
-                              //open change password
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChangePassScreen(data: widget.data,currentUser: widget.currentUser,),
+                                ),
+                                    (route) => false,
+                              );
                             },
                           ),
                           _buildDivider(),

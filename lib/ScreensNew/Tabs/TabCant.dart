@@ -14,8 +14,8 @@ class TabCant extends StatefulWidget{
 
 class _TabCantState extends State<TabCant> {
   double result=0;
-  DateTime selectedIniDate = DateTime.now();
-  DateTime selectedFinDate = DateTime.now();
+  DateTime selectedIniDate = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day);
+  DateTime selectedFinDate = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day);
   @override
   Widget build(BuildContext context) {
     return Scaffold(

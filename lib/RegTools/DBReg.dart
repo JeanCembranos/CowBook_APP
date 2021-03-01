@@ -10,7 +10,7 @@ class DBReg {
   Future<String> createGroup(RegModel registro, String data, String currentUser,String code) async {
     String retVal = "error";
     try {
-      await _firestore.collection("DBReg").add({
+      await _firestore.collection("DBReg").document(currentUser).collection(data).add({
         'medicamento': registro.medicamento,
         'fechaIni': registro.InitialDate,
         'fechaFin': registro.FinalDate,
@@ -31,14 +31,14 @@ class DBReg {
     return await Firestore.instance.collection('DBReg').getDocuments();
   }
   /*Update Car element*/
-  updateReg(selectedDoc, newValues){
-    Firestore.instance.collection('DBReg').document(selectedDoc).updateData(newValues).catchError((e){
+  updateReg(selectedDoc,String currentUser,String data, newValues){
+    Firestore.instance.collection('DBReg').document(currentUser).collection(data).document(selectedDoc).updateData(newValues).catchError((e){
       print(e);
     });
   }
   /*Delete car element */
-  deleteReg(docId){
-    Firestore.instance.collection('DBReg').document(docId).delete().catchError((e){
+  deleteReg(docId, String currentUser,String data){
+    Firestore.instance.collection('DBReg').document(currentUser).collection(data).document(docId).delete().catchError((e){
       print(e);
     });
   }

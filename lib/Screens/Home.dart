@@ -40,21 +40,6 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
-  getRegTratSnapshots() async {
-    //final uid = await Provider.of(context).auth.getCurrentUID();
-    var data = await Firestore.instance
-        .collection('DBReg')
-        .where('currentUser', isEqualTo: widget.currentUser,)
-        .where('fechaIni', isGreaterThanOrEqualTo: hoy)
-        .getDocuments();
-    setState(() {
-      for(int i=0;i<data.documents.length;i++){
-       contadorPorComenzar++;
-      }
-    });
-    return "complete";
-  }
-
   Future getCarouselWidget() async {
     var firestore = Firestore.instance;
     QuerySnapshot qn = await firestore.collection("carousel").getDocuments();

@@ -24,7 +24,7 @@ class CreateRegLeche extends StatefulWidget{
 class _CreateRegLecheState extends State<CreateRegLeche> {
   int _currentIndex = 0;
   String obs;
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day);
   bool _medHasError = true;
   final _formKey = GlobalKey<FormBuilderState>();
 
@@ -58,18 +58,19 @@ class _CreateRegLecheState extends State<CreateRegLeche> {
                   width: MediaQuery
                       .of(context)
                       .size
-                      .width - 10,
-                  height: 250,
+                      .width - 40,
+                  height: 200,
                   decoration: BoxDecoration(
                       color: Colors.white,
                       image: DecorationImage(
-                          image: AssetImage("assets/images/CreTratLogo.png"),
+                          image: AssetImage("assets/images/CrearRegLeche.JPG"),
                           fit: BoxFit.cover
                       )
                   ),
                 ),
                 alignment: Alignment.center,
               ),
+              SizedBox(height: 30.0),
               FormBuilder(
                 key: _formKey,
                 autovalidateMode: AutovalidateMode.disabled,
@@ -150,14 +151,14 @@ class _CreateRegLecheState extends State<CreateRegLeche> {
                           }
                         },
                         elevation: 4.0,
-                        splashColor: Colors.blue[400],
+                        splashColor: Colors.green,
                         child: Text(
                           'GUARDAR',
-                          style: TextStyle(color: Colors.red, fontSize: 25.0),
+                          style: TextStyle(color: Colors.green, fontSize: 25.0),
                         ),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: Colors.red)
+                            side: BorderSide(color: Colors.green)
                         ),
                       ),
                       alignment: Alignment.center,

@@ -308,7 +308,7 @@ class _TratDetailsState extends State<TratDetails> {
                                             child: SizedBox(width: 56, height: 56, child: Icon(Icons.delete,)),
                                             onTap: () {
                                               var SelectedDoc=registros.documents[location[i]].documentID.toString();
-                                              objReg.deleteReg(SelectedDoc);
+                                              objReg.deleteReg(SelectedDoc,widget.currentUser,widget.data);
                                               Flushbar(
                                                 borderRadius: 8,
                                                 backgroundGradient: LinearGradient(
@@ -345,7 +345,7 @@ class _TratDetailsState extends State<TratDetails> {
                                         if(_formKey.currentState.fields['medicamento'].validate()){
                                           var SelectedDoc=registros.documents[location[i]].documentID.toString();
                                           print(registros.documents[location[i]].documentID.toString());
-                                          objReg.updateReg(SelectedDoc, {'medicamento':_formKey.currentState.fields['medicamento'].value,'fechaIni':selectedIniDate,'fechaFin':selectedFinalDate,'observaciones':obs});
+                                          objReg.updateReg(SelectedDoc,widget.currentUser,widget.data, {'medicamento':_formKey.currentState.fields['medicamento'].value,'fechaIni':selectedIniDate,'fechaFin':selectedFinalDate,'observaciones':obs});
                                           flag=true;
                                           Flushbar(
                                             borderRadius: 8,

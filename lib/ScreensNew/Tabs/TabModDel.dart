@@ -16,8 +16,8 @@ class TabModDel extends StatefulWidget{
 }
 
 class _TabModDelState extends State<TabModDel> {
-  DateTime selectedIniDate = DateTime.now();
-  DateTime selectedFinDate = DateTime.now();
+  DateTime selectedIniDate = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day);
+  DateTime selectedFinDate = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day);
   Future resultsLoaded;
   List _allResults = [];
   List _resultsList = [];
@@ -52,11 +52,11 @@ class _TabModDelState extends State<TabModDel> {
     //final uid = await Provider.of(context).auth.getCurrentUID();
     var data = await Firestore.instance
         .collection('DBProduLeche').document(widget.currentUser).collection(widget.data)
-        .where('fechaReg',isGreaterThanOrEqualTo: selectedIniDate)
+        .where('fechaReg',isGreaterThanOrEqualTo: selectedIniDate,)
        .where('fechaReg',isLessThanOrEqualTo: selectedFinDate)
         .getDocuments();
     setState(() {
-      print(widget.currentUser);
+      print(selectedIniDate);
       _allResults = data.documents;
     });
     searchResultsList();
