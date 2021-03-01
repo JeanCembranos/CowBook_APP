@@ -51,11 +51,12 @@ class _TabModDelState extends State<TabModDel> {
   getRegLecheSnapshots() async {
     //final uid = await Provider.of(context).auth.getCurrentUID();
     var data = await Firestore.instance
-        .collection('DBProduLeche')
+        .collection('DBProduLeche').document(widget.currentUser).collection(widget.data)
         .where('fechaReg',isGreaterThanOrEqualTo: selectedIniDate)
-        .where('fechaReg',isLessThanOrEqualTo: selectedFinDate)
+       .where('fechaReg',isLessThanOrEqualTo: selectedFinDate)
         .getDocuments();
     setState(() {
+      print(widget.currentUser);
       _allResults = data.documents;
     });
     searchResultsList();

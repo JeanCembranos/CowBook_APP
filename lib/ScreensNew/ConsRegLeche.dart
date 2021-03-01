@@ -44,7 +44,7 @@ class _RegLecheDetailsState extends State<RegLecheDetails> {
   @override
   void initState() {
     super.initState();
-    objRegLeche.getData().then((results){
+    objRegLeche.getData(widget.currentUser,widget.data).then((results){
       setState(() {
         RegLecheDB = results;
       });
@@ -238,7 +238,7 @@ class _RegLecheDetailsState extends State<RegLecheDetails> {
                                           child: SizedBox(width: 56, height: 56, child: Icon(Icons.delete,)),
                                           onTap: () {
                                             var SelectedDoc=RegLecheDB.documents[location[i]].documentID.toString();
-                                            objRegLeche.deleteReg(SelectedDoc);
+                                            objRegLeche.deleteReg(SelectedDoc,widget.currentUser,widget.data);
                                             Flushbar(
                                               borderRadius: 8,
                                               backgroundGradient: LinearGradient(
@@ -275,7 +275,7 @@ class _RegLecheDetailsState extends State<RegLecheDetails> {
                                       if(_formKey.currentState.fields['cantidad'].validate()){
                                         var SelectedDoc=RegLecheDB.documents[location[i]].documentID.toString();
                                         print(RegLecheDB.documents[location[i]].documentID.toString());
-                                        objRegLeche.updateRegLeche(SelectedDoc, {'fechaReg':selectedIniDate,'cantProd':_formKey.currentState.fields['cantidad'].value});
+                                        objRegLeche.updateRegLeche(SelectedDoc,widget.currentUser,widget.data, {'fechaReg':selectedIniDate,'cantProd':_formKey.currentState.fields['cantidad'].value});
                                         flag=true;
                                         Flushbar(
                                           borderRadius: 8,

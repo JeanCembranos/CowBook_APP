@@ -156,11 +156,9 @@ class _TabCantState extends State<TabCant> {
   getRegLecheSnapshots() async {
     //final uid = await Provider.of(context).auth.getCurrentUID();
     var data = await Firestore.instance
-        .collection('DBProduLeche')
-        .where('currentUser', isEqualTo: widget.currentUser,)
-        .where('codigo', isEqualTo: widget.data,)
-        .where('fechaReg',isGreaterThan: selectedIniDate)
-        .where('fechaReg', isLessThan: selectedFinDate)
+        .collection('DBProduLeche').document(widget.currentUser).collection(widget.data)
+        .where('fechaReg',isGreaterThanOrEqualTo: selectedIniDate)
+        .where('fechaReg', isLessThanOrEqualTo: selectedFinDate)
         .getDocuments();
     setState(() {
       for(int i=0;i<data.documents.length;i++){

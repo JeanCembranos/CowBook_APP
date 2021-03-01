@@ -10,7 +10,7 @@ class DBProduLeche {
   Future<String> createGroup(RegLecheModel registro, String data, String currentUser,String code) async {
     String retVal = "error";
     try {
-      await _firestore.collection("DBProduLeche").add({
+      await _firestore.collection("DBProduLeche").document(currentUser).collection(data).add({
         'fechaReg': registro.fechaReg,
         'cantProd': registro.cant,
         'codigo': data,
@@ -25,18 +25,18 @@ class DBProduLeche {
   }
 
   /*Create Car documents*/
-  getData() async{
-    return await Firestore.instance.collection('DBProduLeche').getDocuments();
+  getData(String currentUser,String data) async{
+    return await Firestore.instance.collection('DBProduLeche').document(currentUser).collection(data).getDocuments();
   }
   /*Update Car element*/
-  updateRegLeche(selectedDoc, newValues){
-    Firestore.instance.collection('DBProduLeche').document(selectedDoc).updateData(newValues).catchError((e){
+  updateRegLeche(selectedDoc,String currentUser,String data, newValues){
+    Firestore.instance.collection('DBProduLeche').document(currentUser).collection(data).document(selectedDoc).updateData(newValues).catchError((e){
       print(e);
     });
   }
   /*Delete car element */
-  deleteReg(docId){
-    Firestore.instance.collection('DBProduLeche').document(docId).delete().catchError((e){
+  deleteReg(docId,String currentUser,String data){
+    Firestore.instance.collection('DBProduLeche').document(currentUser).collection(data).document(docId).delete().catchError((e){
       print(e);
     });
   }

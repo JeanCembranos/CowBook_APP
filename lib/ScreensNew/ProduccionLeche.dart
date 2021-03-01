@@ -146,8 +146,8 @@ class _RegLecheState extends State<RegLeche>{
           ),
           body: new TabBarView(
             children: [
-              TabModDel(),
-              TabCant()
+              TabModDel(data: widget.data,currentUser: widget.currentUser,),
+              TabCant(currentUser: widget.currentUser,data: widget.data,)
             ],
           ),
         ),

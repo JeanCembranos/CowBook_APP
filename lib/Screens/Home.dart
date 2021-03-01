@@ -29,18 +29,31 @@ class Home extends StatefulWidget{
 
 
 class _HomeState extends State<Home> {
+  DateTime hoy=DateTime.now();
+  int contadorPorComenzar=0;
   int _currentIndex = 0;
   final List<Widget> _children = [];
 
 
   @override
   void initState() {
-    print('Qr: ${widget.data}');
-    print('Usuario: ${widget.currentUser}');
     super.initState();
   }
 
-
+  getRegTratSnapshots() async {
+    //final uid = await Provider.of(context).auth.getCurrentUID();
+    var data = await Firestore.instance
+        .collection('DBReg')
+        .where('currentUser', isEqualTo: widget.currentUser,)
+        .where('fechaIni', isGreaterThanOrEqualTo: hoy)
+        .getDocuments();
+    setState(() {
+      for(int i=0;i<data.documents.length;i++){
+       contadorPorComenzar++;
+      }
+    });
+    return "complete";
+  }
 
   Future getCarouselWidget() async {
     var firestore = Firestore.instance;
@@ -150,6 +163,11 @@ class _HomeState extends State<Home> {
                 ),
                 width: MediaQuery.of(context).size.width-10,
                 height: 80.0,
+                child: new Column(
+                  children: [
+                    Text("Tiene ${contadorPorComenzar.toString()} por comenzar")
+                  ],
+                ),
               ),
               GridView.count(
                 shrinkWrap: true,
