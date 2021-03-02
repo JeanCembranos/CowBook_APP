@@ -3,11 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:myfarm_app/LoginTools/auth.dart';
+import 'package:myfarm_app/LoginTools/utils.dart';
 import 'package:myfarm_app/Screens/Login.dart';
 import 'package:myfarm_app/Screens/Settings.dart';
 
-class ChangePassScreen extends StatefulWidget{
+class ChangePassScreen extends StatefulWidget {
   final String data;
   final String currentUser;
   @override
@@ -19,128 +19,143 @@ class ChangePassScreen extends StatefulWidget{
 }
 
 class _ChangePassScreenState extends State<ChangePassScreen> {
-  bool _contrasenaHasError = true;
-  bool _contrasenaConfirmHasError = true;
-  bool _newContrasenaHasError = true;
-  final _formKey = GlobalKey<FormBuilderState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
-        title: Text(
-          "Cambiar Contraseña", style: TextStyle(color: Colors.black),),
-        leading:
-        IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black,),
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      SettingsOnePage(
-                        currentUser: widget.currentUser, data: widget.data,),
-                ),
-                    (route) => false,
-              );
-            }),
-        backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+              child: ListView(
+                padding: EdgeInsets.all(20.0),
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      IconButton(icon: Icon(Icons.arrow_back), onPressed: (){
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder:(context) =>SettingsOnePage(currentUser: widget.currentUser,data: widget.data,)),(route) => false);
+                      })
+                    ],
+                  ),
+                  SizedBox(
+                      height: screenAwareSize(20, context)
+                  ),
+                  Signupform()
+                ],
+              )
+          )
+        ],
       ),
-      body: WillPopScope(
-        child: new Column(
-          children: [
-            FormBuilder(
-              key: _formKey,
-              autovalidateMode: AutovalidateMode.disabled,
-              skipDisabled: true,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  FormBuilderTextField(
-                    autovalidateMode: AutovalidateMode.always,
-                    name: "contrasena",
-                    decoration: InputDecoration(
-                      labelText: 'Contraseña Actual',
-                      suffixIcon: _contrasenaHasError
-                          ? const Icon(Icons.error, color: Colors.red)
-                          : const Icon(Icons.check, color: Colors.green),
-                    ),
-                    onChanged: (val) {
-                      setState(() {
-                        _contrasenaHasError =
-                        !_formKey.currentState.fields['contrasena'].validate();
-                      });
-                    },
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,
-                          errorText: "Este campo no puede estar vacío"),
-                      FormBuilderValidators.minLength(context, 8,
-                          errorText: "Contraseña debe contener entre 8 y 16 caracteres"),
-                      FormBuilderValidators.maxLength(context, 16,
-                          errorText: "Contraseña debe contener entre 8 y 16 caracteres"),
-                    ]),
-                    textInputAction: TextInputAction.next,
+    );
+  }
+}
+class Signupform extends StatefulWidget {
+  @override
+  _SignupformState createState() => _SignupformState();
+}
+
+class _SignupformState extends State<Signupform> {
+  bool _correoHasError = true;
+  final _formKeyCorreo = GlobalKey<FormBuilderState>();
+  var _formKey=GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Container(
+        child: Form(
+          key: _formKey,
+          child: Column(
+              children: <Widget>[
+                new Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: ClipRRect(
+                    child: Image.asset('assets/images/recovery.png',
+                      width: screenAwareSize(250, context),
+                      height: screenAwareSize(250, context),fit: BoxFit.cover,),
                   ),
-                  FormBuilderTextField(
-                    autovalidateMode: AutovalidateMode.always,
-                    name: "newContrasena",
-                    decoration: InputDecoration(
-                      labelText: 'Nueva Contraseña',
-                      suffixIcon: _newContrasenaHasError
-                          ? const Icon(Icons.error, color: Colors.red)
-                          : const Icon(Icons.check, color: Colors.green),
-                    ),
-                    onChanged: (val) {
-                      setState(() {
-                        _newContrasenaHasError =
-                        !_formKey.currentState.fields['newContrasena']
-                            .validate();
-                      });
-                    },
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,
-                          errorText: "Este campo no puede estar vacío"),
-                      FormBuilderValidators.minLength(context, 8,
-                          errorText: "Contraseña debe contener entre 8 y 16 caracteres"),
-                      FormBuilderValidators.maxLength(context, 16,
-                          errorText: "Contraseña debe contener entre 8 y 16 caracteres"),
-                    ]),
-                    textInputAction: TextInputAction.next,
+                ),
+                SizedBox(
+                  height: screenAwareSize(30.0, context),
+                ),
+                FormBuilder(
+                  key: _formKeyCorreo,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  skipDisabled: true,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        FormBuilderTextField(
+                          autovalidateMode: AutovalidateMode.always,
+                          name: "correo",
+                          decoration: InputDecoration(
+                            labelText: 'Correo Electrónico',
+                            suffixIcon: _correoHasError
+                                ? const Icon(Icons.error, color: Colors.red)
+                                : const Icon(Icons.check, color: Colors.green),
+                          ),
+                          onChanged: (val) {
+                            setState(() {
+                              _correoHasError =
+                              !_formKeyCorreo.currentState.fields['correo'].validate();
+                            });
+                          },
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(context,errorText: "Este campo no puede estar vacío"),
+                            FormBuilderValidators.email(context,errorText: "Ingrese un Correo Electrónico Válido"),
+                            FormBuilderValidators.maxLength(context,100,errorText: "Correo debe contener máximo 100 caracteres")
+                          ]),
+                          textInputAction: TextInputAction.next,
+                        ),
+                      ]
                   ),
-                  FormBuilderTextField(
-                    autovalidateMode: AutovalidateMode.always,
-                    name: "contrasenaConfirm",
-                    decoration: InputDecoration(
-                      labelText: 'Confirmar Nueva Contraseña',
-                      suffixIcon: _contrasenaConfirmHasError
-                          ? const Icon(Icons.error, color: Colors.red)
-                          : const Icon(Icons.check, color: Colors.green),
-                    ),
-                    onChanged: (val) {
-                      setState(() {
-                        _contrasenaConfirmHasError =
-                        !_formKey.currentState.fields['contrasenaConfirm']
-                            .validate();
-                      });
-                    },
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(context,
-                          errorText: "Este campo no puede estar vacío"),
-                      FormBuilderValidators.minLength(context, 8,
-                          errorText: "Contraseña debe contener entre 8 y 16 caracteres"),
-                      FormBuilderValidators.maxLength(context, 16,
-                          errorText: "Contraseña debe contener entre 8 y 16 caracteres"),
-                    ]),
-                    textInputAction: TextInputAction.next,
-                  ),
-                  Align(
-                    child: RaisedButton(
+                ),
+
+                SizedBox(
+                  height: 10,
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20.0, right: 20.0, top: 20.0),
+                  child: Align(
+                    child:  RaisedButton(
                       color: Colors.white,
                       onPressed: () {
-                       
+                        if(_formKey.currentState.validate()&&_formKeyCorreo.currentState.fields['correo'].validate()){
+                          //FirebaseAuth.instance.sendPasswordResetEmail(email: _formKeyCorreo.currentState.fields['correo'].value).then((value) => showSnackBar(context));
+                          final FirebaseAuth _auth = FirebaseAuth.instance;
+                          _auth.sendPasswordResetEmail(email: _formKeyCorreo.currentState.fields['correo'].value ).then((doc) {
+                            showSnackBar(context);
+                          }).catchError((err) {
+                            Flushbar(
+                              borderRadius: 8,
+                              backgroundGradient: LinearGradient(
+                                colors: [Colors.red.shade800,Colors.redAccent.shade700],
+                                stops: [0.6,1],
+                              ),
+                              boxShadows: [
+                                BoxShadow(
+                                  color: Colors.black45,
+                                  offset: Offset(3, 3),
+                                  blurRadius: 3,
+                                )
+                              ],
+                              duration: Duration(seconds: 2),
+                              dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+                              forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+                              title: 'ERROR',
+                              message: 'Correo electrónico inválido',
+                            )..show(context);
+                          });
+                        }
                       },
                       elevation: 4.0,
-                      splashColor: Colors.blue[400],
+                      splashColor:  Colors.blue[400],
                       child: Text(
                         'GUARDAR',
                         style: TextStyle(color: Colors.green, fontSize: 25.0),
@@ -152,12 +167,80 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                     ),
                     alignment: Alignment.center,
                   ),
-                ],
-              ),
-            )
-          ],
+
+
+                  /*GestureDetector(
+                  onTap: () {
+                    if(_formKey.currentState.validate()&&_formKeyCorreo.currentState.fields['correo'].validate()){
+                      FirebaseAuth.instance.sendPasswordResetEmail(email: _formKeyCorreo.currentState.fields['correo'].value).then((value) => showSnackBar(context));
+                    }else{
+                      Flushbar(
+                        borderRadius: 8,
+                        backgroundGradient: LinearGradient(
+                          colors: [Colors.red.shade800,Colors.redAccent.shade700],
+                          stops: [0.6,1],
+                        ),
+                        boxShadows: [
+                          BoxShadow(
+                            color: Colors.black45,
+                            offset: Offset(3, 3),
+                            blurRadius: 3,
+                          )
+                        ],
+                        dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+                        forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+                        title: 'ERROR',
+                        message: 'Correo electrónico inválido',
+                      )..show(context);
+                    }
+                  },
+                  child: Container(
+                    height: 40,
+                    width: 170,
+                    color: Colors.white,
+                    child: new RaisedButton(
+                      color: Colors.grey,
+                      child: Text("ENVIAR SOLICITUD",style: new TextStyle(color: Colors.black),),
+                    ),
+                  ),
+                ),*/
+                ),
+              ]
+          ),
         ),
       ),
     );
   }
+  Flushbar showSnackBar(BuildContext context){
+    return Flushbar(
+      borderRadius: 8,
+      backgroundGradient: LinearGradient(
+        colors: [Colors.green.shade800,Colors.greenAccent.shade700],
+        stops: [0.6,1],
+      ),
+      boxShadows: [
+        BoxShadow(
+          color: Colors.black45,
+          offset: Offset(3, 3),
+          blurRadius: 3,
+        )
+      ],
+      duration: Duration(seconds: 2),
+      dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+      forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+      title: 'SOLICITUD DE RECUPERACIÓN ENVIADA CORRECTAMENTE',
+      message: 'Revise la bandeja de entrada de su Correo Electrónico',
+    )..show(context);
+  }
+  Future<bool> _onBackPressed() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            Login(),
+      ),
+          (route) => false,
+    );
+  }
 }
+

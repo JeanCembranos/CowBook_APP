@@ -246,7 +246,7 @@ class _SignupformState extends State<Signupform> {
               blurRadius: 3,
             )
           ],
-          duration: Duration(seconds: 3),
+          duration: Duration(seconds: 1),
           dismissDirection: FlushbarDismissDirection.HORIZONTAL,
           forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
           title: 'NOTIFICACIÓN',

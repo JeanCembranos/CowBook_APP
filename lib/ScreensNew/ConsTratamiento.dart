@@ -42,7 +42,7 @@ class _TratDetailsState extends State<TratDetails> {
   @override
   void initState() {
     super.initState();
-    objReg.getData().then((results){
+    objReg.getData(widget.currentUser,widget.data).then((results){
       setState(() {
         registros = results;
       });
@@ -308,29 +308,9 @@ class _TratDetailsState extends State<TratDetails> {
                                             child: SizedBox(width: 56, height: 56, child: Icon(Icons.delete,)),
                                             onTap: () {
                                               var SelectedDoc=registros.documents[location[i]].documentID.toString();
-                                              objReg.deleteReg(SelectedDoc,widget.currentUser,widget.data);
-                                              Flushbar(
-                                                borderRadius: 8,
-                                                backgroundGradient: LinearGradient(
-                                                  colors: [Colors.green.shade800,Colors.green.shade700],
-                                                  stops: [0.6,1],
-                                                ),
-                                                boxShadows: [
-                                                  BoxShadow(
-                                                    color: Colors.black45,
-                                                    offset: Offset(3, 3),
-                                                    blurRadius: 3,
-                                                  )
-                                                ],
-                                                duration: Duration(seconds: 2),
-                                                dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-                                                forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
-                                                title: 'NOTIFICACIÓN',
-                                                message: 'Tratamiento Eliminado Correctamente',
-                                              )..show(context).then((value) => Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(builder: (context) =>  RegMedico(currentUser: widget.currentUser,data: widget.data,))
-                                              ));
+                                              showAlertDialog(context,SelectedDoc);
+                                              //objReg.deleteReg(SelectedDoc,widget.currentUser,widget.data);
+
                                             },
                                           ),
                                         ),
@@ -460,6 +440,63 @@ class _TratDetailsState extends State<TratDetails> {
             RegMedico(currentUser: widget.currentUser,data: widget.data,),
       ),
           (route) => false,
+    );
+  }
+  showAlertDialog(BuildContext context,SelectedDoc) {
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Advertencia"),
+      content: Text("Está seguro de continuar con la eliminación del registro?"),
+      actions: [
+        Builder(
+        builder: (context) => FlatButton(
+      child: Text('Cancelar'),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    ),
+    ),
+    Builder(
+    builder: (context) => FlatButton(
+    child: Text('Continuar'),
+    onPressed: () {
+      objReg.deleteReg(SelectedDoc,widget.currentUser,widget.data);
+      Flushbar(
+        borderRadius: 8,
+        backgroundGradient: LinearGradient(
+          colors: [Colors.green.shade800,Colors.green.shade700],
+          stops: [0.6,1],
+        ),
+        boxShadows: [
+          BoxShadow(
+            color: Colors.black45,
+            offset: Offset(3, 3),
+            blurRadius: 3,
+          )
+        ],
+        duration: Duration(seconds: 1),
+        dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+        forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+        title: 'NOTIFICACIÓN',
+        message: 'Tratamiento Eliminado Correctamente',
+      )..show(context).then((value) => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) =>  RegMedico(currentUser: widget.currentUser,data: widget.data,))
+      ));
+
+    },
+    ),
+    ),
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

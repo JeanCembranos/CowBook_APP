@@ -27,8 +27,8 @@ class DBReg {
   }
 
   /*Create Car documents*/
-  getData() async{
-    return await Firestore.instance.collection('DBReg').getDocuments();
+  getData(String currentUser,String data) async{
+    return await Firestore.instance.collection('DBReg').document(currentUser).collection(data).getDocuments();
   }
   /*Update Car element*/
   updateReg(selectedDoc,String currentUser,String data, newValues){

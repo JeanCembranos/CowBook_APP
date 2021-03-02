@@ -130,30 +130,12 @@ class _HomeState extends State<Home> {
                       }
                     }
                   }),
-              SizedBox(
-                height: 30.0,
-              ),
-              Padding(
-                padding: EdgeInsets.only(right:MediaQuery.of(context).size.width-100),
-                child: new Text("Recordatorios"),
-              ),
+
+
               SizedBox(
                 height: 15.0,
               ),
-              new Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: Colors.orange.withOpacity(0.37),
-                    border: Border.all(color: Colors.orange,width: 5)
-                ),
-                width: MediaQuery.of(context).size.width-10,
-                height: 80.0,
-                child: new Column(
-                  children: [
-                    Text("Tiene ${contadorPorComenzar.toString()} por comenzar")
-                  ],
-                ),
-              ),
+
               GridView.count(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),

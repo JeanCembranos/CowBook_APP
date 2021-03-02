@@ -256,7 +256,7 @@ class _CreateRegLecheState extends State<CreateRegLeche> {
             blurRadius: 3,
           )
         ],
-        duration: Duration(seconds: 2),
+        duration: Duration(seconds: 1),
         dismissDirection: FlushbarDismissDirection.HORIZONTAL,
         forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
         title: 'NOTIFICACIÓN',

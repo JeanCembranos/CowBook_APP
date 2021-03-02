@@ -40,7 +40,7 @@ class _IDCreateState extends State<IDCreate>{
         backgroundColor: Colors.white,
         title: Text('REGISTRO INDIVIDUAL',
           style: TextStyle(
-              fontSize: 22.0,
+              fontSize: 15.0,
               fontWeight: FontWeight.bold,
               color: Colors.black
           ),
@@ -62,7 +62,6 @@ class _IDCreateState extends State<IDCreate>{
             }),
       ),
       body: WillPopScope(
-
         onWillPop: (){
             return Navigator.pushAndRemoveUntil(
               context,
@@ -337,7 +336,7 @@ class _IDCreateState extends State<IDCreate>{
             blurRadius: 3,
           )
         ],
-        duration: Duration(seconds: 2),
+        duration: Duration(seconds: 1),
         dismissDirection: FlushbarDismissDirection.HORIZONTAL,
         forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
         title: 'NOTIFICACIÓN',
@@ -365,10 +364,7 @@ class _IDCreateState extends State<IDCreate>{
         forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
         title: 'ERROR',
         message: 'Identificación ya registrada anteriormente',
-      )..show(context).then((value) => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) =>  Home(currentUser: widget.currentUser,data: widget.data,))
-      ));
+      )..show(context);
     }
 
   }

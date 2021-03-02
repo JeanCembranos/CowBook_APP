@@ -21,6 +21,7 @@ class IDSearch extends StatefulWidget{
 }
 
 class _IDSearchState extends State<IDSearch>{
+  bool bandera=false;
   DateTime fechaFinTer,fechainiDeste,fechaFinDeste,fechaIniNovi,fechaFinNovi,fechaIniAdulta;
   bool flag=true;
   bool flagA=true;
@@ -62,7 +63,7 @@ class _IDSearchState extends State<IDSearch>{
             }),
         title: Text('REGISTRO INDIVIDUAL',
           style: TextStyle(
-              fontSize: 22.0,
+              fontSize: 15.0,
               fontWeight: FontWeight.bold,
               color: Colors.black
           ),
@@ -246,30 +247,8 @@ class _IDSearchState extends State<IDSearch>{
                                     child: SizedBox(width: 56, height: 56, child: Icon(Icons.delete,)),
                                     onTap: () {
                                       var SelectedDoc=id.documents[location[0]].documentID.toString();
-                                      idSearch.deleteID(SelectedDoc);
-                                      Flushbar(
-                                        borderRadius: 8,
-                                        backgroundGradient: LinearGradient(
-                                          colors: [Colors.green.shade800,Colors.green.shade700],
-                                          stops: [0.6,1],
-                                        ),
-                                        boxShadows: [
-                                          BoxShadow(
-                                            color: Colors.black45,
-                                            offset: Offset(3, 3),
-                                            blurRadius: 3,
-                                          )
-                                        ],
-                                        duration: Duration(seconds: 2),
-                                        dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-                                        forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
-                                        title: 'NOTIFICACIÓN',
-                                        message: 'Identificación Eliminada Correctamente',
-                                      )..show(context).then((value) => Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) =>   Scanner(currentUser: widget.currentUser))
-                                      ));
-                                    },
+                                     showAlertDialog(context,SelectedDoc);
+                                     }
                                   ),
                                 ),
                               ),
@@ -301,7 +280,7 @@ class _IDSearchState extends State<IDSearch>{
                                         blurRadius: 3,
                                       )
                                     ],
-                                    duration: Duration(seconds: 2),
+                                    duration: Duration(seconds: 1),
                                     dismissDirection: FlushbarDismissDirection.HORIZONTAL,
                                     forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
                                     title: 'NOTIFICACIÓN',
@@ -450,6 +429,47 @@ class _IDSearchState extends State<IDSearch>{
           (route) => false,
     );
   }
+  showAlertDialog(BuildContext context,SelectedDoc) {
+
+    Widget aceptButton = FlatButton(
+      child: Text("Continuar"),
+      onPressed: () {
+        idSearch.deleteID(SelectedDoc);
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Scanner(currentUser: widget.currentUser,),
+          ),
+              (route) => false,
+        );
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Advertencia"),
+      content: Text("Está seguro de continuar con la eliminación del registro? (*Toda la información para este ID será también eliminada)"),
+      actions: [
+        Builder(
+          builder: (context) => FlatButton(
+            child: Text('Cancelar'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+      aceptButton
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,

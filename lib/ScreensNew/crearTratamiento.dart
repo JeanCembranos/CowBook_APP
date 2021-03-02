@@ -22,8 +22,8 @@ class CreateReg extends StatefulWidget{
 class _CreateRegState extends State<CreateReg> {
   int _currentIndex = 0;
   String obs;
-  DateTime selectedIniDate = DateTime.now();
-  DateTime selectedFinalDate = DateTime.now();
+  DateTime selectedIniDate = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day);
+  DateTime selectedFinalDate = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day);
   bool _medHasError = false;
   bool _ObsHasError = false;
   final _formKey = GlobalKey<FormBuilderState>();
@@ -328,7 +328,7 @@ class _CreateRegState extends State<CreateReg> {
             blurRadius: 3,
           )
         ],
-        duration: Duration(seconds: 2),
+        duration: Duration(seconds: 1),
         dismissDirection: FlushbarDismissDirection.HORIZONTAL,
         forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
         title: 'NOTIFICACIÓN',

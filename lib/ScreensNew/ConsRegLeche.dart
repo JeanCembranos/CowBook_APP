@@ -244,29 +244,7 @@ class _RegLecheDetailsState extends State<RegLecheDetails> {
                                           child: SizedBox(width: 56, height: 56, child: Icon(Icons.delete,)),
                                           onTap: () {
                                             var SelectedDoc=RegLecheDB.documents[location[i]].documentID.toString();
-                                            objRegLeche.deleteReg(SelectedDoc,widget.currentUser,widget.data);
-                                            Flushbar(
-                                              borderRadius: 8,
-                                              backgroundGradient: LinearGradient(
-                                                colors: [Colors.green.shade800,Colors.green.shade700],
-                                                stops: [0.6,1],
-                                              ),
-                                              boxShadows: [
-                                                BoxShadow(
-                                                  color: Colors.black45,
-                                                  offset: Offset(3, 3),
-                                                  blurRadius: 3,
-                                                )
-                                              ],
-                                              duration: Duration(seconds: 2),
-                                              dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-                                              forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
-                                              title: 'NOTIFICACIÓN',
-                                              message: 'Reporte Inidividual Eliminado Correctamente',
-                                            )..show(context).then((value) => Navigator.push(
-                                                context,
-                                                MaterialPageRoute(builder: (context) => RegLeche(currentUser: widget.currentUser,data: widget.data,))
-                                            ));
+                                            showAlertDialog(context, SelectedDoc);
                                           },
                                         ),
                                       ),
@@ -296,7 +274,7 @@ class _RegLecheDetailsState extends State<RegLecheDetails> {
                                               blurRadius: 3,
                                             )
                                           ],
-                                          duration: Duration(seconds: 2),
+                                          duration: Duration(seconds: 1),
                                           dismissDirection: FlushbarDismissDirection.HORIZONTAL,
                                           forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
                                           title: 'NOTIFICACIÓN',
@@ -337,7 +315,63 @@ class _RegLecheDetailsState extends State<RegLecheDetails> {
       }
     }
   }
+  showAlertDialog(BuildContext context,SelectedDoc) {
 
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Advertencia"),
+      content: Text("Está seguro de continuar con la eliminación del registro?"),
+      actions: [
+        Builder(
+          builder: (context) => FlatButton(
+            child: Text('Cancelar'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+        Builder(
+          builder: (context) => FlatButton(
+            child: Text('Continuar'),
+            onPressed: () {
+              objRegLeche.deleteReg(SelectedDoc,widget.currentUser,widget.data);
+              Flushbar(
+                borderRadius: 8,
+                backgroundGradient: LinearGradient(
+                  colors: [Colors.green.shade800,Colors.green.shade700],
+                  stops: [0.6,1],
+                ),
+                boxShadows: [
+                  BoxShadow(
+                    color: Colors.black45,
+                    offset: Offset(3, 3),
+                    blurRadius: 3,
+                  )
+                ],
+                duration: Duration(seconds: 1),
+                dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+                forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+                title: 'NOTIFICACIÓN',
+                message: 'Reporte individual eliminado correctamente',
+              )..show(context).then((value) => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>  RegMedico(currentUser: widget.currentUser,data: widget.data,))
+              ));
+
+            },
+          ),
+        ),
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   Future<void> _selectIniDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(

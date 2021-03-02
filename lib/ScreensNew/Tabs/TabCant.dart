@@ -19,126 +19,128 @@ class _TabCantState extends State<TabCant> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: new Column(
-        children: [
-          Container(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width - 10,
-            height: 150,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                image: DecorationImage(
-                    image: AssetImage("assets/images/ConsLeche.png"),
-                    fit: BoxFit.cover
+      body:SingleChildScrollView(
+        child: new Column(
+          children: [
+            Container(
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width - 10,
+              height: 150,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/ConsLeche.png"),
+                      fit: BoxFit.cover
+                  )
+              ),
+            ),
+            SizedBox(height: 35.0,),
+            Container(
+                width:MediaQuery.of(context).size.width,
+                child: Row(
+                  children: [
+                    Padding(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width/2-70,
+                        height: 30.0,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.black,
+                                  width: 1.0,
+                                )
+                            )
+                        ),
+                        child: Text(selectedIniDate.toString().substring(0,10)),
+                      ),
+                      padding: EdgeInsets.only(left: 20.0),
+                    ),
+                    ClipOval(
+                      child: Material(
+                        color: Colors.orange, // button color
+                        child: InkWell(
+                          splashColor: Colors.red, // inkwell color
+                          child: SizedBox(width: 46, height:46, child: Icon(Icons.calendar_today_outlined,)),
+                          onTap: () {
+                            _selectIniDate(context);
+                          },
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.0),
+                      child: Container(
+                          width: MediaQuery.of(context).size.width/2-70,
+                          height: 30.0,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.black,
+                                    width: 1.0,
+                                  )
+                              )
+                          ),
+                          child: Text(selectedFinDate.toString().substring(0,10))
+                      ),
+                    ),
+                    ClipOval(
+                      child: Material(
+                        color: Colors.orange, // button color
+                        child: InkWell(
+                          splashColor: Colors.red, // inkwell color
+                          child: SizedBox(width: 46, height: 46, child: Icon(Icons.calendar_today_outlined,)),
+                          onTap: () {
+                            _selectFinDate(context);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 )
             ),
-          ),
-          SizedBox(height: 35.0,),
-         Container(
-           width:MediaQuery.of(context).size.width,
-           child: Row(
-             children: [
-               Padding(
-                 child: Container(
-                   width: MediaQuery.of(context).size.width/2-70,
-                   height: 30.0,
-                   decoration: BoxDecoration(
-                       color: Colors.white,
-                       border: Border(
-                           bottom: BorderSide(
-                             color: Colors.black,
-                             width: 1.0,
-                           )
-                       )
-                   ),
-                   child: Text(selectedIniDate.toString().substring(0,10)),
-                 ),
-                 padding: EdgeInsets.only(left: 20.0),
-               ),
-               ClipOval(
-                 child: Material(
-                   color: Colors.orange, // button color
-                   child: InkWell(
-                     splashColor: Colors.red, // inkwell color
-                     child: SizedBox(width: 46, height:46, child: Icon(Icons.calendar_today_outlined,)),
-                     onTap: () {
-                       _selectIniDate(context);
-                     },
-                   ),
-                 ),
-               ),
-               Padding(
-                 padding: EdgeInsets.only(left: 10.0),
-                 child: Container(
-                   width: MediaQuery.of(context).size.width/2-70,
-                   height: 30.0,
-                   decoration: BoxDecoration(
-                       color: Colors.white,
-                       border: Border(
-                           bottom: BorderSide(
-                             color: Colors.black,
-                             width: 1.0,
-                           )
-                       )
-                   ),
-                   child: Text(selectedFinDate.toString().substring(0,10))
-                 ),
-               ),
-               ClipOval(
-                 child: Material(
-                   color: Colors.orange, // button color
-                   child: InkWell(
-                     splashColor: Colors.red, // inkwell color
-                     child: SizedBox(width: 46, height: 46, child: Icon(Icons.calendar_today_outlined,)),
-                     onTap: () {
-                       _selectFinDate(context);
-                     },
-                   ),
-                 ),
-               ),
-             ],
-           )
-         ),
-          SizedBox(height: 20.0,),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            child: RaisedButton(
-              color: Colors.white,
-              onPressed: () {
-                result=0;
-              getRegLecheSnapshots();
-              },
-              elevation: 4.0,
-              splashColor:  Colors.blue[400],
-              child: Text(
-                'BUSCAR',
-                style: TextStyle(color: Colors.red, fontSize: 25.0),
-              ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                  side: BorderSide(color: Colors.red)
-              ),
-            ),
-          ),
-          SizedBox(height: 20.0,),
-          Text("Cantidad de Leche Producida",textAlign: TextAlign.start,),
-          SizedBox(height: 10.0,),
-          Padding(
-            child: Container(
+            SizedBox(height: 20.0,),
+            Container(
               width: MediaQuery.of(context).size.width,
-              height: 30.0,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18.0),
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black)
+              child: RaisedButton(
+                color: Colors.white,
+                onPressed: () {
+                  result=0;
+                  getRegLecheSnapshots();
+                },
+                elevation: 4.0,
+                splashColor:  Colors.blue[400],
+                child: Text(
+                  'BUSCAR',
+                  style: TextStyle(color: Colors.red, fontSize: 25.0),
+                ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                    side: BorderSide(color: Colors.red)
+                ),
               ),
-              child: Text("${result.toString()} Litros",textAlign: TextAlign.center,),
             ),
-            padding: EdgeInsets.only(left: 20.0,right: 20.0),
-          ),
-        ],
+            SizedBox(height: 20.0,),
+            Text("Cantidad de Leche Producida",textAlign: TextAlign.start,),
+            SizedBox(height: 10.0,),
+            Padding(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 30.0,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(18.0),
+                    color: Colors.white,
+                    border: Border.all(color: Colors.black)
+                ),
+                child: Text("${result.toString()} Litros",textAlign: TextAlign.center,),
+              ),
+              padding: EdgeInsets.only(left: 20.0,right: 20.0),
+            ),
+          ],
+        ),
       ),
     );
   }
