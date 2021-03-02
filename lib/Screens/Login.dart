@@ -116,7 +116,6 @@ class _BottomPartHomeState extends State<BottomPartHome> {
           break;
         case LoginType.google:
           _returnString = await Auth().loginUserWithGoogle();
-          print(await _returnString);
           break;
         default:
       }
@@ -519,6 +518,10 @@ class _BottomPartHomeState extends State<BottomPartHome> {
                       ],
                     ),
                   ),
+                  Padding(
+                    child: _googleButton(),
+                    padding: EdgeInsets.only(right: 80.0),
+                  )
                 ],
               ),
             )

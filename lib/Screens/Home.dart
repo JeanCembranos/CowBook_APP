@@ -29,6 +29,7 @@ class Home extends StatefulWidget{
 
 
 class _HomeState extends State<Home> {
+  
   DateTime hoy=DateTime.now();
   int contadorPorComenzar=0;
   int _currentIndex = 0;
@@ -121,7 +122,7 @@ class _HomeState extends State<Home> {
                             child: new Carousel(
                               boxFit: BoxFit.cover,
                               images: list,
-                              autoplay: false,
+                              autoplay: true,
                               dotSize: 4.0,
                               indicatorBgPadding: 4.0,
                               animationCurve: Curves.fastOutSlowIn,

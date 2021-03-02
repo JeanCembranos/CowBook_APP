@@ -79,7 +79,7 @@ class _IDSearchState extends State<IDSearch>{
       bool carflag = false;
       List<int> location = [];
       for (var y = 0; y < id.documents.length; y++) {
-        if (id.documents[y].data['code'] == widget.data) {
+        if (id.documents[y].data['code'] == widget.data&&id.documents[y].data['currentUser'] == widget.currentUser) {
           carflag = true;
           location.add(y);
         }

@@ -11,6 +11,7 @@ import 'package:myfarm_app/Screens/Home.dart';
 import 'package:myfarm_app/ScreensNew/ChooseID.dart';
 import 'package:myfarm_app/ScreensNew/IDCreate.dart';
 import 'package:provider/provider.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'Login.dart';
 
@@ -32,6 +33,7 @@ class _ScannerState extends State <Scanner> {
 
   @override
   void initState(){
+    print(widget.currentUser);
     super.initState();
     idSearch.getData().then((results){
       setState(() {
@@ -204,7 +206,7 @@ class _ScannerState extends State <Scanner> {
   Future<void> _ScannerRedirection() {
     bool bandera=true;
    for(var y = 0; y < id.documents.length; y++){
-      if(id.documents[y].data['code'] == _scanBarcode){
+      if(id.documents[y].data['code'] == _scanBarcode&&id.documents[y].data['currentUser'] == currentUid){
         bandera=true;
         break;
       }else{

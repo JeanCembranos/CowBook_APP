@@ -74,8 +74,30 @@ class Auth {
   }
 
   Future<String> loginUserWithGoogle() async {
+      GoogleSignIn googleSignIn=GoogleSignIn();
+      GoogleSignInAccount account=await googleSignIn.signIn();
+      /*if(account==null)
+        return "error";*/
+        AuthResult res=await _auth.signInWithCredential(GoogleAuthProvider.getCredential(idToken: (await account.authentication).idToken,
+            accessToken: (await account.authentication).accessToken));
+        return "success";
+      /*if (res.additionalUserInfo.isNewUser) {
+        UserModel _user = UserModel(
+          uid: res.user.uid,
+          email: res.user.email,
+          worker: res.user.displayName,
+          accountCreated: DateTime.now(),
+          notifToken: await _fcm.getToken(),
+        );
+        String _returnString = await dbID().createUser(_user);
+      }*/
+     /* if(res.user==null){
+        return "error";
+      }else{
+        return "success";
+      }*/
 
-    String retVal = "error";
+    /*String retVal = "error";
     GoogleSignIn _googleSignIn = GoogleSignIn(
       scopes: [
         'email',
@@ -83,7 +105,7 @@ class Auth {
       ],
     );
 
-    /*try  {
+    try  {
       GoogleSignInAccount _googleUser = await _googleSignIn.signIn();
       GoogleSignInAuthentication _googleAuth = await _googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.getCredential(
@@ -97,7 +119,7 @@ class Auth {
           accountCreated: DateTime.now(),
           notifToken: await _fcm.getToken(),
         );
-        String _returnString = await DBRecords().createUser(_user);
+        String _returnString = await dbID().createUser(_user);
         if (_returnString == "success") {
           retVal = "success";
         }
@@ -107,8 +129,8 @@ class Auth {
       retVal = e.message;
     } catch (e) {
       print(e);
-    }*/
-
+    }
+*/
   }
   Future deleteCurrentUser(String userUid,String userEmail, String password) async {
 
