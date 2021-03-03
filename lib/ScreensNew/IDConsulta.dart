@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:myfarm_app/IDTools/dbID.dart';
 import 'package:myfarm_app/Screens/Home.dart';
 import 'package:myfarm_app/Screens/ScannerQR.dart';
+import 'package:myfarm_app/Screens/Settings.dart';
 
 class IDSearch extends StatefulWidget{
   final String data;
@@ -21,6 +22,7 @@ class IDSearch extends StatefulWidget{
 }
 
 class _IDSearchState extends State<IDSearch>{
+  int _currentIndex = 0;
   bool bandera=false;
   DateTime fechaFinTer,fechainiDeste,fechaFinDeste,fechaIniNovi,fechaFinNovi,fechaIniAdulta;
   bool flag=true;
@@ -72,6 +74,21 @@ class _IDSearchState extends State<IDSearch>{
         elevation: 0,
       ),
       body: _idList(),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: onTabTapped,
+        currentIndex: _currentIndex,
+        items: [
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.home),
+            title: new Text('Home'),
+          ),
+
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              title: Text('Ajustes')
+          )
+        ],
+      ),
     );
   }
   Widget _idList() {
@@ -489,6 +506,33 @@ class _IDSearchState extends State<IDSearch>{
     fechaFinNovi=new DateTime(inicio.year,inicio.month+12,inicio.day);
     fechaIniAdulta=new DateTime(inicio.year,inicio.month+12,inicio.day);
 
+  }
+  void onTabTapped(int index) {
+    switch(index){
+      case 0: {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Home(data: widget.data,currentUser: widget.currentUser,),
+          ),
+              (route) => false,
+        );
+      }
+      break;
+      case 1: {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SettingsOnePage(data: widget.data,currentUser: widget.currentUser,),
+          ),
+              (route) => false,
+        );
+      }
+      break;
+    }
+    setState(() {
+      _currentIndex = index;
+    });
   }
 
 }

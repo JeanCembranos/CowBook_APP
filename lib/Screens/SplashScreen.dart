@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
                                 width: MediaQuery.of(context).size.width,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                                  child: Image.asset('assets/images/CowBook.png',
+                                  child: Image.asset('assets/images/CowBook1.png',
                                       width: screenAwareSize(400, context),
                                       height: screenAwareSize(400, context)),
                                 ),

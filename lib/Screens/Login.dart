@@ -48,7 +48,7 @@ class _TopPartHomeState extends State<TopPartHome> {
                         width: MediaQuery.of(context).size.width,
                         child: ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                          child: Image.asset('assets/images/CowBook.png',
+                          child: Image.asset('assets/images/CowBook1.png',
                               width: screenAwareSize(250, context),
                               height: screenAwareSize(250, context)),
                         ),
@@ -158,12 +158,12 @@ class _BottomPartHomeState extends State<BottomPartHome> {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(padding: EdgeInsets.only(left: 30.0)),
           _buildSocialBtn(
                 () => {
-              _loginUser(type: LoginType.google, context: context)
+              //_loginUser(type: LoginType.google, context: context)
             },
             AssetImage(
               'assets/images/google_logo.png',
@@ -178,7 +178,7 @@ class _BottomPartHomeState extends State<BottomPartHome> {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(padding: EdgeInsets.only(left: 30.0)),
           _buildSocialBtn(
@@ -518,9 +518,17 @@ class _BottomPartHomeState extends State<BottomPartHome> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
                   Padding(
-                    child: _googleButton(),
-                    padding: EdgeInsets.only(right: 80.0),
+                    child:Row(
+                      children: [
+                        _googleButton(),
+                        _facebookButton()
+                      ],
+                    ),
+                    padding: EdgeInsets.only(left:MediaQuery.of(context).size.width/2-100),
                   )
                 ],
               ),

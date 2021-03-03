@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
+import 'dart:async';
 
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,7 +12,6 @@ import 'package:myfarm_app/ScreensNew/IDConsulta.dart';
 import 'package:myfarm_app/ScreensNew/ProduccionLeche.dart';
 import 'package:myfarm_app/ScreensNew/RegMedico.dart';
 import 'package:myfarm_app/ScreensNew/ReproState.dart';
-
 
 class Home extends StatefulWidget{
   final String data;
@@ -29,7 +27,6 @@ class Home extends StatefulWidget{
 
 
 class _HomeState extends State<Home> {
-  
   DateTime hoy=DateTime.now();
   int contadorPorComenzar=0;
   int _currentIndex = 0;
@@ -72,7 +69,7 @@ class _HomeState extends State<Home> {
 
       ),*/
 
-      body:WillPopScope(
+      body: WillPopScope(
         onWillPop: _onBackPressed,
         child: SingleChildScrollView(
           child: Column(
@@ -278,7 +275,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top: 10.0),
+                              padding: EdgeInsets.only(top: 15.0),
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5.0),
@@ -385,7 +382,7 @@ class _HomeState extends State<Home> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 20.0),
-                            child: Text(
+                            child: T  ext(
                               "ESTADO MÉDICO", style: new TextStyle(fontSize: 15),
                               textAlign: TextAlign.center,),
                           ),

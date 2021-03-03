@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myfarm_app/RegTools/DBProduLeche.dart';
 import 'package:myfarm_app/RegTools/DBReg.dart';
 import 'package:myfarm_app/Screens/Home.dart';
+import 'package:myfarm_app/Screens/Settings.dart';
 import 'package:myfarm_app/ScreensNew/ConsTratamiento.dart';
 import 'package:myfarm_app/ScreensNew/RegLecheCreate.dart';
 import 'package:myfarm_app/ScreensNew/Tabs/TabCant.dart';
@@ -23,6 +24,7 @@ class RegLeche extends StatefulWidget{
 }
 
 class _RegLecheState extends State<RegLeche>{
+  int _currentIndex = 0;
   Future resultsLoaded;
   List _allResults = [];
   List _resultsList = [];
@@ -224,5 +226,32 @@ class _RegLecheState extends State<RegLeche>{
       ),
           (route) => false,
     );
+  }
+  void onTabTapped(int index) {
+    switch(index){
+      case 0: {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Home(data: widget.data,currentUser: widget.currentUser,),
+          ),
+              (route) => false,
+        );
+      }
+      break;
+      case 1: {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SettingsOnePage(data: widget.data,currentUser: widget.currentUser,),
+          ),
+              (route) => false,
+        );
+      }
+      break;
+    }
+    setState(() {
+      _currentIndex = index;
+    });
   }
 }

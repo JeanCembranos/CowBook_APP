@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:myfarm_app/RegTools/DBReg.dart';
 import 'package:myfarm_app/Screens/Home.dart';
+import 'package:myfarm_app/Screens/Settings.dart';
 import 'package:myfarm_app/ScreensNew/ConsTratamiento.dart';
 import 'package:myfarm_app/ScreensNew/crearTratamiento.dart';
 import 'package:myfarm_app/SearchIDTools/HealthTrip.dart';
@@ -341,5 +342,4 @@ class _RegMedicoState extends State<RegMedico>{
         selectedFinDate = picked;
       });
   }
-
 }
