@@ -275,7 +275,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top: 15.0),
+                              padding: EdgeInsets.only(top: 5.0),
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5.0),
