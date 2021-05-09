@@ -39,7 +39,81 @@ class _TabCantState extends State<TabCant> {
             SizedBox(height: 35.0,),
             Container(
                 width:MediaQuery.of(context).size.width,
-                child: Row(
+                child:Row(
+                  children: [
+                    Column(
+                      children: [
+                        Text("Desde: ",style: TextStyle(fontWeight: FontWeight.bold),),
+                        SizedBox(height: 10,),
+                        Padding(
+                          child: Container(
+                            width: MediaQuery.of(context).size.width/2-70,
+                            height: 30.0,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border(
+                                    bottom: BorderSide(
+                                      color: Colors.black,
+                                      width: 1.0,
+                                    )
+                                )
+                            ),
+                            child: Text(selectedIniDate.toString().substring(0,10)),
+                          ),
+                          padding: EdgeInsets.only(left: 20.0),
+                        ),
+                      ],
+                    ),
+                    ClipOval(
+                      child: Material(
+                        color: Colors.orange, // button color
+                        child: InkWell(
+                          splashColor: Colors.red, // inkwell color
+                          child: SizedBox(width: 46, height:46, child: Icon(Icons.calendar_today_outlined,)),
+                          onTap: () {
+                            _selectIniDate(context);
+                          },
+                        ),
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Text("Hasta:",style: TextStyle(fontWeight: FontWeight.bold),),
+                        SizedBox(height: 10,),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10.0),
+                          child: Container(
+                              width: MediaQuery.of(context).size.width/2-70,
+                              height: 30.0,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border(
+                                      bottom: BorderSide(
+                                        color: Colors.black,
+                                        width: 1.0,
+                                      )
+                                  )
+                              ),
+                              child: Text(selectedFinDate.toString().substring(0,10))
+                          ),
+                        ),
+                      ],
+                    ),
+                    ClipOval(
+                      child: Material(
+                        color: Colors.orange, // button color
+                        child: InkWell(
+                          splashColor: Colors.red, // inkwell color
+                          child: SizedBox(width: 46, height: 46, child: Icon(Icons.calendar_today_outlined,)),
+                          onTap: () {
+                            _selectFinDate(context);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              /*Row(
                   children: [
                     Padding(
                       child: Container(
@@ -100,7 +174,7 @@ class _TabCantState extends State<TabCant> {
                       ),
                     ),
                   ],
-                )
+                )*/
             ),
             SizedBox(height: 20.0,),
             Container(

@@ -10,9 +10,9 @@ Widget buildTripCard(BuildContext context, DocumentSnapshot document) {
    return InkWell(
        child: Container(
          decoration: BoxDecoration(
-           borderRadius: BorderRadius.only(
-               topLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-           color: Colors.yellow,
+             borderRadius: BorderRadius.circular(10.0),
+             color: Color(0xff84DCEF).withOpacity(0.34),
+             border: Border.all(color: Color(0xff84DCEF),width: 3.0)
          ),
          width: MediaQuery.of(context).size.width,
          height: 100,

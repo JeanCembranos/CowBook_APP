@@ -11,9 +11,9 @@ Widget buildTripCardTrat(BuildContext context, DocumentSnapshot document) {
   return InkWell(
     child: Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-        color: Colors.yellow,
+          borderRadius: BorderRadius.circular(10.0),
+          color: Color(0xff84DCEF).withOpacity(0.34),
+          border: Border.all(color: Color(0xff84DCEF),width: 3.0)
       ),
       width: MediaQuery.of(context).size.width,
       height: 110,
@@ -36,10 +36,9 @@ Widget buildTripCardTrat(BuildContext context, DocumentSnapshot document) {
                 Row(
                   children: [
                     Text(
-                      trip.fechaFin.difference(DateTime.now()).inDays<=0&&trip.fechaFin.difference(DateTime.now()).inHours<=12
-                          ?"COMPLETADO":"EN CURSO",style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
+                      trip.fechaFin.difference(DateTime.now()).inDays<=0&&trip.fechaFin.difference(DateTime.now()).inHours<=1
+                          ?"COMPLETADO":DateTime.now().difference(trip.fechaIni).inDays<=0&&DateTime.now().difference(trip.fechaIni).inHours<=5?"POR COMENZAR":"EN CURSO",style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),
                     ),
-
                   ],
                 ),
 

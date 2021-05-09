@@ -12,9 +12,9 @@ Widget buildSearchDelModCards(BuildContext context, DocumentSnapshot document) {
   return InkWell(
     child: Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-        color: Colors.yellow,
+          borderRadius: BorderRadius.circular(10.0),
+          color: Color(0xff84DCEF).withOpacity(0.34),
+          border: Border.all(color: Color(0xff84DCEF),width: 3.0)
       ),
       width: MediaQuery.of(context).size.width,
       height: 80,
@@ -31,38 +31,41 @@ Widget buildSearchDelModCards(BuildContext context, DocumentSnapshot document) {
                 child: Image(image: AssetImage('assets/images/leche.png'),height: 50,)),
           ),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: [
-                    Text(trip.fechaReg.toString().substring(0,10),style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),),
-                  ],
-                ),
-                SizedBox(height: 10.0,),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      child: Icon(
-                        Icons.leaderboard,
-                        color: Colors.orangeAccent,
-                        size: 20,
+            child: Padding(
+              padding: EdgeInsets.only(left: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Text(trip.fechaReg.toString().substring(0,10),style: TextStyle(fontSize: 20.0,fontWeight: FontWeight.bold),),
+                    ],
+                  ),
+                  SizedBox(height: 10.0,),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        child: Icon(
+                          Icons.leaderboard,
+                          color: Colors.orangeAccent,
+                          size: 20,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Flexible(
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: Text("Cantidad: ${trip.cant}",
-                          /* style: TextStyle(
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Flexible(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: Text("Cantidad: ${trip.cant}",
+                            /* style: TextStyle(
                                                 color: primary, fontSize: 18, letterSpacing: .3)*/),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],

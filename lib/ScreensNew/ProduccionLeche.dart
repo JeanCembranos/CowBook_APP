@@ -133,7 +133,7 @@ class _RegLecheState extends State<RegLeche>{
                 ),
               ),
             ],
-            bottom: TabBar(
+            /*bottom: TabBar(
               tabs: [
                 Tab(
                   icon: Icon(Icons.edit_off,color: Colors.black,),
@@ -145,15 +145,41 @@ class _RegLecheState extends State<RegLeche>{
                 ),
               ],
             ),
-          ),
+          ),*/
+         /* body: new TabBarView(
+            children: [
+              TabModDel(data: widget.data,currentUser: widget.currentUser,),
+              TabCant(currentUser: widget.currentUser,data: widget.data,)
+            ],
+          ),*/
+
+
+        ),
+         bottomNavigationBar: Material(
+           color: Colors.white,
+           child: TabBar(
+             tabs: <Widget>[
+               Tab(
+                 icon: Icon(Icons.edit_off,color: Colors.black,),
+                 child: new Text("Modificar/Eliminar",style: TextStyle(color: Colors.black),),
+               ),
+               Tab(
+                 icon: Icon(Icons.leaderboard,color: Colors.black,),
+                 child: new Text("Consultar Cantidad",style: TextStyle(color: Colors.black),),
+               ),
+             ],
+             indicatorColor: Colors.orange,
+             indicatorWeight:  7.0,
+           ),
+         ),
           body: new TabBarView(
             children: [
               TabModDel(data: widget.data,currentUser: widget.currentUser,),
               TabCant(currentUser: widget.currentUser,data: widget.data,)
             ],
           ),
-        ),
       ),
+      )
     );
 
 
@@ -226,32 +252,5 @@ class _RegLecheState extends State<RegLeche>{
       ),
           (route) => false,
     );
-  }
-  void onTabTapped(int index) {
-    switch(index){
-      case 0: {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Home(data: widget.data,currentUser: widget.currentUser,),
-          ),
-              (route) => false,
-        );
-      }
-      break;
-      case 1: {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SettingsOnePage(data: widget.data,currentUser: widget.currentUser,),
-          ),
-              (route) => false,
-        );
-      }
-      break;
-    }
-    setState(() {
-      _currentIndex = index;
-    });
   }
 }
