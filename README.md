@@ -1,10 +1,31 @@
-# myfarm_app
+------------------------------------------------------------------
+|                                                                |
+|                                                                |
+|                         CowBook APP                            |
+|                            /)  (\                              |
+|                        .-._((,~~.))_.-,                        |
+|                         `=.   99   ,='                         |   
+|                           / ,o~~o. \                           |
+|                          { { .__. } }                          |
+|                           ) `~~~\' (                           |
+|                          /`-._  _\.-\                          |
+|                         /         )  \                         \
+|                      ,-X        #   X-.                        |
+|               hjw   /   \          /   \                       |
+|                     (     )| |  | |(     )                     |
+|                     \   / | |  | | \   /                       |
+|                       \_(.-( )--( )-.)_/                       |
+|                      /_,\ ) /  \ ( /._\                        |
+|                           /_,\  /._\                           |
+|                                                                |
+|                                                                |
+------------------------------------------------------------------
 
-A new Flutter application.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+FARMAPP was created with the aim of helping farmers manage and identify the life history of their animals.
+This application allows, through a QR code scanning system, to record incidents, treatments and important events in animals on a farm.
+Our purpose is to help the farmer, through a low-cost solution, available to everyone, but taking care of the integrity and confidentiality of the data.
 
 A few resources to get you started if this is your first Flutter project:
 
